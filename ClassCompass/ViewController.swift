@@ -100,16 +100,22 @@ class ViewController: UIViewController {
 
                             self.decodeCourses(coursesRaw)
                             
-                            print("Courses:")
+                            var courseDetails = "Courses:\n"
+
                             for course in courses {
-                                print("ID: \(course.id)")
-                                print("Name: \(course.name)")
-                                print("Code: \(course.code)")
-                                print("Start Date: \(course.startDate)")
-                                print("End Date: \(course.endDate)")
-                                print("---------")
-                                
+                                courseDetails += "ID: \(course.id)\n"
+                                courseDetails += "Name: \(course.name)\n"
+                                courseDetails += "Code: \(course.code)\n"
+                                courseDetails += "Start Date: \(course.startDate)\n"
+                                courseDetails += "End Date: \(course.endDate)\n"
+                                courseDetails += "---------"
                             }
+
+                            self.ResponseLbl.numberOfLines = 0
+
+                            self.ResponseLbl.text = courseDetails
+                            print(courseDetails)
+                                
                         } catch {
                             print("Error decoding JSON: \(error)")
                         }
