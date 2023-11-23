@@ -3,8 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "static Course.dump(_:):Course.swift">
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in ViewController.APITestBtn(_:):ViewController.swift">
          <PersistentStrings>
+            <PersistentString
+               value = "self.courses[0].code">
+            </PersistentString>
             <PersistentString
                value = "json.rawArray[0]">
             </PersistentString>
