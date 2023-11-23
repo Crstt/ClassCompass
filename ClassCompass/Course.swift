@@ -13,7 +13,7 @@ class Course {
     let code: String
     let startDate: Date
     let endDate: Date
-    let assignments: [Assignment]
+    var assignments: [Assignment]
     
     init(id: Int, name: String, code: String, startDate: Date, endDate: Date, assignments: [Assignment]) {
         self.id = id

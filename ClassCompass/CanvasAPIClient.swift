@@ -37,7 +37,6 @@ class CanvasAPIClient {
                     do {
                         //let deserializedJson = try JSONSerialization.jsonObject(with: jsonData as Data, options: []) as! [NSDictionary]
                         //completion(.success(deserializedJson))
-                        
                         if let deserializedJson = try JSONSerialization.jsonObject(with: jsonData as Data, options: []) as? [NSDictionary] {
                             completion(.success(deserializedJson))
                         } else {
@@ -111,6 +110,27 @@ class CanvasAPIClient {
             courseDetails += "---------\n"
         }
         return courseDetails
+    }
+    
+    func fetchAssignmentsById(courseId: Int, completion: @escaping ([Assignment]) -> Void) {
+        performRequest(url: self.canvasAPIURL + "/courses/\(courseId)/assignments", headers: self.defaultHeaders) { result in
+            switch result {
+            case .success(let assignmentRaw):
+                var assignments : [Assignment] = []
+                for assignmentRaw in assignmentRaw {
+                    let assignment = Assignment(id: assignmentRaw["id"] as! Int,
+                                                name: assignmentRaw["name"] as! String,
+                                                dueDate: self.stringtoDate(assignmentRaw["due_at"] as! String),
+                                                description: assignmentRaw["description"] as! String,
+                                                grade: 0)
+                    assignments.append(assignment)
+                }
+                completion(assignments)
+            case .failure(let error):
+                print("Error: \(error)")
+                completion([])
+            }
+        }
     }
 }
 

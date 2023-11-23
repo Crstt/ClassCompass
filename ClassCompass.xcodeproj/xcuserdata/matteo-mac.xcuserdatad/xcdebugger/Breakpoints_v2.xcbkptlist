@@ -3,4 +3,84 @@
    uuid = "31659256-ABB2-4A97-A8B7-1614469FF4FA"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "282C7657-C4A9-410E-9463-4624831211DF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ClassCompass/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "fetchAssignments(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "282C7657-C4A9-410E-9463-4624831211DF - 50993d2efcc502a5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.ViewController.fetchAssignments(Any) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "332">
+               </Location>
+               <Location
+                  uuid = "282C7657-C4A9-410E-9463-4624831211DF - 1d2f2abd20cdf07d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Array&lt;ClassCompass.Assignment&gt;) -&gt; () in ClassCompass.ViewController.fetchAssignments(Any) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "64">
+               </Location>
+               <Location
+                  uuid = "282C7657-C4A9-410E-9463-4624831211DF - 50993d2efcc502e3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.ViewController.fetchAssignments(Any) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "332">
+               </Location>
+               <Location
+                  uuid = "282C7657-C4A9-410E-9463-4624831211DF - 1d2f2abd20cdf03b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Array&lt;ClassCompass.Assignment&gt;) -&gt; () in ClassCompass.ViewController.fetchAssignments(Any) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "64">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

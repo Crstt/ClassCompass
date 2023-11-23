@@ -40,10 +40,10 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4UH-Ci-3vI">
-                                <rect key="frame" x="153" y="112" width="86" height="35"/>
+                                <rect key="frame" x="16" y="112" width="130" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Api Test"/>
+                                <buttonConfiguration key="configuration" style="filled" title="FetchCourses"/>
                                 <connections>
                                     <action selector="APITestBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uQr-lC-jar"/>
                                 </connections>
@@ -63,6 +63,16 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="acm-rO-Gsr">
+                                <rect key="frame" x="207" y="112" width="170" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Fetch Assignments"/>
+                                <connections>
+                                    <action selector="APITestBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3wk-mB-qfT"/>
+                                    <action selector="fetchAssignments:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gBS-Uf-qWO"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>

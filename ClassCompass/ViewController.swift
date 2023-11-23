@@ -11,7 +11,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
     
     var courses: [Course] = []
@@ -19,7 +18,6 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var ResponseView: UITextView!
     @IBOutlet weak var APIToken: UITextField!
-    @IBOutlet weak var ResponseLbl: UILabel!
     
     @IBAction func APITestBtn(_ sender: Any) {
         
@@ -31,5 +29,14 @@ class ViewController: UIViewController {
             print(courseDump)
             self.ResponseView.text = courseDump
         }
+    }
+    @IBAction func fetchAssignments(_ sender: Any) {
+        print(Course.dump(self.courses))
+        canvasClient.fetchAssignmentsById(courseId: self.courses[0].id){ fetchedAssignments in
+            self.courses[0].assignments = fetchedAssignments
+            print(Assignment.dump(fetchedAssignments))
+            self.ResponseView.text = Assignment.dump(fetchedAssignments)
+        }
+        
     }
 }
