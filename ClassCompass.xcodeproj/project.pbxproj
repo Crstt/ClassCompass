@@ -23,6 +23,7 @@
 		727467692B0D664E00A4E64C /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727467682B0D664E00A4E64C /* Course.swift */; };
 		7274676B2B0D668700A4E64C /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274676A2B0D668700A4E64C /* Assignment.swift */; };
 		7274676D2B0D66D400A4E64C /* CanvasAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */; };
+		72DBA1912B1426750096E054 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DBA1902B1426750096E054 /* AddViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		727467682B0D664E00A4E64C /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		7274676A2B0D668700A4E64C /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasAPIClient.swift; sourceTree = "<group>"; };
+		72DBA1902B1426750096E054 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				727466782B042DD300A4E64C /* AgendaViewController.swift */,
 				72338CB42B140A540040D4D5 /* ProgressViewController.swift */,
 				7274667A2B042DD300A4E64C /* Main.storyboard */,
+				72DBA1902B1426750096E054 /* AddViewController.swift */,
 				727467622B0D587400A4E64C /* Agenda.storyboard */,
 				7274667D2B042DD500A4E64C /* Assets.xcassets */,
 				7274667F2B042DD500A4E64C /* LaunchScreen.storyboard */,
@@ -288,6 +291,7 @@
 			files = (
 				727467692B0D664E00A4E64C /* Course.swift in Sources */,
 				727466792B042DD300A4E64C /* AgendaViewController.swift in Sources */,
+				72DBA1912B1426750096E054 /* AddViewController.swift in Sources */,
 				727466752B042DD300A4E64C /* AppDelegate.swift in Sources */,
 				72338CB52B140A540040D4D5 /* ProgressViewController.swift in Sources */,
 				7274676D2B0D66D400A4E64C /* CanvasAPIClient.swift in Sources */,

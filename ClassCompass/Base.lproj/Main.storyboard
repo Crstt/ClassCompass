@@ -63,7 +63,18 @@
                             <constraint firstItem="BOG-iZ-jZ6" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="TBz-2W-osH"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Agenda" id="WN8-l9-Hb1"/>
+                    <navigationItem key="navigationItem" title="Agenda" id="WN8-l9-Hb1">
+                        <barButtonItem key="leftBarButtonItem" title="Add" id="XUY-Ex-tff">
+                            <connections>
+                                <segue destination="7su-tT-2ew" kind="presentation" id="Mx3-lu-abV"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Progress" id="0ec-6G-Vwf">
+                            <connections>
+                                <segue destination="N8E-2P-1Tu" kind="show" id="W45-Jb-x1h"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="APIToken" destination="VxH-SU-ocG" id="p3y-Q4-9I5"/>
                         <outlet property="ResponseView" destination="FNz-eW-a8d" id="N9Y-jh-P0w"/>
@@ -72,6 +83,47 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3814.5038167938928" y="-27.464788732394368"/>
+        </scene>
+        <!--Add Assignment-->
+        <scene sceneID="JFy-hE-3BK">
+            <objects>
+                <viewController title="Add Assignment" id="7su-tT-2ew" customClass="AddViewController" customModule="ClassCompass" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dPW-7E-gzI">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Assignment" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lkb-4h-Ajk">
+                                <rect key="frame" x="16" y="50" width="361" height="41"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q7x-RH-tBs">
+                                <rect key="frame" x="313" y="15" width="65" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Done" titleAlignment="trailing"/>
+                                <connections>
+                                    <action selector="CloseModal:" destination="7su-tT-2ew" eventType="touchUpInside" id="aKe-c0-2pm"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ihq-H0-4tk"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="lkb-4h-Ajk" firstAttribute="leading" secondItem="ihq-H0-4tk" secondAttribute="leading" constant="16" id="4Yr-xG-Ado"/>
+                            <constraint firstItem="ihq-H0-4tk" firstAttribute="trailing" secondItem="lkb-4h-Ajk" secondAttribute="trailing" constant="16" id="6cj-hh-rp3"/>
+                            <constraint firstItem="Q7x-RH-tBs" firstAttribute="top" secondItem="ihq-H0-4tk" secondAttribute="top" constant="15" id="cYI-EF-VIT"/>
+                            <constraint firstItem="ihq-H0-4tk" firstAttribute="trailing" secondItem="Q7x-RH-tBs" secondAttribute="trailing" constant="15" id="hLP-es-LaH"/>
+                            <constraint firstItem="lkb-4h-Ajk" firstAttribute="top" secondItem="ihq-H0-4tk" secondAttribute="top" constant="50" id="vwz-GJ-AZ1"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Add Assignment" style="browser" id="TC0-5U-RNr"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JSh-QC-Bdb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3815" y="713"/>
         </scene>
         <!--Progress-->
         <scene sceneID="i3y-ux-Uos">
@@ -83,7 +135,7 @@
                         <viewLayoutGuide key="safeArea" id="7QE-OQ-gHW"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="z4c-wS-LPw"/>
+                    <navigationItem key="navigationItem" title="Progress" style="browser" id="z4c-wS-LPw"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g0k-wL-Rvu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
