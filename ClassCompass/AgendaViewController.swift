@@ -12,16 +12,25 @@ class AgendaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Agenda"
-        let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeft(_:)))
-        swipeRightGestureRecognizer.direction = .left
-        view.addGestureRecognizer(swipeRightGestureRecognizer)
+        let swipeLeftGR = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeft(_:)))
+        swipeLeftGR.direction = .left
+        view.addGestureRecognizer(swipeLeftGR)
+        
+        let swipeUpGR = UISwipeGestureRecognizer(target: self, action: #selector(swipeUp(_:)))
+        swipeUpGR.direction = .up
+        view.addGestureRecognizer(swipeUpGR)
     }
     
     @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
-        print("did swipe")
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let ProgressViewController = storyboard.instantiateViewController(withIdentifier: "ProgressViewController") as! ProgressViewController
         navigationController?.pushViewController(ProgressViewController, animated: true)
+    }
+    
+    @IBAction func swipeUp(_ sender: UISwipeGestureRecognizer) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let AddViewController = storyboard.instantiateViewController(withIdentifier: "AddViewController") as! AddViewController
+        present(AddViewController, animated: true)
     }
     
     var courses: [Course] = []
