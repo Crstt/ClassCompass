@@ -7,10 +7,21 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class AgendaViewController: UIViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Agenda"
+        let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeft(_:)))
+        swipeRightGestureRecognizer.direction = .left
+        view.addGestureRecognizer(swipeRightGestureRecognizer)
+    }
+    
+    @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
+        print("did swipe")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let ProgressViewController = storyboard.instantiateViewController(withIdentifier: "ProgressViewController") as! ProgressViewController
+        navigationController?.pushViewController(ProgressViewController, animated: true)
     }
     
     var courses: [Course] = []

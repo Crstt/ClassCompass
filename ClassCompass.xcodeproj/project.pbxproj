@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		72338CB52B140A540040D4D5 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72338CB42B140A540040D4D5 /* ProgressViewController.swift */; };
 		727466752B042DD300A4E64C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466742B042DD300A4E64C /* AppDelegate.swift */; };
 		727466772B042DD300A4E64C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466762B042DD300A4E64C /* SceneDelegate.swift */; };
-		727466792B042DD300A4E64C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466782B042DD300A4E64C /* ViewController.swift */; };
+		727466792B042DD300A4E64C /* AgendaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466782B042DD300A4E64C /* AgendaViewController.swift */; };
 		7274667C2B042DD300A4E64C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7274667A2B042DD300A4E64C /* Main.storyboard */; };
 		7274667E2B042DD500A4E64C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7274667D2B042DD500A4E64C /* Assets.xcassets */; };
 		727466812B042DD500A4E64C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7274667F2B042DD500A4E64C /* LaunchScreen.storyboard */; };
@@ -42,10 +43,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		72338CB42B140A540040D4D5 /* ProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
 		727466712B042DD300A4E64C /* ClassCompass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClassCompass.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		727466742B042DD300A4E64C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		727466762B042DD300A4E64C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		727466782B042DD300A4E64C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		727466782B042DD300A4E64C /* AgendaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaViewController.swift; sourceTree = "<group>"; };
 		7274667B2B042DD300A4E64C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7274667D2B042DD500A4E64C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		727466802B042DD500A4E64C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -114,7 +116,8 @@
 				727467682B0D664E00A4E64C /* Course.swift */,
 				727466742B042DD300A4E64C /* AppDelegate.swift */,
 				727466762B042DD300A4E64C /* SceneDelegate.swift */,
-				727466782B042DD300A4E64C /* ViewController.swift */,
+				727466782B042DD300A4E64C /* AgendaViewController.swift */,
+				72338CB42B140A540040D4D5 /* ProgressViewController.swift */,
 				7274667A2B042DD300A4E64C /* Main.storyboard */,
 				727467622B0D587400A4E64C /* Agenda.storyboard */,
 				7274667D2B042DD500A4E64C /* Assets.xcassets */,
@@ -284,8 +287,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				727467692B0D664E00A4E64C /* Course.swift in Sources */,
-				727466792B042DD300A4E64C /* ViewController.swift in Sources */,
+				727466792B042DD300A4E64C /* AgendaViewController.swift in Sources */,
 				727466752B042DD300A4E64C /* AppDelegate.swift in Sources */,
+				72338CB52B140A540040D4D5 /* ProgressViewController.swift in Sources */,
 				7274676D2B0D66D400A4E64C /* CanvasAPIClient.swift in Sources */,
 				7274676B2B0D668700A4E64C /* Assignment.swift in Sources */,
 				727466772B042DD300A4E64C /* SceneDelegate.swift in Sources */,

@@ -35,8 +35,7 @@ class CanvasAPIClient {
             case .success(let json):
                 if let jsonData = json as? NSData {
                     do {
-                        //let deserializedJson = try JSONSerialization.jsonObject(with: jsonData as Data, options: []) as! [NSDictionary]
-                        //completion(.success(deserializedJson))
+                        
                         if let deserializedJson = try JSONSerialization.jsonObject(with: jsonData as Data, options: []) as? [NSDictionary] {
                             completion(.success(deserializedJson))
                         } else {
