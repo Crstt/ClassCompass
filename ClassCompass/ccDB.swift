@@ -10,6 +10,7 @@ import Foundation
 import SQLite3
 import CanvasAPIClient
 
+
 // Create Class
 class Database {
 /*
@@ -40,6 +41,7 @@ class Database {
         createCoursesView()
         createAssignmentsView()
     }
+
     
     // Create DB connection
     func openDatabase() -> OpaquePointer? {

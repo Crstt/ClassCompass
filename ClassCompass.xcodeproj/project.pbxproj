@@ -7,15 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		72338CB52B140A540040D4D5 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72338CB42B140A540040D4D5 /* ProgressViewController.swift */; };
 		727466752B042DD300A4E64C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466742B042DD300A4E64C /* AppDelegate.swift */; };
 		727466772B042DD300A4E64C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466762B042DD300A4E64C /* SceneDelegate.swift */; };
-		727466792B042DD300A4E64C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466782B042DD300A4E64C /* ViewController.swift */; };
+		727466792B042DD300A4E64C /* AgendaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466782B042DD300A4E64C /* AgendaViewController.swift */; };
 		7274667C2B042DD300A4E64C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7274667A2B042DD300A4E64C /* Main.storyboard */; };
 		7274667E2B042DD500A4E64C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7274667D2B042DD500A4E64C /* Assets.xcassets */; };
 		727466812B042DD500A4E64C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7274667F2B042DD500A4E64C /* LaunchScreen.storyboard */; };
 		7274668C2B042DD600A4E64C /* ClassCompassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274668B2B042DD600A4E64C /* ClassCompassTests.swift */; };
 		727466962B042DD600A4E64C /* ClassCompassUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466952B042DD600A4E64C /* ClassCompassUITests.swift */; };
 		727466982B042DD600A4E64C /* ClassCompassUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466972B042DD600A4E64C /* ClassCompassUITestsLaunchTests.swift */; };
+		727466A62B04329100A4E64C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 727466A52B04329100A4E64C /* Alamofire */; };
+		727466A92B051C2D00A4E64C /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 727466A82B051C2D00A4E64C /* SwiftyJSON */; };
+		727467632B0D587400A4E64C /* Agenda.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 727467622B0D587400A4E64C /* Agenda.storyboard */; };
+		727467692B0D664E00A4E64C /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727467682B0D664E00A4E64C /* Course.swift */; };
+		7274676B2B0D668700A4E64C /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274676A2B0D668700A4E64C /* Assignment.swift */; };
+		7274676D2B0D66D400A4E64C /* CanvasAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */; };
+		72DBA1912B1426750096E054 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DBA1902B1426750096E054 /* AddViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,10 +44,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		72338CB42B140A540040D4D5 /* ProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
 		727466712B042DD300A4E64C /* ClassCompass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClassCompass.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		727466742B042DD300A4E64C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		727466762B042DD300A4E64C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		727466782B042DD300A4E64C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		727466782B042DD300A4E64C /* AgendaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaViewController.swift; sourceTree = "<group>"; };
 		7274667B2B042DD300A4E64C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7274667D2B042DD500A4E64C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		727466802B042DD500A4E64C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -49,6 +58,11 @@
 		727466912B042DD600A4E64C /* ClassCompassUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClassCompassUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		727466952B042DD600A4E64C /* ClassCompassUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassCompassUITests.swift; sourceTree = "<group>"; };
 		727466972B042DD600A4E64C /* ClassCompassUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassCompassUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		727467622B0D587400A4E64C /* Agenda.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Agenda.storyboard; sourceTree = "<group>"; };
+		727467682B0D664E00A4E64C /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
+		7274676A2B0D668700A4E64C /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
+		7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasAPIClient.swift; sourceTree = "<group>"; };
+		72DBA1902B1426750096E054 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				727466A92B051C2D00A4E64C /* SwiftyJSON in Frameworks */,
+				727466A62B04329100A4E64C /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,13 +115,19 @@
 		727466732B042DD300A4E64C /* ClassCompass */ = {
 			isa = PBXGroup;
 			children = (
+				727467682B0D664E00A4E64C /* Course.swift */,
 				727466742B042DD300A4E64C /* AppDelegate.swift */,
 				727466762B042DD300A4E64C /* SceneDelegate.swift */,
-				727466782B042DD300A4E64C /* ViewController.swift */,
+				727466782B042DD300A4E64C /* AgendaViewController.swift */,
+				72338CB42B140A540040D4D5 /* ProgressViewController.swift */,
 				7274667A2B042DD300A4E64C /* Main.storyboard */,
+				72DBA1902B1426750096E054 /* AddViewController.swift */,
+				727467622B0D587400A4E64C /* Agenda.storyboard */,
 				7274667D2B042DD500A4E64C /* Assets.xcassets */,
 				7274667F2B042DD500A4E64C /* LaunchScreen.storyboard */,
 				727466822B042DD500A4E64C /* Info.plist */,
+				7274676A2B0D668700A4E64C /* Assignment.swift */,
+				7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */,
 			);
 			path = ClassCompass;
 			sourceTree = "<group>";
@@ -143,6 +165,10 @@
 			dependencies = (
 			);
 			name = ClassCompass;
+			packageProductDependencies = (
+				727466A52B04329100A4E64C /* Alamofire */,
+				727466A82B051C2D00A4E64C /* SwiftyJSON */,
+			);
 			productName = ClassCompass;
 			productReference = 727466712B042DD300A4E64C /* ClassCompass.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +241,10 @@
 				Base,
 			);
 			mainGroup = 727466682B042DD300A4E64C;
+			packageReferences = (
+				727466A42B04329100A4E64C /* XCRemoteSwiftPackageReference "Alamofire" */,
+				727466A72B051C2C00A4E64C /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+			);
 			productRefGroup = 727466722B042DD300A4E64C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -232,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				727466812B042DD500A4E64C /* LaunchScreen.storyboard in Resources */,
+				727467632B0D587400A4E64C /* Agenda.storyboard in Resources */,
 				7274667E2B042DD500A4E64C /* Assets.xcassets in Resources */,
 				7274667C2B042DD300A4E64C /* Main.storyboard in Resources */,
 			);
@@ -258,8 +289,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				727466792B042DD300A4E64C /* ViewController.swift in Sources */,
+				727467692B0D664E00A4E64C /* Course.swift in Sources */,
+				727466792B042DD300A4E64C /* AgendaViewController.swift in Sources */,
+				72DBA1912B1426750096E054 /* AddViewController.swift in Sources */,
 				727466752B042DD300A4E64C /* AppDelegate.swift in Sources */,
+				72338CB52B140A540040D4D5 /* ProgressViewController.swift in Sources */,
+				7274676D2B0D66D400A4E64C /* CanvasAPIClient.swift in Sources */,
+				7274676B2B0D668700A4E64C /* Assignment.swift in Sources */,
 				727466772B042DD300A4E64C /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -601,6 +637,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		727466A42B04329100A4E64C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.1;
+			};
+		};
+		727466A72B051C2C00A4E64C /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		727466A52B04329100A4E64C /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 727466A42B04329100A4E64C /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		727466A82B051C2D00A4E64C /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 727466A72B051C2C00A4E64C /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 727466692B042DD300A4E64C /* Project object */;
 }
