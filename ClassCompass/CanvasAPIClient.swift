@@ -1,8 +1,8 @@
 //
-//  CanvasAPIClient.swift
-//  ClassCompass
+//  CanvasAPIClient.Student.swift
+//  ClassCompassDB
 //
-//  Created by Matteo Catalano on 11/21/23.
+//  Created by David Teixeira on 11/28/23.
 //
 
 import Foundation
@@ -13,19 +13,21 @@ class CanvasAPIClient {
     let authToken : String
     let canvasAPIURL : String
     let defaultHeaders: HTTPHeaders
+    let database : Database
     
     enum APIError: Error {
         case invalidData
         case networkError(Error)
     }
     
-    init (authToken: String, canvasAPIURL: String? = "https://ivylearn.ivytech.edu/api/v1/"){
+    init (authToken: String, canvasAPIURL: String? = "https://ivylearn.ivytech.edu/api/v1/", database: Database){
         self.authToken = authToken
         self.canvasAPIURL = canvasAPIURL ?? "https://ivylearn.ivytech.edu/api/v1/"
         self.defaultHeaders = [
             "Authorization": "Bearer \(self.authToken)",
             "Accept": "application/json"
         ]
+        self.database = database
     }
     
 
@@ -58,6 +60,9 @@ class CanvasAPIClient {
             switch result {
             case .success(let coursesRaw):
                 let courses = self.decodeCourses(coursesRaw)
+                for course in courses {
+                    self.database.saveCourse(course)  // Save each course to the database
+                }
                 completion(courses)
             case .failure(let error):
                 print("Error: \(error)")
@@ -122,6 +127,8 @@ class CanvasAPIClient {
                                                 dueDate: self.stringtoDate(assignmentRaw["due_at"] as! String),
                                                 description: assignmentRaw["description"] as! String,
                                                 grade: 0)
+                    
+                    self.database.saveAssignment(assignment)  // Save each assignment to the database
                     assignments.append(assignment)
                 }
                 completion(assignments)
@@ -131,5 +138,50 @@ class CanvasAPIClient {
             }
         }
     }
-}
+    
+    /*func fetchUsers(completion: @escaping ([Users]) -> Void) {
+        performRequest(url: self.canvasAPIURL + "/users", headers: self.defaultHeaders) { result in
+            switch result {
+            case .success(let usersRaw):
+                let users = self.decodeUsers(usersRaw)
+                for user in users {
+                    self.database.saveUser(user)  // Save each user to the database
+                }
+                completion(users)
+            case .failure(let error):
+                print("Error: \(error)")
+                completion([])
+            }
+        }
+    }
 
+    func decodeUsers(_ usersRaw: [NSDictionary]) -> [Users] {
+        var users: [Users] = []
+        
+        for userRaw in usersRaw {
+            guard let id = userRaw["id"] as? Int,
+                  let first_name = userRaw["first_name"] as? String,
+                  let last_name = userRaw["last_name"] as? String,
+                  let login_id = userRaw["login_id"] as? String else {
+                continue
+            }
+
+            let user = Users(id: id, first_name: first_name, last_name: last_name, login_id: login_id)
+            users.append(user)
+        }
+        return users
+    }
+    
+    func usersDump(_ users: [Users]) -> String {
+        var userDetails = "Users:\n"
+
+        for user in users {
+            userDetails += "ID: \(user.id)\n"
+            userDetails += "First Name: \(user.first_name)\n"
+            userDetails += "Last Name: \(user.last_name)\n"
+            userDetails += "Login Email: \(user.login_id)\n"
+            userDetails += "---------\n"
+        }
+        return userDetails
+    }*/
+}

@@ -8,7 +8,6 @@
 // Import Swift Libraries
 import Foundation
 import SQLite3
-import CanvasAPIClient
 
 
 // Create Class
@@ -20,7 +19,7 @@ class Database {
     // Delcare Public Variables. (pointer used for C API's ie. SQLite with C library)
     var db: OpaquePointer?
 
-    func initialize_Use_Database() {
+    init() {
     /*
      Function Name: initialize_Use_Database
      Function Purpose: Function is to initialize the db and insert an item
@@ -355,11 +354,11 @@ class Database {
     /* ########################################################################
                                 Save Content To Tables
     ######################################################################## */
-    func saveUser(_ user: Users) {
-    /*
+    /*func saveUser(_ user: Users) {
+    
      Function Name: saveUser
      Function Purpose: Function is to save the user that is pulled from the Canvas API call
-     */
+     
         let insertStatementString = """
         INSERT INTO TStudents (id, first_name, last_name, login_id)
         VALUES (?, ?, ?, ?)
@@ -386,7 +385,7 @@ class Database {
             print("INSERT statement could not be prepared.")
         }
         sqlite3_finalize(insertStatement)
-    }
+    }*/
     
     func saveCourse(_ course: Course) {
     /*
@@ -408,7 +407,7 @@ class Database {
         if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
             sqlite3_bind_int(insertStatement, 1, Int32(course.id))
             sqlite3_bind_text(insertStatement, 2, (course.name as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStatement, 3, (course.courseCode as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStatement, 3, (course.code as NSString).utf8String, -1, nil)
             
             // Convert Date to String or Timestamp
             let dateFormatter = DateFormatter()
@@ -455,26 +454,19 @@ class Database {
             // Convert Date to String or Timestamp
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-            if let dueDate = assignment.dueDate {
-                let dueDateString = dateFormatter.string(from: dueDate)
-                sqlite3_bind_text(insertStatement, 3, (dueDateString as NSString).utf8String, -1, nil)
-            } else {
-                sqlite3_bind_null(insertStatement, 3)
-            }
-
-            if let description = assignment.description {
-                sqlite3_bind_text(insertStatement, 4, (description as NSString).utf8String, -1, nil)
-            } else {
-                sqlite3_bind_null(insertStatement, 4)
-            }
-
+            
+            let dueDateString = dateFormatter.string(from: assignment.dueDate)
+            sqlite3_bind_text(insertStatement, 3, (dueDateString as NSString).utf8String, -1, nil)
+            
+            sqlite3_bind_text(insertStatement, 4, (assignment.description as NSString).utf8String, -1, nil)
+           
             if let grade = assignment.grade {
                 sqlite3_bind_double(insertStatement, 5, grade)
             } else {
                 sqlite3_bind_null(insertStatement, 5)
             }
 
-            sqlite3_bind_text(insertStatement, 6, (assignment.gradingType.rawValue as NSString).utf8String, -1, nil)
+            //sqlite3_bind_text(insertStatement, 6, (assignment.gradingType.rawValue as NSString).utf8String, -1, nil)
 
             if sqlite3_step(insertStatement) == SQLITE_DONE {
                 print("Successfully inserted assignment.")
@@ -575,7 +567,7 @@ class Database {
             sqlite3_bind_text(updateStatement, 2, (dueDate as NSString?)?.utf8String, -1, nil)
             sqlite3_bind_text(updateStatement, 3, (description as NSString?)?.utf8String, -1, nil)
             sqlite3_bind_double(updateStatement, 4, grade ?? 0)
-            sqlite3_bind_text(updateStatement, 5, (gradingType as NSString?)?.utf8String, -1, nil)
+            //sqlite3_bind_text(updateStatement, 5, (gradingType as NSString?)?.utf8String, -1, nil)
             sqlite3_bind_int(updateStatement, 6, Int32(id))
 
             if sqlite3_step(updateStatement) == SQLITE_DONE {
