@@ -9,6 +9,10 @@ import UIKit
 
 class AgendaViewController: UIViewController {
     
+    var courses: [Course] = []
+    var canvasClient: CanvasAPIClient!
+    var db: Database!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Agenda"
@@ -19,6 +23,8 @@ class AgendaViewController: UIViewController {
         let swipeUpGR = UISwipeGestureRecognizer(target: self, action: #selector(swipeUp(_:)))
         swipeUpGR.direction = .up
         view.addGestureRecognizer(swipeUpGR)
+        
+        db = Database()
     }
     
     @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
@@ -33,15 +39,12 @@ class AgendaViewController: UIViewController {
         present(AddViewController, animated: true)
     }
     
-    var courses: [Course] = []
-    var canvasClient: CanvasAPIClient!
-    
     @IBOutlet weak var ResponseView: UITextView!
     @IBOutlet weak var APIToken: UITextField!
     
     @IBAction func APITestBtn(_ sender: Any) {
         
-        canvasClient = CanvasAPIClient(authToken: APIToken.text!)
+        canvasClient = CanvasAPIClient(authToken: APIToken.text!, database: db)
         
         canvasClient.fetchCourses(){ fetchedCourses in
             self.courses = fetchedCourses

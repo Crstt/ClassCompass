@@ -23,6 +23,7 @@
 		727467692B0D664E00A4E64C /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727467682B0D664E00A4E64C /* Course.swift */; };
 		7274676B2B0D668700A4E64C /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274676A2B0D668700A4E64C /* Assignment.swift */; };
 		7274676D2B0D66D400A4E64C /* CanvasAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */; };
+		72DB68D42B16926E00640691 /* ccDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DB68D32B16926E00640691 /* ccDB.swift */; };
 		72DBA1912B1426750096E054 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DBA1902B1426750096E054 /* AddViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,7 @@
 		727467682B0D664E00A4E64C /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		7274676A2B0D668700A4E64C /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasAPIClient.swift; sourceTree = "<group>"; };
+		72DB68D32B16926E00640691 /* ccDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ccDB.swift; sourceTree = "<group>"; };
 		72DBA1902B1426750096E054 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -115,19 +117,20 @@
 		727466732B042DD300A4E64C /* ClassCompass */ = {
 			isa = PBXGroup;
 			children = (
+				7274676A2B0D668700A4E64C /* Assignment.swift */,
 				727467682B0D664E00A4E64C /* Course.swift */,
 				727466742B042DD300A4E64C /* AppDelegate.swift */,
 				727466762B042DD300A4E64C /* SceneDelegate.swift */,
 				727466782B042DD300A4E64C /* AgendaViewController.swift */,
 				72338CB42B140A540040D4D5 /* ProgressViewController.swift */,
-				7274667A2B042DD300A4E64C /* Main.storyboard */,
 				72DBA1902B1426750096E054 /* AddViewController.swift */,
+				7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */,
+				72DB68D32B16926E00640691 /* ccDB.swift */,
+				7274667A2B042DD300A4E64C /* Main.storyboard */,
 				727467622B0D587400A4E64C /* Agenda.storyboard */,
 				7274667D2B042DD500A4E64C /* Assets.xcassets */,
 				7274667F2B042DD500A4E64C /* LaunchScreen.storyboard */,
 				727466822B042DD500A4E64C /* Info.plist */,
-				7274676A2B0D668700A4E64C /* Assignment.swift */,
-				7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */,
 			);
 			path = ClassCompass;
 			sourceTree = "<group>";
@@ -289,6 +292,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72DB68D42B16926E00640691 /* ccDB.swift in Sources */,
 				727467692B0D664E00A4E64C /* Course.swift in Sources */,
 				727466792B042DD300A4E64C /* AgendaViewController.swift in Sources */,
 				72DBA1912B1426750096E054 /* AddViewController.swift in Sources */,
