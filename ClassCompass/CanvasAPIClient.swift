@@ -2,7 +2,7 @@
 //  CanvasAPIClient.Student.swift
 //  ClassCompassDB
 //
-//  Created by David Teixeira on 11/28/23.
+//  Created by Matteo Catalano on 11/26/23.
 //
 
 import Foundation

@@ -24,6 +24,9 @@
 		7274676B2B0D668700A4E64C /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274676A2B0D668700A4E64C /* Assignment.swift */; };
 		7274676D2B0D66D400A4E64C /* CanvasAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */; };
 		72DB68D42B16926E00640691 /* ccDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DB68D32B16926E00640691 /* ccDB.swift */; };
+		72DB68D82B19852400640691 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DB68D72B19852400640691 /* SettingsViewController.swift */; };
+		72DB68DD2B1992FF00640691 /* settingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DB68DB2B1992FF00640691 /* settingsTableViewCell.swift */; };
+		72DB68DE2B1992FF00640691 /* settingsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72DB68DC2B1992FF00640691 /* settingsTableViewCell.xib */; };
 		72DBA1912B1426750096E054 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DBA1902B1426750096E054 /* AddViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +67,9 @@
 		7274676A2B0D668700A4E64C /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasAPIClient.swift; sourceTree = "<group>"; };
 		72DB68D32B16926E00640691 /* ccDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ccDB.swift; sourceTree = "<group>"; };
+		72DB68D72B19852400640691 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		72DB68DB2B1992FF00640691 /* settingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingsTableViewCell.swift; sourceTree = "<group>"; };
+		72DB68DC2B1992FF00640691 /* settingsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = settingsTableViewCell.xib; sourceTree = "<group>"; };
 		72DBA1902B1426750096E054 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -117,13 +123,11 @@
 		727466732B042DD300A4E64C /* ClassCompass */ = {
 			isa = PBXGroup;
 			children = (
+				72DB68D92B19929500640691 /* ViewControllers */,
 				7274676A2B0D668700A4E64C /* Assignment.swift */,
 				727467682B0D664E00A4E64C /* Course.swift */,
 				727466742B042DD300A4E64C /* AppDelegate.swift */,
 				727466762B042DD300A4E64C /* SceneDelegate.swift */,
-				727466782B042DD300A4E64C /* AgendaViewController.swift */,
-				72338CB42B140A540040D4D5 /* ProgressViewController.swift */,
-				72DBA1902B1426750096E054 /* AddViewController.swift */,
 				7274676C2B0D66D400A4E64C /* CanvasAPIClient.swift */,
 				72DB68D32B16926E00640691 /* ccDB.swift */,
 				7274667A2B042DD300A4E64C /* Main.storyboard */,
@@ -150,6 +154,27 @@
 				727466972B042DD600A4E64C /* ClassCompassUITestsLaunchTests.swift */,
 			);
 			path = ClassCompassUITests;
+			sourceTree = "<group>";
+		};
+		72DB68D92B19929500640691 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				72DB68DA2B1992B700640691 /* tableViews */,
+				727466782B042DD300A4E64C /* AgendaViewController.swift */,
+				72338CB42B140A540040D4D5 /* ProgressViewController.swift */,
+				72DBA1902B1426750096E054 /* AddViewController.swift */,
+				72DB68D72B19852400640691 /* SettingsViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		72DB68DA2B1992B700640691 /* tableViews */ = {
+			isa = PBXGroup;
+			children = (
+				72DB68DB2B1992FF00640691 /* settingsTableViewCell.swift */,
+				72DB68DC2B1992FF00640691 /* settingsTableViewCell.xib */,
+			);
+			path = tableViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,6 +293,7 @@
 				727467632B0D587400A4E64C /* Agenda.storyboard in Resources */,
 				7274667E2B042DD500A4E64C /* Assets.xcassets in Resources */,
 				7274667C2B042DD300A4E64C /* Main.storyboard in Resources */,
+				72DB68DE2B1992FF00640691 /* settingsTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,9 +320,11 @@
 			files = (
 				72DB68D42B16926E00640691 /* ccDB.swift in Sources */,
 				727467692B0D664E00A4E64C /* Course.swift in Sources */,
+				72DB68D82B19852400640691 /* SettingsViewController.swift in Sources */,
 				727466792B042DD300A4E64C /* AgendaViewController.swift in Sources */,
 				72DBA1912B1426750096E054 /* AddViewController.swift in Sources */,
 				727466752B042DD300A4E64C /* AppDelegate.swift in Sources */,
+				72DB68DD2B1992FF00640691 /* settingsTableViewCell.swift in Sources */,
 				72338CB52B140A540040D4D5 /* ProgressViewController.swift in Sources */,
 				7274676D2B0D66D400A4E64C /* CanvasAPIClient.swift in Sources */,
 				7274676B2B0D668700A4E64C /* Assignment.swift in Sources */,

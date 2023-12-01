@@ -70,9 +70,20 @@
                     <navigationItem key="navigationItem" title="Agenda" id="WN8-l9-Hb1">
                         <barButtonItem key="leftBarButtonItem" title="Add" id="XUY-Ex-tff">
                             <connections>
-                                <segue destination="7su-tT-2ew" kind="presentation" id="Mx3-lu-abV"/>
+                                <segue destination="7su-tT-2ew" kind="presentation" identifier="addSegue" id="Mx3-lu-abV"/>
                             </connections>
                         </barButtonItem>
+                        <centerItemGroups>
+                            <barButtonItemGroup customizationDisposition="fixed" id="OkJ-MY-PeQ">
+                                <barButtonItems>
+                                    <barButtonItem title="Settings" id="eus-EG-paD" userLabel="Settings">
+                                        <connections>
+                                            <segue destination="yBt-kZ-uUa" kind="show" identifier="settingsSegue" id="7n0-Fc-Id9"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </barButtonItems>
+                            </barButtonItemGroup>
+                        </centerItemGroups>
                         <barButtonItem key="rightBarButtonItem" title="Progress" id="0ec-6G-Vwf">
                             <connections>
                                 <segue destination="N8E-2P-1Tu" kind="show" id="W45-Jb-x1h"/>
@@ -87,6 +98,37 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3814.5038167938928" y="-27.464788732394368"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="ucw-R6-BqB">
+            <objects>
+                <viewController storyboardIdentifier="SettingsViewController" title="Settings" id="yBt-kZ-uUa" customClass="SettingsViewController" customModule="ClassCompass" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="HNa-3N-ZEO" customClass="settingsViewController">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="nil-f9-e6R">
+                                <rect key="frame" x="0.0" y="155" width="393" height="663"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="gph-SE-dzn"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="nil-f9-e6R" firstAttribute="top" secondItem="gph-SE-dzn" secondAttribute="top" id="7zs-jy-I4g"/>
+                            <constraint firstItem="gph-SE-dzn" firstAttribute="trailing" secondItem="nil-f9-e6R" secondAttribute="trailing" id="RcC-kI-7pj"/>
+                            <constraint firstItem="nil-f9-e6R" firstAttribute="leading" secondItem="gph-SE-dzn" secondAttribute="leading" id="XPX-Id-QKB"/>
+                            <constraint firstItem="gph-SE-dzn" firstAttribute="bottom" secondItem="nil-f9-e6R" secondAttribute="bottom" id="ddz-mr-fUp"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Settings" id="WOR-ce-qEJ"/>
+                    <connections>
+                        <outlet property="tableView" destination="nil-f9-e6R" id="EDR-nE-Kbx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vd7-xq-4qi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2887.7862595419847" y="712.67605633802816"/>
         </scene>
         <!--Add Assignment-->
         <scene sceneID="JFy-hE-3BK">

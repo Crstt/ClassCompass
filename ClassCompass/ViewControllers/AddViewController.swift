@@ -9,6 +9,10 @@ import UIKit
 
 class AddViewController: UIViewController {
 
+    var courses: [Course] = []
+    var canvasClient: CanvasAPIClient!
+    var db: Database!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

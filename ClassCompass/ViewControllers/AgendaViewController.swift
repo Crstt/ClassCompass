@@ -39,6 +39,17 @@ class AgendaViewController: UIViewController {
         present(AddViewController, animated: true)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "addSegue" {
+            if let destinationVC = segue.destination as? AddViewController {
+                // Pass data to AddViewController here
+                destinationVC.courses = courses
+                destinationVC.canvasClient = canvasClient
+                destinationVC.db = db
+            }
+        }
+    }
+    
     @IBOutlet weak var ResponseView: UITextView!
     @IBOutlet weak var APIToken: UITextField!
     
