@@ -6,6 +6,25 @@
          contextName = "static Course.dump(_:):Course.swift">
       </ContextState>
       <ContextState
+         contextName = "AddViewController.pickerView(_:didSelectRow:inComponent:):AddViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.selectedCourse">
+            </PersistentString>
+            <PersistentString
+               value = "courses[row]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AddViewController.pickerView(_:titleForRow:forComponent:):AddViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "courses[row].code">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in ViewController.APITestBtn(_:):ViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -13,6 +32,14 @@
             </PersistentString>
             <PersistentString
                value = "json.rawArray[0]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "SettingsViewController.tableView(_:didSelectRowAt:):SettingsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "cell.textField.text">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

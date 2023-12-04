@@ -2,7 +2,7 @@
 //  CanvasAPIClient.Student.swift
 //  ClassCompassDB
 //
-//  Created by David Teixeira on 11/28/23.
+//  Created by Matteo Catalano on 11/26/23.
 //
 
 import Foundation
@@ -34,8 +34,8 @@ class CanvasAPIClient {
     }
     
 
-    func performRequest(url: String, headers: HTTPHeaders, completion: @escaping (Result<[NSDictionary], Error>) -> Void) {
-        AF.request(url, headers: headers).response { response in
+    func performRequest(url: String, parameters: [String: Any], headers: HTTPHeaders, completion: @escaping (Result<[NSDictionary], Error>) -> Void) {
+        AF.request(url, parameters: parameters, headers: headers).response { response in
             switch response.result {
             case .success(let json):
                 if let jsonData = json as? NSData {
@@ -58,8 +58,14 @@ class CanvasAPIClient {
         }
     }
     
-    func fetchCourses(completion: @escaping ([Course]) -> Void) {
-        performRequest(url: self.canvasAPIURL + "/courses", headers: self.defaultHeaders) { result in
+    func fetchCourses(page: Int = 1, pageSize: Int = 999, completion: @escaping ([Course]) -> Void) {
+        
+        let parameters: [String: Any] = [
+            "page": page,
+            "per_page": pageSize
+        ]
+        
+        performRequest(url: self.canvasAPIURL + "/courses", parameters: parameters, headers: self.defaultHeaders) { result in
             switch result {
             case .success(let coursesRaw):
                 let courses = self.decodeCourses(coursesRaw)
@@ -74,21 +80,46 @@ class CanvasAPIClient {
         }
     }
 
+    fileprivate func regExReplace(_ inputString: String, _ pattern: String, _ replacement: String) -> String {
+        
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: [])
+            return regex.stringByReplacingMatches(in: inputString, options: [], range: NSRange(inputString.startIndex..., in: inputString), withTemplate: replacement)
+        } catch {
+            print("Error creating regex: \(error)")
+            return inputString
+        }
+    }
+    
     func decodeCourses(_ coursesRaw: [NSDictionary]) -> [Course] {
         var courses: [Course] = []
         
         for courseRaw in coursesRaw {
-            let id = courseRaw["id"] as! Int
-            let name = courseRaw["name"] as! String
-            let courseCode = courseRaw["course_code"] as! String
-            let start_at = courseRaw["start_at"] as! String
-            let end_at = courseRaw["end_at"] as! String
-            
-            let startDate = self.stringtoDate(start_at)
-            let endDate = self.stringtoDate(end_at)
-            
-            let course = Course(id: id, name: name, code: courseCode, startDate: startDate, endDate: endDate, assignments: [])
-            courses.append(course)
+            if let _ = courseRaw["access_restricted_by_date"] {
+                print("Course with id: \(courseRaw["id"] as! Int ) has restricted access by date. Could not be saved.")
+            } else {
+                let id = courseRaw["id"] as! Int
+                var name = courseRaw["name"] as! String
+                var courseCode = courseRaw["course_code"] as! String
+                guard let start_at = courseRaw["start_at"] as? String else {
+                    print("Course with id: \(courseRaw["id"] as! Int ) has no start date. Could not be saved.")
+                    continue
+                }
+                guard let end_at = courseRaw["end_at"] as? String else {
+                    print("Course with id: \(courseRaw["id"] as! Int ) has no end date. Could not be saved.")
+                    continue
+                }
+                
+                courseCode = String(courseCode.prefix(7))
+                
+                name = regExReplace(name, "(^.+)-(.+)-(.+$)", "$3")
+                
+                let startDate = self.stringtoDate(start_at)
+                let endDate = self.stringtoDate(end_at)
+                
+                let course = Course(id: id, name: name, code: courseCode, startDate: startDate, endDate: endDate, assignments: [])
+                courses.append(course)
+            }
         }
         //print(Course.dump(courses))
         return courses
@@ -119,8 +150,14 @@ class CanvasAPIClient {
         return courseDetails
     }
     
-    func fetchAssignmentsById(courseId: Int, completion: @escaping ([Assignment]) -> Void) {
-        performRequest(url: self.canvasAPIURL + "/courses/\(courseId)/assignments", headers: self.defaultHeaders) { result in
+    func fetchAssignmentsById(courseId: Int, page: Int = 1, pageSize: Int = 999, completion: @escaping ([Assignment]) -> Void) {
+        
+        let parameters: [String: Any] = [
+            "page": page,
+            "per_page": pageSize
+        ]
+        
+        performRequest(url: self.canvasAPIURL + "/courses/\(courseId)/assignments", parameters: parameters, headers: self.defaultHeaders) { result in
             switch result {
             case .success(let assignmentRaw):
                 var assignments: [Assignment] = []

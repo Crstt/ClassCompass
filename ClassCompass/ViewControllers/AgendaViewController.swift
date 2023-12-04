@@ -39,6 +39,17 @@ class AgendaViewController: UIViewController {
         present(AddViewController, animated: true)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "addSegue" {
+            if let destinationVC = segue.destination as? AddViewController {
+                // Pass data to AddViewController here
+                destinationVC.courses = courses
+                destinationVC.canvasClient = canvasClient
+                destinationVC.db = db
+            }
+        }
+    }
+    
     @IBOutlet weak var ResponseView: UITextView!
     @IBOutlet weak var APIToken: UITextField!
     
@@ -49,17 +60,20 @@ class AgendaViewController: UIViewController {
         canvasClient.fetchCourses(){ fetchedCourses in
             self.courses = fetchedCourses
             let courseDump = Course.dump(fetchedCourses)
-            print(courseDump)
+            //print(courseDump)
             self.ResponseView.text = courseDump
         }
     }
     @IBAction func fetchAssignments(_ sender: Any) {
-        print(Course.dump(self.courses))
-        canvasClient.fetchAssignmentsById(courseId: self.courses[0].id){ fetchedAssignments in
-            self.courses[0].assignments = fetchedAssignments
-            print(Assignment.dump(fetchedAssignments))
-            self.ResponseView.text = Assignment.dump(fetchedAssignments)
-        }
         
+        self.ResponseView.text = ""
+        for index in 0..<self.courses.count {
+            let course = self.courses[index]
+            canvasClient.fetchAssignmentsById(courseId: course.id) { fetchedAssignments in
+                self.ResponseView.text += course.code + "\n------------------------\n"
+                self.courses[index].assignments = fetchedAssignments
+                self.ResponseView.text += Assignment.dump(fetchedAssignments)
+            }
+        }
     }
 }
