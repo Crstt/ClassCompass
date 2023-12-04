@@ -11,6 +11,9 @@
             <PersistentString
                value = "self.selectedCourse">
             </PersistentString>
+            <PersistentString
+               value = "courses[row]">
+            </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState

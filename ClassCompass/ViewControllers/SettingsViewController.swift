@@ -23,7 +23,9 @@ class SettingsViewController: UIViewController {
 }
 
 var settings = [
-    "Username",
+    "First Name",
+    "Last Name",
+    "Email",
     "Password",
     "API Token"
     ]

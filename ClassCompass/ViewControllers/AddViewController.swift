@@ -9,6 +9,12 @@ import UIKit
 
 class AddViewController: UIViewController {
     
+    var courses: [Course] = []
+    var canvasClient: CanvasAPIClient!
+    var db: Database!
+    var selectedCourse: Course?
+    var selectedAssignment: Assignment?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,17 +40,11 @@ class AddViewController: UIViewController {
     }
 }
 
-var courses: [Course] = []
-var canvasClient: CanvasAPIClient!
-var db: Database!
-
-var selectedCourse: Course?
-var selectedAssignment: Assignment?
-
 extension AddViewController: UIPickerViewDelegate{
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView == ClassPicker {
             selectedCourse = courses[row]
+            print(courses[row].assignments.count)
             AssignmentPicker.reloadAllComponents() // Reload AssignmentPicker data
         } else if pickerView == AssignmentPicker {
             selectedAssignment = selectedCourse?.assignments[row]
@@ -62,6 +62,7 @@ extension AddViewController: UIPickerViewDataSource{
             return courses.count // Number of courses for ClassPicker
         } else if pickerView == AssignmentPicker {
             // Return the number of assignments for the selected course
+            print(selectedCourse?.code)
             return selectedCourse?.assignments.count ?? 0
         } else {
             return 0
