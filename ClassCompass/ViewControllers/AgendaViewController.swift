@@ -65,12 +65,13 @@ class AgendaViewController: UIViewController {
         }
     }
     @IBAction func fetchAssignments(_ sender: Any) {
-        print(Course.dump(self.courses))
-        canvasClient.fetchAssignmentsById(courseId: self.courses[0].id){ fetchedAssignments in
-            self.courses[0].assignments = fetchedAssignments
-            print(Assignment.dump(fetchedAssignments))
-            self.ResponseView.text = Assignment.dump(fetchedAssignments)
-        }
         
+        for course in self.courses{
+            canvasClient.fetchAssignmentsById(courseId: course.id){ fetchedAssignments in
+                course.assignments = fetchedAssignments
+                print(Assignment.dump(fetchedAssignments))
+                self.ResponseView.text = Assignment.dump(fetchedAssignments)
+            }
+        }
     }
 }

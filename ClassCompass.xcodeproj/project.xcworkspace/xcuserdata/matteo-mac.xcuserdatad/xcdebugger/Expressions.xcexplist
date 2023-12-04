@@ -3,6 +3,25 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "static Course.dump(_:):Course.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AddViewController.pickerView(_:didSelectRow:inComponent:):AddViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.selectedCourse">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AddViewController.pickerView(_:titleForRow:forComponent:):AddViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "courses[row].code">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in ViewController.APITestBtn(_:):ViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -20,9 +39,6 @@
                value = "cell.textField.text">
             </PersistentString>
          </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "static Course.dump(_:):Course.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

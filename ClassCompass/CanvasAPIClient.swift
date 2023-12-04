@@ -71,15 +71,30 @@ class CanvasAPIClient {
         }
     }
 
+    fileprivate func regExReplace(_ inputString: String, _ pattern: String, _ replacement: String) -> String {
+        
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: [])
+            return regex.stringByReplacingMatches(in: inputString, options: [], range: NSRange(inputString.startIndex..., in: inputString), withTemplate: replacement)
+        } catch {
+            print("Error creating regex: \(error)")
+            return inputString
+        }
+    }
+    
     func decodeCourses(_ coursesRaw: [NSDictionary]) -> [Course] {
         var courses: [Course] = []
         
         for courseRaw in coursesRaw {
             let id = courseRaw["id"] as! Int
-            let name = courseRaw["name"] as! String
-            let courseCode = courseRaw["course_code"] as! String
+            var name = courseRaw["name"] as! String
+            var courseCode = courseRaw["course_code"] as! String
             let start_at = courseRaw["start_at"] as! String
             let end_at = courseRaw["end_at"] as! String
+            
+            courseCode = String(courseCode.prefix(7))
+            
+            name = regExReplace(name, "(^.+)-(.+)-(.+$)", "$3")
             
             let startDate = self.stringtoDate(start_at)
             let endDate = self.stringtoDate(end_at)
@@ -125,7 +140,7 @@ class CanvasAPIClient {
                     let assignment = Assignment(id: assignmentRaw["id"] as! Int,
                                                 name: assignmentRaw["name"] as! String,
                                                 dueDate: self.stringtoDate(assignmentRaw["due_at"] as! String),
-                                                description: assignmentRaw["description"] as! String,
+                                                description: ""/*assignmentRaw["description"] as! String*/,
                                                 grade: 0)
                     
                     self.database.saveAssignment(assignment)  // Save each assignment to the database
