@@ -30,7 +30,7 @@ class Assignment {
                 assignmentDetails += "ID: \(assignment.id)\n"
                 assignmentDetails += "Name: \(assignment.name)\n"
                 assignmentDetails += "Due Date: \(String(describing: assignment.dueDate))\n"
-                assignmentDetails += "Description: \(assignment.description)\n"
+                //assignmentDetails += "Description: \(assignment.description)\n"
                 if let grade = assignment.grade {
                     assignmentDetails += "Grade: \(grade)\n"
                 } else {

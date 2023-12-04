@@ -20,6 +20,13 @@ class AddViewController: UIViewController {
 
         ClassPicker.delegate = self
         ClassPicker.dataSource = self
+        
+        AssignmentPicker.delegate = self
+        AssignmentPicker.dataSource = self
+        
+        ClassPicker.selectRow(0, inComponent: 0, animated: false)
+        ClassPicker.selectRow(1, inComponent: 0, animated: false)
+        ClassPicker.selectRow(0, inComponent: 0, animated: false)
     }
     
     @IBOutlet weak var ClassPicker: UIPickerView!
@@ -62,8 +69,8 @@ extension AddViewController: UIPickerViewDataSource{
             return courses.count // Number of courses for ClassPicker
         } else if pickerView == AssignmentPicker {
             // Return the number of assignments for the selected course
-            print(selectedCourse?.code)
-            return selectedCourse?.assignments.count ?? 0
+            //print(selectedCourse?.code)
+            return selectedCourse?.assignments.count ?? 1
         } else {
             return 0
         }
@@ -71,6 +78,7 @@ extension AddViewController: UIPickerViewDataSource{
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if pickerView == ClassPicker {
+            selectedCourse = courses[row]
             return courses[row].code // Display course codes in ClassPicker
         } else if pickerView == AssignmentPicker {
             // Display assignment names for the selected course in AssignmentPicker

@@ -3,9 +3,6 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "static Course.dump(_:):Course.swift">
-      </ContextState>
-      <ContextState
          contextName = "AddViewController.pickerView(_:didSelectRow:inComponent:):AddViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -17,10 +14,24 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "SettingsViewController.tableView(_:didSelectRowAt:):SettingsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "cell.textField.text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "CanvasAPIClient.decodeCourses(_:):CanvasAPIClient.swift">
+      </ContextState>
+      <ContextState
+         contextName = "static Course.dump(_:):Course.swift">
+      </ContextState>
+      <ContextState
          contextName = "AddViewController.pickerView(_:titleForRow:forComponent:):AddViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "courses[row].code">
+               value = "selectedCourse">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -32,14 +43,6 @@
             </PersistentString>
             <PersistentString
                value = "json.rawArray[0]">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "SettingsViewController.tableView(_:didSelectRowAt:):SettingsViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "cell.textField.text">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
