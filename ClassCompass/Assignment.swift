@@ -10,12 +10,12 @@ import Foundation
 class Assignment {
     let id: Int
     let name: String
-    let dueDate: Date
+    let dueDate: Date?
     let description: String
     //points_possible
     var grade: Double?
 
-    init(id: Int, name: String, dueDate: Date, description: String, grade: Double?) {
+    init(id: Int, name: String, dueDate: Date?, description: String, grade: Double?) {
         self.id = id
         self.name = name
         self.dueDate = dueDate
@@ -29,7 +29,7 @@ class Assignment {
             for assignment in assignments {
                 assignmentDetails += "ID: \(assignment.id)\n"
                 assignmentDetails += "Name: \(assignment.name)\n"
-                assignmentDetails += "Due Date: \(assignment.dueDate)\n"
+                assignmentDetails += "Due Date: \(String(describing: assignment.dueDate))\n"
                 assignmentDetails += "Description: \(assignment.description)\n"
                 if let grade = assignment.grade {
                     assignmentDetails += "Grade: \(grade)\n"

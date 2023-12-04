@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "CF37B61D-C7AE-49AD-B414-B0C4CC1E2C4B"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "951907E6-9689-4241-9D9B-5E3E56AAD3AF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ClassCompass/ccDB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "init()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D5FA9089-321D-43CC-87B0-E2243FBB0F5F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ClassCompass/CanvasAPIClient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "init(authToken:canvasAPIURL:database:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D5FA9089-321D-43CC-87B0-E2243FBB0F5F - f8f75508bbbfb4ab"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 1 of ClassCompass.CanvasAPIClient.init(authToken: Swift.String, canvasAPIURL: Swift.Optional&lt;Swift.String&gt;, database: ClassCompass.Database) -&gt; ClassCompass.CanvasAPIClient"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/davidteixeira/Documents/ClassCompass/ClassCompass/CanvasAPIClient.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  uuid = "D5FA9089-321D-43CC-87B0-E2243FBB0F5F - cf715c2e2d17b57d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.CanvasAPIClient.__allocating_init(authToken: Swift.String, canvasAPIURL: Swift.Optional&lt;Swift.String&gt;, database: ClassCompass.Database) -&gt; ClassCompass.CanvasAPIClient"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/davidteixeira/Documents/ClassCompass/ClassCompass/CanvasAPIClient.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "D5FA9089-321D-43CC-87B0-E2243FBB0F5F - 41271f5deb4c0669"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.CanvasAPIClient.init(authToken: Swift.String, canvasAPIURL: Swift.Optional&lt;Swift.String&gt;, database: ClassCompass.Database) -&gt; ClassCompass.CanvasAPIClient"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/davidteixeira/Documents/ClassCompass/ClassCompass/CanvasAPIClient.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "108">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E483552A-86ED-41C8-9C4E-3651169A4140"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ClassCompass/CanvasAPIClient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "init(authToken:canvasAPIURL:database:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "81EF8816-99F9-47D5-B7FA-A93BBA6AD5FE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ClassCompass/ccDB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "454"
+            endingLineNumber = "454"
+            landmarkName = "saveCourse(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "73B4E8EF-8F79-47AD-A8CD-EB75A8EC6EF4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ClassCompass/CanvasAPIClient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "fetchAssignmentsById(courseId:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "73B4E8EF-8F79-47AD-A8CD-EB75A8EC6EF4 - 33f7fc92dc91e098"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Swift.Array&lt;__C.NSDictionary&gt;, Swift.Error&gt;) -&gt; () in ClassCompass.CanvasAPIClient.fetchAssignmentsById(courseId: Swift.Int, completion: (Swift.Array&lt;ClassCompass.Assignment&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/davidteixeira/Documents/ClassCompass/ClassCompass/CanvasAPIClient.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "476">
+               </Location>
+               <Location
+                  uuid = "73B4E8EF-8F79-47AD-A8CD-EB75A8EC6EF4 - 33f7fc92dc91e098"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Swift.Array&lt;__C.NSDictionary&gt;, Swift.Error&gt;) -&gt; () in ClassCompass.CanvasAPIClient.fetchAssignmentsById(courseId: Swift.Int, completion: (Swift.Array&lt;ClassCompass.Assignment&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/davidteixeira/Documents/ClassCompass/ClassCompass/CanvasAPIClient.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "692">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "588BCC8A-F26A-4CD5-ACBF-40A719786F45"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ClassCompass/CanvasAPIClient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "fetchAssignmentsById(courseId:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EA3A8529-D42C-492A-B763-029C2F46436C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ClassCompass/CanvasAPIClient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "fetchAssignmentsById(courseId:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

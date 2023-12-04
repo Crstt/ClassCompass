@@ -27,7 +27,10 @@ class CanvasAPIClient {
             "Authorization": "Bearer \(self.authToken)",
             "Accept": "application/json"
         ]
-        self.database = database
+        
+        // Added this step to init the db and open the db file
+        self.database = Database()
+        _ = self.database.openDatabase()
     }
     
 
@@ -120,16 +123,35 @@ class CanvasAPIClient {
         performRequest(url: self.canvasAPIURL + "/courses/\(courseId)/assignments", headers: self.defaultHeaders) { result in
             switch result {
             case .success(let assignmentRaw):
-                var assignments : [Assignment] = []
-                for assignmentRaw in assignmentRaw {
-                    let assignment = Assignment(id: assignmentRaw["id"] as! Int,
-                                                name: assignmentRaw["name"] as! String,
-                                                dueDate: self.stringtoDate(assignmentRaw["due_at"] as! String),
-                                                description: assignmentRaw["description"] as! String,
-                                                grade: 0)
-                    
-                    self.database.saveAssignment(assignment)  // Save each assignment to the database
-                    assignments.append(assignment)
+                var assignments: [Assignment] = []
+                for assignmentDict in assignmentRaw {
+                    guard let id = assignmentDict["id"] as? Int else {
+                        print("Error: 'id' is not an Int or is missing in assignment: \(assignmentDict)")
+                        continue
+                    }
+                    guard let name = assignmentDict["name"] as? String else {
+                        print("Error: 'name' is not a String or is missing in assignment: \(assignmentDict)")
+                        continue
+                    }
+                    guard let description = assignmentDict["description"] as? String else {
+                        print("Error: 'description' is not a String or is missing in assignment: \(assignmentDict)")
+                        continue
+                    }
+
+                    let dueAtString = assignmentDict["due_at"] as? String
+                    let dueAtDate = dueAtString != nil ? self.stringtoDate(dueAtString!) : nil
+                    let grade = assignmentDict["grade"] as? Double
+
+                    // Now all required values are non-nil
+                    if dueAtDate != nil {
+                        let assignment = Assignment(id: id,
+                                                    name: name,
+                                                    dueDate: dueAtDate,
+                                                    description: description,
+                                                    grade: grade)
+                        self.database.saveAssignment(assignment)
+                        assignments.append(assignment)
+                    } 
                 }
                 completion(assignments)
             case .failure(let error):
@@ -138,7 +160,8 @@ class CanvasAPIClient {
             }
         }
     }
-    
+
+    /////
     /*func fetchUsers(completion: @escaping ([Users]) -> Void) {
         performRequest(url: self.canvasAPIURL + "/users", headers: self.defaultHeaders) { result in
             switch result {
