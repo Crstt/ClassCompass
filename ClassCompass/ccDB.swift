@@ -192,6 +192,7 @@ class Database {
         CREATE TABLE IF NOT EXISTS TAssignmentsInProgress (
             assignInProgress_id INTEGER PRIMARY KEY NOT NULL,
             assignment_id INTEGER,
+            dueOnDate TEXT,
             FOREIGN KEY (assignment_id) REFERENCES TAssignments(id)
         );
         """
@@ -361,6 +362,7 @@ class Database {
             A.name            AS AssignmentName,
             A.due_date        AS DueDate,
             A.description     AS AssignmentDescription
+            TIP.dueOnDate     AS MyDueOnDate
         FROM TAssignmentsInProgress AS AIP
         JOIN TAssignments AS A ON AIP.assignment_id = A.id;
         """
@@ -564,19 +566,20 @@ class Database {
         sqlite3_finalize(insertStatement)
     }
 
-    func addAssignmentInProgress(assignmentId: Int) {
+    func addAssignmentInProgress(assignmentId: Int, dueOnDate: String) {
     /*
      Function Name: addAssignmentInProgress
      Function Purpose: Function is to create a view for the TAssignmentsToDo table
      */
         let insertStatementString = """
-        INSERT INTO TAssignmentsInProgress (assignment_id) VALUES (?);
+        INSERT INTO TAssignmentsInProgress (assignment_id, dueOnDate) VALUES (?, ?);
         """
         
         var insertStatement: OpaquePointer? = nil
 
         if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
             sqlite3_bind_int(insertStatement, 1, Int32(assignmentId))
+            sqlite3_bind_text(insertStatement, 2, (dueOnDate as NSString).utf8String, -1, nil)
 
             if sqlite3_step(insertStatement) == SQLITE_DONE {
                 print("Successfully inserted in progress item.")
