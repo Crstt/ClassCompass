@@ -20,15 +20,30 @@ class SettingsViewController: UIViewController {
         "Password"
         ]
     var settingsValues = [String: String]()
+    var settingsDidChange: (([String: String]) -> Void)?
 
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        
         for setting in settings {
-            settingsValues[setting] = ""
+            if !settingsValues.contains(where: { $0.key == setting }) {
+                settingsValues[setting] = ""
+            }
         }
+        if settingsValues["Password"] != "" && settingsValues["API Token"] != ""{
+            print(SettingsViewController.decrypt(encryptedPassword: settingsValues["Password"]!, keyString: settingsValues["API Token"]!))
+            guard let decryptPassword = SettingsViewController.decrypt(encryptedPassword: settingsValues["Password"]!, keyString: settingsValues["API Token"]!)else {
+                print("Password decryption failed")
+                return
+            }
+            print(decryptPassword)
+            settingsValues["Password"] = decryptPassword
+        }
+        
         
         let nib = UINib(nibName: "settingsTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "settingsTableViewCell")
@@ -67,6 +82,36 @@ class SettingsViewController: UIViewController {
             }
         }
     }
+    
+    static func loadSettingsFromPlist() -> [String: String]? {
+        // Get the file URL for the Settings.plist file
+        if let plistURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Settings.plist") {
+            // Check if the plist file exists
+            if FileManager.default.fileExists(atPath: plistURL.path) {
+                // Load contents from the plist file into a dictionary
+                if let settingsDict = NSDictionary(contentsOf: plistURL) as? [String: String] {
+                    return settingsDict
+                }
+            }
+        }
+        return nil
+    }
+    
+    static func loadSettingByKey(key: String) -> String? {
+        
+        if let settingsDict = SettingsViewController.loadSettingsFromPlist() {
+            if let value = settingsDict[key] {
+                return value // Return value for the specified key
+            } else {
+                print("Key '\(key)' does not exist in the settings")
+            }
+        }else{
+            print("Error loading settings")
+        }
+        return nil
+    }
+
+
     static func generateRandomIV() -> Data {
         var randomIV = [UInt8](repeating: 0, count: kCCBlockSizeAES128)
         let result = SecRandomCopyBytes(kSecRandomDefault, randomIV.count, &randomIV)
@@ -82,11 +127,11 @@ class SettingsViewController: UIViewController {
         let keyString = keyString
         let ivData = generateRandomIV()
         
-        SettingsViewController.saveSettingToPlist(key: "ivKey", value: ivData)
-        
+        SettingsViewController.saveSettingToPlist(key: "ivKey", value: ivData.base64EncodedString())
         
         // Convert key and IV strings to Data
-        guard let keyData = keyString.data(using: .utf8) else { return nil }
+        guard var keyData = keyString.data(using: .utf8) else { return nil }
+        keyData.count = kCCKeySizeAES128
         
         // Prepare buffers
         var encryptedData = Data(count: passwordData.count + kCCBlockSizeAES128)
@@ -125,16 +170,26 @@ class SettingsViewController: UIViewController {
         return encryptedData.base64EncodedString()
     }
 
-    static func decrypt(encryptedPassword: String, keyString: String, ivString: String) -> String? {
+    static func decrypt(encryptedPassword: String, keyString: String, ivString: String = "") -> String? {
         // Convert the encrypted password string from base64
         guard let encryptedData = Data(base64Encoded: encryptedPassword) else { return nil }
         
         // Define key and initialization vector (IV)
         let keyString = keyString
-        let ivString = ivString
+        let ivyKey: String
+        
+        if ivString == ""{
+            ivyKey = SettingsViewController.loadSettingByKey(key: "ivKey")!
+        }else{
+            ivyKey = ivString
+        }
         
         // Convert key and IV strings to Data
-        guard let keyData = keyString.data(using: .utf8), let ivData = ivString.data(using: .utf8) else { return nil }
+        guard var keyData = keyString.data(using: .utf8), let ivData = Data(base64Encoded: ivyKey) else
+        {
+            return nil
+        }
+        keyData.count = kCCKeySizeAES128
         
         // Prepare buffers
         var decryptedData = Data(count: encryptedData.count + kCCBlockSizeAES128)
@@ -164,7 +219,10 @@ class SettingsViewController: UIViewController {
         }
         
         // Check if decryption succeeded
-        guard result == kCCSuccess else { return nil }
+        guard result == kCCSuccess else {
+            print("Decryption error: \(result)")
+            return nil
+        }
         
         // Trim the decrypted data to the actual decrypted length
         decryptedData.count = decryptedLength
@@ -203,6 +261,7 @@ extension SettingsViewController: UITableViewDelegate{
                     default:
                         break
                 }
+                settingsDidChange?(settingsValues)
             }
         }
     }
@@ -217,6 +276,7 @@ extension SettingsViewController: UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "settingsTableViewCell", for: indexPath) as! settingsTableViewCell
         
         cell.label?.text = settings[indexPath.row]
+        cell.textField?.text = settingsValues[settings[indexPath.row]]
         
         return cell
     }

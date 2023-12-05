@@ -26,6 +26,15 @@ class AgendaViewController: UIViewController {
         view.addGestureRecognizer(swipeUpGR)
         
         db = Database()
+        
+        // Call the function to load settings from the plist file
+        if let loadedSettings = SettingsViewController.loadSettingsFromPlist() {
+            // Assign the loaded settings to the settingsValues dictionary
+            settingsValues = loadedSettings
+        }else{
+            print("Error loading settings")
+        }
+
     }
     
     @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
@@ -47,10 +56,13 @@ class AgendaViewController: UIViewController {
                 destinationVC.courses = courses
                 destinationVC.canvasClient = canvasClient
                 destinationVC.db = db
-            }else if segue.identifier == "settingsSegue"{
-                if let destinationVC = segue.destination as? SettingsViewController {
-                    destinationVC.db = db
-                    destinationVC.settingsValues = settingsValues
+            }
+        }else if segue.identifier == "settingsSegue"{
+            if let destinationVC = segue.destination as? SettingsViewController {
+                destinationVC.db = db
+                destinationVC.settingsValues = settingsValues
+                destinationVC.settingsDidChange = { updatedSettings in
+                    self.settingsValues = updatedSettings
                 }
             }
         }
@@ -59,9 +71,23 @@ class AgendaViewController: UIViewController {
     @IBOutlet weak var ResponseView: UITextView!
     @IBOutlet weak var APIToken: UITextField!
     
+    func initCanvasClient() {
+        if !settingsValues.contains(where: { $0.key == "API Token" }) {
+            print("API Token not in settings. Using APIToken text field")
+            settingsValues["API Token"] = APIToken.text!
+        }
+        
+        if settingsValues["API Token"] as! String == "" {
+            print("Error: APIToken empty.")
+            return
+        }
+        
+        canvasClient = CanvasAPIClient(authToken: settingsValues["API Token"]! as! String, database: db)
+    }
+    
     @IBAction func APITestBtn(_ sender: Any) {
         
-        canvasClient = CanvasAPIClient(authToken: APIToken.text!, database: db)
+        initCanvasClient()
         
         canvasClient.fetchCourses(){ fetchedCourses in
             self.courses = fetchedCourses
