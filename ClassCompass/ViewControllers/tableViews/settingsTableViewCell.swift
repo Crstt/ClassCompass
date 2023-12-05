@@ -8,6 +8,7 @@
 import UIKit
 
 class settingsTableViewCell: UITableViewCell, UITextFieldDelegate {
+    weak var delegate: SettingsTableViewCellDelegate?
 
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var textField: UITextField!
@@ -22,9 +23,13 @@ class settingsTableViewCell: UITableViewCell, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        // ToDo: Add code to save the setting in the database
-        //       get id of data from label
-        print(textField.text ?? "")
+        super.setSelected(false, animated: true)
+        delegate?.textFieldDidEndEditing(in: self)
+        
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        super.setSelected(true, animated: true)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -37,5 +42,8 @@ class settingsTableViewCell: UITableViewCell, UITextFieldDelegate {
 
         // Configure the view for the selected state
     }
-    
+}
+
+protocol SettingsTableViewCellDelegate: AnyObject {
+    func textFieldDidEndEditing(in cell: settingsTableViewCell)
 }

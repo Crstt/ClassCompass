@@ -35,8 +35,10 @@ class SettingsViewController: UIViewController {
             }
         }
         if settingsValues["Password"] != "" && settingsValues["API Token"] != ""{
-            print(SettingsViewController.decrypt(encryptedPassword: settingsValues["Password"]!, keyString: settingsValues["API Token"]!))
-            guard let decryptPassword = SettingsViewController.decrypt(encryptedPassword: settingsValues["Password"]!, keyString: settingsValues["API Token"]!)else {
+            guard let decryptPassword = SettingsViewController.decrypt(
+                encryptedPassword: settingsValues["Password"]!,
+                keyString: settingsValues["API Token"]!)else {
+                
                 print("Password decryption failed")
                 return
             }
@@ -240,11 +242,38 @@ extension SettingsViewController: UITableViewDelegate{
             
             print(cell.label.text ?? "")
             print(cell.getText())
-            
-            let key = cell.label.text ?? ""
-            let set = SettingsViewController.self
-            
+        }
+    }
+}
+
+extension SettingsViewController: UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return settings.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "settingsTableViewCell", for: indexPath) as! settingsTableViewCell
+        
+        cell.label?.text = settings[indexPath.row]
+        cell.textField?.text = settingsValues[settings[indexPath.row]]
+        
+        cell.delegate = self
+        
+        return cell
+    }
+}
+
+extension SettingsViewController: SettingsTableViewCellDelegate {
+    func textFieldDidEndEditing(in cell: settingsTableViewCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
+            tableView.deselectRow(at: indexPath, animated: true)
             if let cell = tableView.cellForRow(at: indexPath) as? settingsTableViewCell {
+                print(cell.label.text ?? "")
+                print(cell.getText())
+                
+                let key = cell.label.text ?? ""
+                let set = SettingsViewController.self
+                
                 let text = cell.getText()
                 switch key {
                     case "First Name", "Last Name", "Email", "API Token":
@@ -264,20 +293,5 @@ extension SettingsViewController: UITableViewDelegate{
                 settingsDidChange?(settingsValues)
             }
         }
-    }
-}
-
-extension SettingsViewController: UITableViewDataSource{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return settings.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "settingsTableViewCell", for: indexPath) as! settingsTableViewCell
-        
-        cell.label?.text = settings[indexPath.row]
-        cell.textField?.text = settingsValues[settings[indexPath.row]]
-        
-        return cell
     }
 }
