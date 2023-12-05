@@ -86,7 +86,7 @@
                         </centerItemGroups>
                         <barButtonItem key="rightBarButtonItem" title="Progress" id="0ec-6G-Vwf">
                             <connections>
-                                <segue destination="N8E-2P-1Tu" kind="show" id="W45-Jb-x1h"/>
+                                <segue destination="N8E-2P-1Tu" kind="show" identifier="progressSegue" id="W45-Jb-x1h"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

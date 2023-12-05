@@ -85,129 +85,250 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A8DD75A3-F46E-41FC-B66D-6BF919AD2A4D"
-            shouldBeEnabled = "No"
+            uuid = "D6C0AA8D-AFF6-40F3-9D35-F428E81222D1"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ClassCompass/ViewControllers/AddViewController.swift"
+            filePath = "ClassCompass/ViewControllers/SettingsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
-            landmarkName = "pickerView(_:titleForRow:forComponent:)"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
+            landmarkName = "tableView(_:didDeselectRowAt:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D6C0AA8D-AFF6-40F3-9D35-F428E81222D1 - 6891753ced79cb18"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.tableView(_: __C.UITableView, didSelectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "312">
+               </Location>
+               <Location
+                  uuid = "D6C0AA8D-AFF6-40F3-9D35-F428E81222D1 - 6891753ced79cb18"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.tableView(_: __C.UITableView, didSelectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "604">
+               </Location>
+               <Location
+                  uuid = "D6C0AA8D-AFF6-40F3-9D35-F428E81222D1 - 51ac5030bf1f0b21"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.tableView(_: __C.UITableView, didDeselectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "181"
+                  endingLineNumber = "181"
+                  offsetFromSymbolStart = "312">
+               </Location>
+               <Location
+                  uuid = "D6C0AA8D-AFF6-40F3-9D35-F428E81222D1 - 51ac5030bf1f0b21"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.tableView(_: __C.UITableView, didDeselectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "181"
+                  endingLineNumber = "181"
+                  offsetFromSymbolStart = "604">
+               </Location>
+               <Location
+                  uuid = "D6C0AA8D-AFF6-40F3-9D35-F428E81222D1 - 51ac5030bf1f0b21"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.tableView(_: __C.UITableView, didDeselectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "181"
+                  endingLineNumber = "181"
+                  offsetFromSymbolStart = "292">
+               </Location>
+               <Location
+                  uuid = "D6C0AA8D-AFF6-40F3-9D35-F428E81222D1 - 51ac5030bf1f0b21"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.tableView(_: __C.UITableView, didDeselectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "181"
+                  endingLineNumber = "181"
+                  offsetFromSymbolStart = "584">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "FA798709-DD29-4496-B66D-FD72E2936A37"
+            uuid = "26F5D354-324C-4877-9981-BCF5CAA6EAFE"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ClassCompass/ViewControllers/AddViewController.swift"
+            filePath = "ClassCompass/ViewControllers/SettingsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "pickerView(_:didSelectRow:inComponent:)"
+            startingLineNumber = "183"
+            endingLineNumber = "183"
+            landmarkName = "tableView(_:didDeselectRowAt:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "26F5D354-324C-4877-9981-BCF5CAA6EAFE - 6891753ced79cb18"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.tableView(_: __C.UITableView, didSelectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "312">
+               </Location>
+               <Location
+                  uuid = "26F5D354-324C-4877-9981-BCF5CAA6EAFE - 6891753ced79cb18"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.tableView(_: __C.UITableView, didSelectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "604">
+               </Location>
+               <Location
+                  uuid = "26F5D354-324C-4877-9981-BCF5CAA6EAFE - 51ac5030bf1f0b0e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.tableView(_: __C.UITableView, didDeselectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "640">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "15EF4399-2644-415F-8FB0-B1F741BDEBB8"
+            uuid = "C8765F19-7EF7-429F-A5EA-CC6688762741"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ClassCompass/ViewControllers/AddViewController.swift"
+            filePath = "ClassCompass/ViewControllers/SettingsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
-            landmarkName = "pickerView(_:didSelectRow:inComponent:)"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "saveSettingToPlist(key:value:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "49E40E96-ECCB-414F-9C11-762895D5600A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ClassCompass/ViewControllers/AddViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
-            landmarkName = "pickerView(_:numberOfRowsInComponent:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "915F7E29-A948-4A34-A985-5EC2891E7C38"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ClassCompass/ViewControllers/AddViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "pickerView(_:titleForRow:forComponent:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "DC7A9870-F638-4569-8240-60899772A601"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ClassCompass/ViewControllers/AddViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
-            landmarkName = "pickerView(_:titleForRow:forComponent:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "4F4B2526-D303-4EB8-9BF4-D341616EF0A6"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ClassCompass/ViewControllers/AddViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
-            landmarkName = "numberOfComponents(in:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "8625D2DA-B562-41AB-A3AB-15AB693D733B"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ClassCompass/ViewControllers/AddViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
-            landmarkName = "pickerView(_:numberOfRowsInComponent:)"
-            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C8765F19-7EF7-429F-A5EA-CC6688762741 - 32b93b375ab73212"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static ClassCompass.SettingsViewController.saveSettingToPlist(key: Swift.String, value: Any) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "376">
+               </Location>
+               <Location
+                  uuid = "C8765F19-7EF7-429F-A5EA-CC6688762741 - 32b93b375ab73212"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static ClassCompass.SettingsViewController.saveSettingToPlist(key: Swift.String, value: Any) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "824">
+               </Location>
+               <Location
+                  uuid = "C8765F19-7EF7-429F-A5EA-CC6688762741 - f3844703ae088a08"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.saveSettingToPlist(key: Swift.String, value: Any) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "376">
+               </Location>
+               <Location
+                  uuid = "C8765F19-7EF7-429F-A5EA-CC6688762741 - f3844703ae088a08"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ClassCompass.SettingsViewController.saveSettingToPlist(key: Swift.String, value: Any) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/SettingsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "824">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

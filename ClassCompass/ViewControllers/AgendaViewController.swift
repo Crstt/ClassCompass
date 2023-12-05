@@ -12,6 +12,7 @@ class AgendaViewController: UIViewController {
     var courses: [Course] = []
     var canvasClient: CanvasAPIClient!
     var db: Database!
+    var settingsValues = [String: String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +47,11 @@ class AgendaViewController: UIViewController {
                 destinationVC.courses = courses
                 destinationVC.canvasClient = canvasClient
                 destinationVC.db = db
+            }else if segue.identifier == "settingsSegue"{
+                if let destinationVC = segue.destination as? SettingsViewController {
+                    destinationVC.db = db
+                    destinationVC.settingsValues = settingsValues
+                }
             }
         }
     }
