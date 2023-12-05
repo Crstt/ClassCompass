@@ -42,7 +42,7 @@ class SettingsViewController: UIViewController {
                 print("Password decryption failed")
                 return
             }
-            print(decryptPassword)
+            //print(decryptPassword)
             settingsValues["Password"] = decryptPassword
         }
         
@@ -240,8 +240,8 @@ extension SettingsViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? settingsTableViewCell {
             
-            print(cell.label.text ?? "")
-            print(cell.getText())
+            //print(cell.label.text ?? "")
+            //print(cell.getText())
         }
     }
 }

@@ -186,7 +186,7 @@ class CanvasAPIClient {
                                                     dueDate: dueAtDate,
                                                     description: description,
                                                     grade: grade)
-                        self.database.saveAssignment(assignment)
+                        self.database.saveAssignment(assignment, Int32(courseId))
                         assignments.append(assignment)
                     } 
                 }
