@@ -17,17 +17,17 @@ class AddViewController: UIViewController {
     var selectedAssignment: Assignment?
     //var filteredAssignments: [Assignment] = []
     
-    override func viewDidLoad() {
+    override func viewDidLoad() {//#1
         super.viewDidLoad()
+        
+        coursesFiltered = filterForActiveCourses()
+        filterAssignmentsForSwitchState()
         
         ClassPicker.delegate = self
         ClassPicker.dataSource = self
         
         AssignmentPicker.delegate = self
         AssignmentPicker.dataSource = self
-        
-        coursesFiltered = filterForActiveCourses()
-        filterAssignmentsForSwitchState()
         
         setupInitialSelections()
     }
@@ -69,7 +69,7 @@ class AddViewController: UIViewController {
         }
         return filteredCourses
     }
-
+    
     
     func filterAssignmentsForSwitchState() {
         
@@ -85,14 +85,9 @@ class AddViewController: UIViewController {
             return filteredCourse
         }
         
-        coursesFiltered = filterCoursesWithAssignments(coursesFiltered)
-        ClassPicker.reloadAllComponents()
-        setupInitialSelections()
-        
         if overdueSwitch.isOn {
             // Show all assignments regardless of dueDate
             coursesFiltered = filterForActiveCourses()
-            setupInitialSelections()
         } else {
             // Filter assignments to show only those with dueDate not past today
             let today = Date()
@@ -105,13 +100,19 @@ class AddViewController: UIViewController {
                 return filteredCourse
             }
         }
+        
+        coursesFiltered = filterCoursesWithAssignments(coursesFiltered)
+        
+        ClassPicker.reloadAllComponents()
+        AssignmentPicker.reloadAllComponents()
+        setupInitialSelections()
     }
     
     @IBAction func Set(_ sender: Any) {
-        print(selectedCourse)
-        print(selectedAssignment)
-        print(DueDatePicker.date)
-        print(DueOnDatePicker.date)
+        /*print(selectedCourse as Any)
+         print(selectedAssignment as Any)
+         print(DueDatePicker.date)
+         print(DueOnDatePicker.date)*/
         
         if let assignmentId = selectedAssignment?.id {
             let df = DateFormatter()
@@ -119,6 +120,21 @@ class AddViewController: UIViewController {
             let dueOnDate = df.string(from: DueOnDatePicker.date)
             db.addAssignmentInProgress(assignmentId: assignmentId, dueOnDate: dueOnDate)
             
+            for course in courses {
+                if course.id == selectedCourse?.id{
+                    for assignment in course.assignments {
+                        if assignment.id == assignmentId{
+                            assignment.dueOnDate = DueOnDatePicker.date
+                        }
+                    }
+                }
+            }
+        }
+        filterAssignmentsForSwitchState()
+        
+        //Close modal when there are no more assignments to set
+        if coursesFiltered.count == 0{
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -177,23 +193,27 @@ extension AddViewController: UIPickerViewDelegate{
     }
 }
 
-extension AddViewController: UIPickerViewDataSource{
+extension AddViewController: UIPickerViewDataSource{ //#2
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if pickerView == ClassPicker {
             return coursesFiltered.count // Number of courses for ClassPicker
         } else if pickerView == AssignmentPicker {
             // Return the number of assignments for the selected course
-            //print(selectedCourse?.code)
             return selectedCourse?.assignments.count ?? 1
         } else {
             return 0
         }
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {//#3
+        //ClassPicker new selectin
         if pickerView == ClassPicker {
+            //print(row)
+            //print(coursesFiltered[row].code)
             selectedCourse = coursesFiltered[row]
-            return coursesFiltered[row].code // Display course codes in ClassPicker
+            AssignmentPicker.reloadAllComponents()
+            return selectedCourse?.code // Display course codes in ClassPicker
+            // AssignmentPicker new selection
         } else if pickerView == AssignmentPicker {
             // Display assignment names for the selected course in AssignmentPicker
             if let name = selectedCourse?.assignments[row]{
@@ -205,6 +225,4 @@ extension AddViewController: UIPickerViewDataSource{
             return nil
         }
     }
-    
-    
 }

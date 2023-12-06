@@ -10,8 +10,8 @@ import Foundation
 class Assignment {
     let id: Int
     let name: String
-    let dueDate: Date?
-    let dueOnDate: Date?
+    var dueDate: Date?
+    var dueOnDate: Date?
     let description: String
     //points_possible
     var grade: Double?
