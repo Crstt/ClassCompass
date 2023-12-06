@@ -9,7 +9,6 @@
 import Foundation
 import SQLite3
 
-
 // Create Class
 class Database {
     /*
@@ -33,9 +32,6 @@ class Database {
             createStudentTable()
             createCoursesTable()
             createAssignmentsTable()
-            createAssignments_ToDo_Table()
-            createAssignments_InProgress_Table()
-            createAssignments_Completed_Table()
             
             // Create the views
             createStudentsView()
@@ -65,6 +61,14 @@ class Database {
         } else {
             print("Successfully opened database connection at \(fileURL.path)")
             return db
+        }
+    }
+    
+    // Close the SQLite database
+    private func closeDatabase() {
+        if db != nil {
+            sqlite3_close(db)
+            print("Database closed.")
         }
     }
     
@@ -108,7 +112,7 @@ class Database {
         let createTableString = """
         CREATE TABLE IF NOT EXISTS TCourses (
             id INTEGER PRIMARY KEY NOT NULL,
-            name TEXT,
+            name TEXT NOT NULL,
             course_code TEXT,
             start_date TEXT,
             end_date TEXT
@@ -136,13 +140,14 @@ class Database {
         let createTableString = """
         CREATE TABLE IF NOT EXISTS TAssignments (
             id INTEGER PRIMARY KEY NOT NULL,
-            name TEXT,
-            due_date TEXT,
-            description TEXT,
+            name TEXT NOT NULL,
+            dueDate TEXT,
+            dueOnDate TEXT,
+            description TEXT NOT NULL,
             grade REAL,
-            grading_type TEXT,
-            course_id INTEGER NOT NULL,
-            FOREIGN KEY (course_id) REFERENCES TCourses(id)
+            courseID INTEGER NOT NULL,
+            status TEXT,
+            FOREIGN KEY (courseID) REFERENCES TCourses(id)
         );
         """
         
@@ -155,85 +160,6 @@ class Database {
             }
         } else {
             print("CREATE TABLE statement for TAssignments could not be prepared.")
-        }
-        sqlite3_finalize(createTableStatement)
-    }
-    
-    private func createAssignments_ToDo_Table() {
-        /*
-         Function Name: createAssignments_ToDo_Table
-         Function Purpose: Function is to create TAssignmentsToDo table if the table does not exist
-         */
-        let createTableString = """
-        CREATE TABLE IF NOT EXISTS TAssignmentsToDo (
-            assignToDo_id INTEGER PRIMARY KEY NOT NULL,
-            assignment_id INTEGER,
-            FOREIGN KEY (assignment_id) REFERENCES TAssignments(id)
-        );
-        """
-        
-        var createTableStatement: OpaquePointer? = nil
-        if sqlite3_prepare_v2(db, createTableString, -1, &createTableStatement, nil) == SQLITE_OK {
-            if sqlite3_step(createTableStatement) == SQLITE_DONE {
-                print("TAssignmentsToDo table created.")
-            } else {
-                print("TAssignmentsToDo table could not be created.")
-            }
-        } else {
-            print("CREATE TABLE statement for TAssignmentsToDo could not be prepared.")
-        }
-        sqlite3_finalize(createTableStatement)
-    }
-    
-    private func createAssignments_InProgress_Table() {
-        /*
-         Function Name: createAssignments_InProgress_Table
-         Function Purpose: Function is to create TAssignmentsInProgress table if the table does not exist
-         */
-        let createTableString = """
-        CREATE TABLE IF NOT EXISTS TAssignmentsInProgress (
-            assignInProgress_id INTEGER PRIMARY KEY NOT NULL,
-            assignment_id INTEGER,
-            dueOnDate TEXT,
-            FOREIGN KEY (assignment_id) REFERENCES TAssignments(id)
-        );
-        """
-        
-        var createTableStatement: OpaquePointer? = nil
-        if sqlite3_prepare_v2(db, createTableString, -1, &createTableStatement, nil) == SQLITE_OK {
-            if sqlite3_step(createTableStatement) == SQLITE_DONE {
-                print("TAssignmentsInProgress table created.")
-            } else {
-                print("TAssignmentsInProgress table could not be created.")
-            }
-        } else {
-            print("CREATE TABLE statement for TAssignmentsInProgress could not be prepared.")
-        }
-        sqlite3_finalize(createTableStatement)
-    }
-    
-    private func createAssignments_Completed_Table() {
-        /*
-         Function Name: createAssignments_Completed_Table
-         Function Purpose: Function is to create TAssignmentsCompleted table if the table does not exist
-         */
-        let createTableString = """
-        CREATE TABLE IF NOT EXISTS TAssignmentsCompleted (
-            assignComplete_id INTEGER PRIMARY KEY NOT NULL,
-            assignment_id INTEGER,
-            FOREIGN KEY (assignment_id) REFERENCES TAssignments(id)
-        );
-        """
-        
-        var createTableStatement: OpaquePointer? = nil
-        if sqlite3_prepare_v2(db, createTableString, -1, &createTableStatement, nil) == SQLITE_OK {
-            if sqlite3_step(createTableStatement) == SQLITE_DONE {
-                print("TAssignmentsCompleted table created.")
-            } else {
-                print("TAssignmentsCompleted table could not be created.")
-            }
-        } else {
-            print("CREATE TABLE statement for TAssignmentsCompleted could not be prepared.")
         }
         sqlite3_finalize(createTableStatement)
     }
@@ -305,10 +231,12 @@ class Database {
         CREATE VIEW IF NOT EXISTS vTAssignments AS
         SELECT
             name            AS AssignmentName,
-            due_date        AS DueDate,
+            dueDate         AS DueDate,
+            dueOnDate       AS DueOnDate,
             description     AS AssignmentDescription,
             grade           AS Grade,
-            grading_type    AS GradeType
+            courseID        AS CourseID,
+            status          AS AssignmentStatus
         FROM TAssignments;
         """
         
@@ -333,11 +261,15 @@ class Database {
         let createViewString = """
         CREATE VIEW IF NOT EXISTS vTAssignmentsToDo AS
         SELECT
-            A.name            AS AssignmentName,
-            A.due_date        AS DueDate,
-            A.description     AS AssignmentDescription
-        FROM TAssignmentsToDo AS ATD
-        JOIN TAssignments AS A ON ATD.assignment_id = A.id;
+            name            AS AssignmentName,
+            dueDate         AS DueDate,
+            dueOnDate       AS DueOnDate,
+            description     AS AssignmentDescription,
+            grade           AS Grade,
+            courseID        AS CourseID,
+            status          AS AssignmentStatus
+        FROM TAssignments
+        WHERE status = 'ToDo';
         """
         
         var createViewStatement: OpaquePointer? = nil
@@ -361,13 +293,15 @@ class Database {
         let createViewString = """
         CREATE VIEW IF NOT EXISTS vTAssignmentsInProgress AS
         SELECT
-            A.name            AS AssignmentName,
-            A.due_date        AS DueDate,
-            A.description     AS AssignmentDescription,
-            AIP.dueOnDate     AS MyDueOnDate
-            
-        FROM TAssignmentsInProgress AS AIP
-        JOIN TAssignments AS A ON AIP.assignment_id = A.id;
+            name            AS AssignmentName,
+            dueDate         AS DueDate,
+            dueOnDate       AS DueOnDate,
+            description     AS AssignmentDescription,
+            grade           AS Grade,
+            courseID        AS CourseID,
+            status          AS AssignmentStatus
+        FROM TAssignments
+        WHERE status = 'InProgress';
         """
         
         var createViewStatement: OpaquePointer? = nil
@@ -391,11 +325,15 @@ class Database {
         let createViewString = """
         CREATE VIEW IF NOT EXISTS vTAssignmentsCompleted AS
         SELECT
-            A.name            AS AssignmentName,
-            A.due_date        AS DueDate,
-            A.description     AS AssignmentDescription
-        FROM TAssignmentsCompleted AS ACM
-        JOIN TAssignments AS A ON ACM.assignment_id = A.id;
+            name            AS AssignmentName,
+            dueDate         AS DueDate,
+            dueOnDate       AS DueOnDate,
+            description     AS AssignmentDescription,
+            grade           AS Grade,
+            courseID        AS CourseID,
+            status          AS AssignmentStatus
+        FROM TAssignments
+        WHERE status = 'Completed';
         """
         
         var createViewStatement: OpaquePointer? = nil
@@ -493,51 +431,57 @@ class Database {
         sqlite3_finalize(insertStatement)
     }
     
-    func saveAssignment(_ assignment: Assignment, _ courseId: Int32) {
+    func saveAssignment(_ assignment: Assignment) {
         /*
          Function Name: saveAssignment
          Function Purpose: Function is to save the assignment that is pulled from the Canvas API call
          */
         let insertStatementString = """
-        INSERT INTO TAssignments (id, name, due_date, description, grade, grading_type, course_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO TAssignments (id, name, dueDate, dueOnDate, description, grade, courseID, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
-        name = excluded.name,
-        due_date = excluded.due_date,
-        description = excluded.description,
-        grade = excluded.grade,
-        grading_type = excluded.grading_type,
-        course_id = excluded.course_id;
+            name = excluded.name,
+            dueDate = excluded.dueDate,
+            dueOnDate = excluded.dueOnDate,
+            description = excluded.description,
+            grade = excluded.grade,
+            courseID = excluded.courseID,
+            status = excluded.status;
         """
         
         var insertStatement: OpaquePointer? = nil
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
         if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
             sqlite3_bind_int(insertStatement, 1, Int32(assignment.id))
             sqlite3_bind_text(insertStatement, 2, (assignment.name as NSString).utf8String, -1, nil)
             
-            // Convert Date to String or Timestamp, or bind null if dueDate is nil
             if let dueDate = assignment.dueDate {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
                 let dueDateString = dateFormatter.string(from: dueDate)
                 sqlite3_bind_text(insertStatement, 3, (dueDateString as NSString).utf8String, -1, nil)
             } else {
                 sqlite3_bind_null(insertStatement, 3)
             }
-            
-            sqlite3_bind_text(insertStatement, 4, (assignment.description as NSString).utf8String, -1, nil)
-            
-            if let grade = assignment.grade {
-                sqlite3_bind_double(insertStatement, 5, grade)
+
+            if let dueOnDate = assignment.dueOnDate {
+                let dueOnDateString = dateFormatter.string(from: dueOnDate)
+                sqlite3_bind_text(insertStatement, 4, (dueOnDateString as NSString).utf8String, -1, nil)
             } else {
-                sqlite3_bind_null(insertStatement, 5)
+                sqlite3_bind_null(insertStatement, 4)
             }
             
+            sqlite3_bind_text(insertStatement, 5, (assignment.description as NSString).utf8String, -1, nil)
             
-            sqlite3_bind_int(insertStatement, 7, courseId)
-            
-            
+            if let grade = assignment.grade {
+                sqlite3_bind_double(insertStatement, 6, grade)
+            } else {
+                sqlite3_bind_null(insertStatement, 6)
+            }
+
+            sqlite3_bind_int(insertStatement, 7, Int32(assignment.courseID))
+            sqlite3_bind_text(insertStatement, 8, (assignment.status.rawValue as NSString).utf8String, -1, nil)
+
             if sqlite3_step(insertStatement) == SQLITE_DONE {
                 print("Successfully inserted assignment.")
             } else {
@@ -548,82 +492,7 @@ class Database {
         }
         sqlite3_finalize(insertStatement)
     }
-    
-    func addAssignmentTodo(assignmentId: Int) {
-        /*
-         Function Name: addAssignmentTodo
-         Function Purpose: Function is to create a view for the TAssignmentsToDo table
-         */
-        let insertStatementString = """
-        INSERT INTO TAssignmentsToDo (assignment_id) VALUES (?);
-        """
-        
-        var insertStatement: OpaquePointer? = nil
-        
-        if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
-            sqlite3_bind_int(insertStatement, 1, Int32(assignmentId))
-            
-            if sqlite3_step(insertStatement) == SQLITE_DONE {
-                print("Successfully inserted todo item.")
-            } else {
-                print("Could not insert todo item.")
-            }
-        } else {
-            print("INSERT statement could not be prepared.")
-        }
-        sqlite3_finalize(insertStatement)
-    }
-    
-    func addAssignmentInProgress(assignmentId: Int, dueOnDate: String) {
-        /*
-         Function Name: addAssignmentInProgress
-         Function Purpose: Function is to create a view for the TAssignmentsToDo table
-         */
-        let insertStatementString = """
-        INSERT INTO TAssignmentsInProgress (assignment_id, dueOnDate) VALUES (?, ?);
-        """
-        
-        var insertStatement: OpaquePointer? = nil
-        
-        if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
-            sqlite3_bind_int(insertStatement, 1, Int32(assignmentId))
-            sqlite3_bind_text(insertStatement, 2, (dueOnDate as NSString).utf8String, -1, nil)
-            
-            if sqlite3_step(insertStatement) == SQLITE_DONE {
-                print("Successfully inserted in progress item.")
-            } else {
-                print("Could not insert in progress item.")
-            }
-        } else {
-            print("INSERT statement could not be prepared.")
-        }
-        sqlite3_finalize(insertStatement)
-    }
-    
-    func addAssignmentCompleted(assignmentId: Int) {
-        /*
-         Function Name: addAssignmentCompleted
-         Function Purpose: Function is to create a view for the TAssignmentsCompleted table
-         */
-        let insertStatementString = """
-        INSERT INTO TAssignmentsCompleted (assignment_id) VALUES (?);
-        """
-        
-        var insertStatement: OpaquePointer? = nil
-        
-        if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
-            sqlite3_bind_int(insertStatement, 1, Int32(assignmentId))
-            
-            if sqlite3_step(insertStatement) == SQLITE_DONE {
-                print("Successfully inserted completed item.")
-            } else {
-                print("Could not insert completed item.")
-            }
-        } else {
-            print("INSERT statement could not be prepared.")
-        }
-        sqlite3_finalize(insertStatement)
-    }
+
     
     /* ########################################################################
      Update Content To Tables
@@ -694,7 +563,7 @@ class Database {
         sqlite3_finalize(updateStatement)
     }
     
-    func updateAssignment(id: Int, assignmentName: String?, dueDate: String?, description: String?, grade: Double?, gradeType: String?) {
+    func updateAssignment(id: Int, assignmentName: String?, dueDate: String?, dueOnDate: String?, description: String?, grade: Double?, courseID: Int, status: String?) {
         /*
          Function Name: updateAssignment
          Function Purpose: Function is to update the TAssignments Table
@@ -702,10 +571,12 @@ class Database {
         let updateStatementString = """
         UPDATE TAssignments
         SET name = ?,
-            due_date = ?,
+            dueDate = ?,
+            dueOnDate = ?,
             description = ?,
             grade = ?,
-            grading_type = ?
+            courseID = ?,
+            status = ?
         WHERE id = ?;
         """
         
@@ -713,10 +584,12 @@ class Database {
         if sqlite3_prepare_v2(db, updateStatementString, -1, &updateStatement, nil) == SQLITE_OK {
             sqlite3_bind_text(updateStatement, 1, (assignmentName as NSString?)?.utf8String, -1, nil)
             sqlite3_bind_text(updateStatement, 2, (dueDate as NSString?)?.utf8String, -1, nil)
-            sqlite3_bind_text(updateStatement, 3, (description as NSString?)?.utf8String, -1, nil)
-            sqlite3_bind_double(updateStatement, 4, grade ?? 0)
-            //sqlite3_bind_text(updateStatement, 5, (gradingType as NSString?)?.utf8String, -1, nil)
-            sqlite3_bind_int(updateStatement, 6, Int32(id))
+            sqlite3_bind_text(updateStatement, 3, (dueOnDate as NSString?)?.utf8String, -1, nil)
+            sqlite3_bind_text(updateStatement, 4, (description as NSString?)?.utf8String, -1, nil)
+            sqlite3_bind_double(updateStatement, 5, grade ?? 0)
+            sqlite3_bind_int(updateStatement, 6, Int32(courseID))
+            sqlite3_bind_text(updateStatement, 7, (status as NSString?)?.utf8String, -1, nil)
+            sqlite3_bind_int(updateStatement, 8, Int32(id))
             
             if sqlite3_step(updateStatement) == SQLITE_DONE {
                 print("Successfully updated assignment.")
@@ -728,27 +601,29 @@ class Database {
         }
         sqlite3_finalize(updateStatement)
     }
-    
-    func updateAssignmentToDo(assignToDoId: Int, newAssignmentId: Int) {
+
+    func updateAssignmentDueOnDate(assignmentId: Int, dueOnDate: String) {
         /*
-         Function Name: updateAssignmentInProgress
-         Function Purpose: Function is to update the TAssignmentsInProgress Table
+         Function Name: updateAssignmentDueOnDate
+         Function Purpose: Function is to update the TAssignments Table with the new due on date
          */
         let updateStatementString = """
-        UPDATE TAssignmentsToDo
-        SET assignment_id = ?
-        WHERE assignToDo_id = ?;
+        UPDATE TAssignments
+        SET dueOnDate = ?
+        WHERE id = ?;
         """
         
         var updateStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, updateStatementString, -1, &updateStatement, nil) == SQLITE_OK {
-            sqlite3_bind_int(updateStatement, 1, Int32(newAssignmentId))
-            sqlite3_bind_int(updateStatement, 2, Int32(assignToDoId))
+            // Bind the new due on date to the first placeholder
+            sqlite3_bind_text(updateStatement, 1, (dueOnDate as NSString).utf8String, -1, nil)
+            // Bind the assignment ID to the second placeholder
+            sqlite3_bind_int(updateStatement, 2, Int32(assignmentId))
             
             if sqlite3_step(updateStatement) == SQLITE_DONE {
-                print("Successfully updated assignment to do.")
+                print("Successfully updated assignment due on date.")
             } else {
-                print("Could not update assignment to do.")
+                print("Could not update assignment due on date.")
             }
         } else {
             print("UPDATE statement could not be prepared.")
@@ -756,26 +631,28 @@ class Database {
         sqlite3_finalize(updateStatement)
     }
     
-    func updateAssignmentInProgress(assignInProgressId: Int, newAssignmentId: Int) {
+    func updateAssignmentToDo(assignmentId: Int, newStatus: String = "ToDo") {
         /*
          Function Name: updateAssignmentInProgress
-         Function Purpose: Function is to update the TAssignmentsInProgress Table
+         Function Purpose: Function is to update the TAssignments Table with the 'ToDo' status
          */
         let updateStatementString = """
-        UPDATE TAssignmentsInProgress
-        SET assignment_id = ?
-        WHERE assignInProgress_id = ?;
+        UPDATE TAssignments
+        SET status = ?
+        WHERE id = ?;
         """
         
         var updateStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, updateStatementString, -1, &updateStatement, nil) == SQLITE_OK {
-            sqlite3_bind_int(updateStatement, 1, Int32(newAssignmentId))
-            sqlite3_bind_int(updateStatement, 2, Int32(assignInProgressId))
+            // Bind the new status to the first placeholder
+            sqlite3_bind_text(updateStatement, 1, (newStatus as NSString).utf8String, -1, nil)
+            // Bind the assignment ID to the second placeholder
+            sqlite3_bind_int(updateStatement, 2, Int32(assignmentId))
             
             if sqlite3_step(updateStatement) == SQLITE_DONE {
-                print("Successfully updated assignment in progress.")
+                print("Successfully updated assignment status to \(newStatus).")
             } else {
-                print("Could not update assignment in progress.")
+                print("Could not update assignment status.")
             }
         } else {
             print("UPDATE statement could not be prepared.")
@@ -783,33 +660,63 @@ class Database {
         sqlite3_finalize(updateStatement)
     }
     
-    func updateAssignmentCompleted(assignCompletedId: Int, newAssignmentId: Int) {
+    func updateAssignmentInProgress(assignmentId: Int, newStatus: String = "InProgress") {
+        /*
+         Function Name: updateAssignmentInProgress
+         Function Purpose: Function is to update the TAssignments Table with the 'InProgress' status
+         */
+        let updateStatementString = """
+        UPDATE TAssignments
+        SET status = ?
+        WHERE id = ?;
+        """
+        
+        var updateStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, updateStatementString, -1, &updateStatement, nil) == SQLITE_OK {
+            // Bind the new status to the first placeholder
+            sqlite3_bind_text(updateStatement, 1, (newStatus as NSString).utf8String, -1, nil)
+            // Bind the assignment ID to the second placeholder
+            sqlite3_bind_int(updateStatement, 2, Int32(assignmentId))
+            
+            if sqlite3_step(updateStatement) == SQLITE_DONE {
+                print("Successfully updated assignment status to \(newStatus).")
+            } else {
+                print("Could not update assignment status.")
+            }
+        } else {
+            print("UPDATE statement could not be prepared.")
+        }
+        sqlite3_finalize(updateStatement)
+    }
+    
+    func updateAssignmentCompleted(assignmentId: Int, newStatus: String = "Completed") {
         /*
          Function Name: updateAssignmentCompleted
-         Function Purpose: Function is to update the TAssignmentsCompleted Table
+         Function Purpose: Function is to update the TAssignments Table with the 'Completed' status
          */
         let updateStatementString = """
-        UPDATE TAssignmentsCompleted
-        SET assignment_id = ?
-        WHERE assignComplete_id = ?;
+        UPDATE TAssignments
+        SET status = ?
+        WHERE id = ?;
         """
         
         var updateStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, updateStatementString, -1, &updateStatement, nil) == SQLITE_OK {
-            sqlite3_bind_int(updateStatement, 1, Int32(newAssignmentId))
-            sqlite3_bind_int(updateStatement, 2, Int32(assignCompletedId))
+            // Bind the new status to the first placeholder
+            sqlite3_bind_text(updateStatement, 1, (newStatus as NSString).utf8String, -1, nil)
+            // Bind the assignment ID to the second placeholder
+            sqlite3_bind_int(updateStatement, 2, Int32(assignmentId))
             
             if sqlite3_step(updateStatement) == SQLITE_DONE {
-                print("Successfully updated assignment completed.")
+                print("Successfully updated assignment status to \(newStatus).")
             } else {
-                print("Could not update assignment completed.")
+                print("Could not update assignment status.")
             }
         } else {
             print("UPDATE statement could not be prepared.")
         }
         sqlite3_finalize(updateStatement)
     }
-    
     
     /* ########################################################################
      Delete Content From Tables
@@ -880,69 +787,166 @@ class Database {
         sqlite3_finalize(deleteStatement)
     }
     
-    func deleteAssignmentTodo(id: Int) {
+    
+    /* ########################################################################
+     Create Query Executable
+     ######################################################################## */
+    func fetchAllCoursesWithAssignments(using db: OpaquePointer) -> [Course] {
         /*
-         Function Name: deleteAssignmentTodo
-         Function Purpose: Function is to delete the TAssignmentsToDo Table
+         Function Name: fetchAllCoursesWithAssignments
+         Function Purpose: Function process the opening of db by fetching courses and
+         assignments. Returns an array of objects
          */
-        let deleteStatementString = "DELETE FROM TAssignmentsToDo WHERE id = ?;"
-        
-        var deleteStatement: OpaquePointer? = nil
-        if sqlite3_prepare_v2(db, deleteStatementString, -1, &deleteStatement, nil) == SQLITE_OK {
-            sqlite3_bind_int(deleteStatement, 1, Int32(id))
-            
-            if sqlite3_step(deleteStatement) == SQLITE_DONE {
-                print("Successfully deleted assignment.")
-            } else {
-                print("Could not delete assignment.")
-            }
-        } else {
-            print("DELETE statement could not be prepared.")
-        }
-        sqlite3_finalize(deleteStatement)
+        let courses = fetchCourses(using: db)
+        return courses
     }
     
-    func deleteAssignmentInProgress(id: Int) {
+    func fetchCourses(using db: OpaquePointer) -> [Course] {
         /*
-         Function Name: deleteAssignmentInProgress
-         Function Purpose: Function is to delete the TAssignmentsInProgress Table
+         Function Name: fetchCourses
+         Function Purpose: Function is to fetch the courses in the db. Returns an array of objects
          */
-        let deleteStatementString = "DELETE FROM TAssignmentsInProgress WHERE id = ?;"
+        let query = "SELECT * FROM TCourses;"
+        var queryStatement: OpaquePointer? = nil
         
-        var deleteStatement: OpaquePointer? = nil
-        if sqlite3_prepare_v2(db, deleteStatementString, -1, &deleteStatement, nil) == SQLITE_OK {
-            sqlite3_bind_int(deleteStatement, 1, Int32(id))
-            
-            if sqlite3_step(deleteStatement) == SQLITE_DONE {
-                print("Successfully deleted assignment.")
-            } else {
-                print("Could not delete assignment.")
+        var courses: [Course] = []
+        
+        if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let courseID = Int(sqlite3_column_int(queryStatement, 0))
+                let courseName = String(cString: sqlite3_column_text(queryStatement, 1))
+                let courseCode = String(cString: sqlite3_column_text(queryStatement, 2))
+                
+                // Convert date strings to Date objects using a DateFormatter
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                
+                let startDateString = String(cString: sqlite3_column_text(queryStatement, 3))
+                let endDateString = String(cString: sqlite3_column_text(queryStatement, 4))
+                
+                if let startDate = dateFormatter.date(from: startDateString),
+                   let endDate = dateFormatter.date(from: endDateString) {
+                    
+                    let course = Course(id: courseID,
+                                        name: courseName,
+                                        code: courseCode,
+                                        startDate: startDate,
+                                        endDate: endDate,
+                                        assignments: fetchAssignments(using: db, courseID: courseID))
+                    
+                    courses.append(course)
+                } else {
+                    print("Error converting date strings to Date objects.")
+                }
             }
         } else {
-            print("DELETE statement could not be prepared.")
+            print("SELECT statement for TCourses could not be prepared.")
         }
-        sqlite3_finalize(deleteStatement)
+        sqlite3_finalize(queryStatement)
+        
+        return courses
     }
     
-    func deleteAssignmentCompleted(id: Int) {
+    func fetchAssignments(using db: OpaquePointer, courseID: Int) -> [Assignment] {
         /*
-         Function Name: deleteAssignmentCompleted
-         Function Purpose: Function is to delete the TAssignmentsCompleted Table
+         Function Name: fetchAssignments
+         Function Purpose: Function is to fetch the assignments for the course ID that is
+         passed in as param. Returns an array of objects
          */
-        let deleteStatementString = "DELETE FROM TAssignmentsCompleted WHERE id = ?;"
-        
-        var deleteStatement: OpaquePointer? = nil
-        if sqlite3_prepare_v2(db, deleteStatementString, -1, &deleteStatement, nil) == SQLITE_OK {
-            sqlite3_bind_int(deleteStatement, 1, Int32(id))
-            
-            if sqlite3_step(deleteStatement) == SQLITE_DONE {
-                print("Successfully deleted assignment.")
-            } else {
-                print("Could not delete assignment.")
+        let query = "SELECT * FROM TAssignments WHERE courseID = \(courseID);"
+        var queryStatement: OpaquePointer? = nil
+
+        var assignments: [Assignment] = []
+
+        if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let assignmentID = Int(sqlite3_column_int(queryStatement, 0))
+                let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
+
+                // Convert date strings to Date objects using a DateFormatter
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+
+                let dueDateString = String(cString: sqlite3_column_text(queryStatement, 2))
+                let dueDate = dateFormatter.date(from: dueDateString)
+
+                let dueOnDateString = String(cString: sqlite3_column_text(queryStatement, 3))
+                let dueOnDate: Date? = dueOnDateString.isEmpty ? nil : dateFormatter.date(from: dueOnDateString)
+
+                let assignmentDescription = String(cString: sqlite3_column_text(queryStatement, 4))
+                let grade = Double(sqlite3_column_double(queryStatement, 5))
+                let statusString = String(cString: sqlite3_column_text(queryStatement, 7))
+                let status = AssignmentStatus(rawValue: statusString) ?? .toDo
+
+                let assignment = Assignment(id: assignmentID,
+                                            name: assignmentName,
+                                            dueDate: dueDate,
+                                            dueOnDate: dueOnDate,
+                                            description: assignmentDescription,
+                                            grade: grade,
+                                            courseID: courseID,
+                                            status: status)
+
+                assignments.append(assignment)
             }
         } else {
-            print("DELETE statement could not be prepared.")
+            print("SELECT statement for TAssignments could not be prepared.")
         }
-        sqlite3_finalize(deleteStatement)
+        sqlite3_finalize(queryStatement)
+
+        return assignments
+    }
+    
+    func fetchAssignmentsStatus(using db: OpaquePointer, courseID: Int, statusFilter: String) -> [Assignment] {
+        /*
+         Function Name: fetchAssignmentsStatus
+         Function Purpose: Function is to fetch the assignments with status passed as param.
+            Returns an array of objects
+         */
+        let query = """
+        SELECT * FROM TAssignments
+        WHERE courseID = \(courseID) AND status = '\(statusFilter)';
+        """
+        var queryStatement: OpaquePointer? = nil
+
+        var assignments: [Assignment] = []
+
+        if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let assignmentID = Int(sqlite3_column_int(queryStatement, 0))
+                let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
+
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+
+                let dueDateString = String(cString: sqlite3_column_text(queryStatement, 2))
+                let dueDate = dateFormatter.date(from: dueDateString)
+
+                let dueOnDateString = String(cString: sqlite3_column_text(queryStatement, 3))
+                let dueOnDate: Date? = dueOnDateString.isEmpty ? nil : dateFormatter.date(from: dueOnDateString)
+
+                let assignmentDescription = String(cString: sqlite3_column_text(queryStatement, 4))
+                let grade = Double(sqlite3_column_double(queryStatement, 5))
+                let statusString = String(cString: sqlite3_column_text(queryStatement, 7))
+                let status = AssignmentStatus(rawValue: statusString) ?? .toDo
+
+                let assignment = Assignment(id: assignmentID,
+                                            name: assignmentName,
+                                            dueDate: dueDate,
+                                            dueOnDate: dueOnDate,
+                                            description: assignmentDescription,
+                                            grade: grade,
+                                            courseID: courseID,
+                                            status: status)
+
+                assignments.append(assignment)
+            }
+        } else {
+            print("SELECT statement for TAssignments could not be prepared.")
+        }
+        sqlite3_finalize(queryStatement)
+
+        return assignments
     }
 }
+

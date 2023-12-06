@@ -109,28 +109,54 @@ class AddViewController: UIViewController {
     }
     
     @IBAction func Set(_ sender: Any) {
-        /*print(selectedCourse as Any)
-         print(selectedAssignment as Any)
-         print(DueDatePicker.date)
-         print(DueOnDatePicker.date)*/
+        print(selectedCourse?.code as Any)
+        print(selectedAssignment?.name as Any)
+        print(DueDatePicker.date)
+        print(DueOnDatePicker.date)
         
         if let assignmentId = selectedAssignment?.id {
             let df = DateFormatter()
             df.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let dueOnDate = df.string(from: DueOnDatePicker.date)
-            db.addAssignmentInProgress(assignmentId: assignmentId, dueOnDate: dueOnDate)
-            
+            db.updateAssignmentDueOnDate(assignmentId: assignmentId, dueOnDate: dueOnDate)
             for course in courses {
                 if course.id == selectedCourse?.id{
                     for assignment in course.assignments {
                         if assignment.id == assignmentId{
                             assignment.dueOnDate = DueOnDatePicker.date
+            
                         }
                     }
                 }
             }
         }
         filterAssignmentsForSwitchState()
+        
+        ClassPicker.reloadAllComponents()
+        AssignmentPicker.reloadAllComponents()
+        
+        //let row = AssignmentPicker.selectedRow(inComponent: 0)
+        //setupSelectedAssignmentForRow(row)
+        
+        //selectNextRow(in: ClassPicker)
+        
+        let rowClass = ClassPicker.selectedRow(inComponent: 0)
+        var rowAssignmetn = AssignmentPicker.selectedRow(inComponent: 0)
+        selectedCourse = coursesFiltered[rowClass]
+        filterAssignmentsForSwitchState()
+        AssignmentPicker.reloadAllComponents()
+        
+        // Select the first assignment for the selected course here
+        if let assignment = selectedCourse?.assignments[rowAssignmetn] {
+            
+            AssignmentPicker.selectRow(rowAssignmetn, inComponent: 0, animated: true)
+            selectedAssignment = assignment
+            
+            // Update DueDatePicker with the due date of the selected assignment
+            if let dueDate = selectedAssignment?.dueDate {
+                setDatePickers(dueDate)
+            }
+        }
         
         //Close modal when there are no more assignments to set
         if coursesFiltered.count == 0{
@@ -176,6 +202,17 @@ class AddViewController: UIViewController {
                     setDatePickers(dueDate)
                 }
             }
+        }
+    }
+    
+    func selectNextRow(in pickerView: UIPickerView) {
+        let currentRow = pickerView.selectedRow(inComponent: 0)
+        let nextRow = currentRow + 1
+        
+        if nextRow < pickerView.numberOfRows(inComponent: 0) {
+            pickerView.selectRow(nextRow, inComponent: 0, animated: true)
+        } else if pickerView.numberOfRows(inComponent: 0) > 0 {
+            pickerView.selectRow(0, inComponent: 0, animated: true) // Wrap to the first element
         }
     }
 }
