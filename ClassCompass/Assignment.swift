@@ -7,22 +7,30 @@
 
 import Foundation
 
+enum AssignmentStatus: String {
+    case toDo = "ToDo", inProgress = "InProgress", completed = "Completed"
+}
+
 class Assignment {
     let id: Int
     let name: String
-    let dueDate: Date?
+    var dueDate: Date?
+    var dueOnDate: Date?
     let description: String
     //points_possible
     var grade: Double?
-    let courseID: Int
+    let courseID: Int // added courseID to store the ID (of course lol)
+    var status: AssignmentStatus
 
-    init(id: Int, name: String, dueDate: Date?, description: String, grade: Double?, courseID: Int) {
+    init(id: Int, name: String, dueDate: Date?, dueOnDate: Date? = nil, description: String, grade: Double?, courseID: Int, status: AssignmentStatus) {
         self.id = id
         self.name = name
         self.dueDate = dueDate
+        self.dueOnDate = dueOnDate
         self.description = description
         self.grade = grade
         self.courseID = courseID
+        self.status = status
     }
     
     static func dump(_ assignments: [Assignment]) -> String {

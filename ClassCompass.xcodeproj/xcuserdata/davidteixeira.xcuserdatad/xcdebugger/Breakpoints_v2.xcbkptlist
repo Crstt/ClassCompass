@@ -14,8 +14,8 @@
             filePath = "ClassCompass/ccDB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "520"
-            endingLineNumber = "520"
+            startingLineNumber = "452"
+            endingLineNumber = "452"
             landmarkName = "saveAssignment(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -81,22 +81,6 @@
             startingLineNumber = "113"
             endingLineNumber = "113"
             landmarkName = "decodeCourses(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F4AD9795-615A-4625-BF59-53CEB843259E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ClassCompass/CanvasAPIClient.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "decodeAssignments(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
