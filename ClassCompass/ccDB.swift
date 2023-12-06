@@ -791,7 +791,21 @@ class Database {
     /* ########################################################################
      Create Query Executable
      ######################################################################## */
+    func fetchAllCoursesWithAssignments(using db: OpaquePointer) -> [Course] {
+        /*
+         Function Name: fetchAllCoursesWithAssignments
+         Function Purpose: Function process the opening of db by fetching courses and
+         assignments. Returns an array of objects
+         */
+        let courses = fetchCourses(using: db)
+        return courses
+    }
+    
     func fetchCourses(using db: OpaquePointer) -> [Course] {
+        /*
+         Function Name: fetchCourses
+         Function Purpose: Function is to fetch the courses in the db. Returns an array of objects
+         */
         let query = "SELECT * FROM TCourses;"
         var queryStatement: OpaquePointer? = nil
         
@@ -834,6 +848,11 @@ class Database {
     }
     
     func fetchAssignments(using db: OpaquePointer, courseID: Int) -> [Assignment] {
+        /*
+         Function Name: fetchAssignments
+         Function Purpose: Function is to fetch the assignments for the course ID that is
+         passed in as param. Returns an array of objects
+         */
         let query = "SELECT * FROM TAssignments WHERE courseID = \(courseID);"
         var queryStatement: OpaquePointer? = nil
 
@@ -845,6 +864,58 @@ class Database {
                 let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
 
                 // Convert date strings to Date objects using a DateFormatter
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+
+                let dueDateString = String(cString: sqlite3_column_text(queryStatement, 2))
+                let dueDate = dateFormatter.date(from: dueDateString)
+
+                let dueOnDateString = String(cString: sqlite3_column_text(queryStatement, 3))
+                let dueOnDate: Date? = dueOnDateString.isEmpty ? nil : dateFormatter.date(from: dueOnDateString)
+
+                let assignmentDescription = String(cString: sqlite3_column_text(queryStatement, 4))
+                let grade = Double(sqlite3_column_double(queryStatement, 5))
+                let statusString = String(cString: sqlite3_column_text(queryStatement, 7))
+                let status = AssignmentStatus(rawValue: statusString) ?? .toDo
+
+                let assignment = Assignment(id: assignmentID,
+                                            name: assignmentName,
+                                            dueDate: dueDate,
+                                            dueOnDate: dueOnDate,
+                                            description: assignmentDescription,
+                                            grade: grade,
+                                            courseID: courseID,
+                                            status: status)
+
+                assignments.append(assignment)
+            }
+        } else {
+            print("SELECT statement for TAssignments could not be prepared.")
+        }
+        sqlite3_finalize(queryStatement)
+
+        return assignments
+    }
+    
+    func fetchAssignmentsStatus(using db: OpaquePointer, courseID: Int, statusFilter: String) -> [Assignment] {
+        /*
+         Function Name: fetchAssignmentsStatus
+         Function Purpose: Function is to fetch the assignments with status passed as param.
+            Returns an array of objects
+         */
+        let query = """
+        SELECT * FROM TAssignments
+        WHERE courseID = \(courseID) AND status = '\(statusFilter)';
+        """
+        var queryStatement: OpaquePointer? = nil
+
+        var assignments: [Assignment] = []
+
+        if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let assignmentID = Int(sqlite3_column_int(queryStatement, 0))
+                let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
+
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd"
 
