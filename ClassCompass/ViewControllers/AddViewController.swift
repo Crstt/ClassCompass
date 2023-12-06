@@ -27,6 +27,7 @@ class AddViewController: UIViewController {
         AssignmentPicker.dataSource = self
         
         coursesFiltered = filterForActiveCourses()
+        filterAssignmentsForSwitchState()
         
         setupInitialSelections()
     }
@@ -62,10 +63,34 @@ class AddViewController: UIViewController {
         return filteredCourses
     }
     
+    func filterCoursesWithAssignments(_ courses: [Course]) -> [Course] {
+        let filteredCourses = courses.filter { course in
+            return course.assignments.count > 0
+        }
+        return filteredCourses
+    }
+
+    
     func filterAssignmentsForSwitchState() {
+        
+        coursesFiltered = coursesFiltered.map { course in
+            var filteredCourse = course
+            filteredCourse.assignments = course.assignments.filter { assignment in
+                if assignment.dueOnDate == nil {
+                    // Keep assignments where dueOnDate is not yet set
+                    return true
+                }
+                return false
+            }
+            return filteredCourse
+        }
+        
+        coursesFiltered = filterCoursesWithAssignments(coursesFiltered)
+        ClassPicker.reloadAllComponents()
+        setupInitialSelections()
+        
         if overdueSwitch.isOn {
             // Show all assignments regardless of dueDate
-            //filteredAssignments = selectedCourse!.assignments
             coursesFiltered = filterForActiveCourses()
             setupInitialSelections()
         } else {
@@ -93,6 +118,7 @@ class AddViewController: UIViewController {
             df.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let dueOnDate = df.string(from: DueOnDatePicker.date)
             db.addAssignmentInProgress(assignmentId: assignmentId, dueOnDate: dueOnDate)
+            
         }
     }
     
@@ -170,7 +196,11 @@ extension AddViewController: UIPickerViewDataSource{
             return coursesFiltered[row].code // Display course codes in ClassPicker
         } else if pickerView == AssignmentPicker {
             // Display assignment names for the selected course in AssignmentPicker
-            return selectedCourse?.assignments[row].name
+            if let name = selectedCourse?.assignments[row]{
+                return name.name
+            }else{
+                return selectedCourse?.assignments[0].name
+            }
         } else {
             return nil
         }
