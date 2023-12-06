@@ -161,7 +161,7 @@ class CanvasAPIClient {
             case .success(let assignmentRaw):
                 let assignments = self.decodeAssignments(assignmentRaw)
                 for assignment in assignments {
-                    self.database.saveAssignment(assignment, Int32(courseId))
+                    self.database.saveAssignment(assignment)
                 }
                 completion(assignments)
             case .failure(let error):

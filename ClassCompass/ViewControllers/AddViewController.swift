@@ -83,7 +83,7 @@ class AddViewController: UIViewController {
             let df = DateFormatter()
             df.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let dueOnDate = df.string(from: DueOnDatePicker.date)
-            db.addAssignmentInProgress(assignmentId: assignmentId, dueOnDate: dueOnDate)
+            db.updateAssignmentDueOnDate(assignmentId: assignmentId, dueOnDate: dueOnDate)
         }
     }
     
