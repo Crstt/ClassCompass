@@ -10,17 +10,19 @@ import Foundation
 class Assignment {
     let id: Int
     let name: String
-    let dueDate: Date
+    let dueDate: Date?
     let description: String
     //points_possible
     var grade: Double?
+    let courseID: Int
 
-    init(id: Int, name: String, dueDate: Date, description: String, grade: Double?) {
+    init(id: Int, name: String, dueDate: Date?, description: String, grade: Double?, courseID: Int) {
         self.id = id
         self.name = name
         self.dueDate = dueDate
         self.description = description
         self.grade = grade
+        self.courseID = courseID
     }
     
     static func dump(_ assignments: [Assignment]) -> String {
@@ -29,13 +31,14 @@ class Assignment {
             for assignment in assignments {
                 assignmentDetails += "ID: \(assignment.id)\n"
                 assignmentDetails += "Name: \(assignment.name)\n"
-                assignmentDetails += "Due Date: \(assignment.dueDate)\n"
-                assignmentDetails += "Description: \(assignment.description)\n"
+                assignmentDetails += "Due Date: \(String(describing: assignment.dueDate))\n"
+                //assignmentDetails += "Description: \(assignment.description)\n"
                 if let grade = assignment.grade {
                     assignmentDetails += "Grade: \(grade)\n"
                 } else {
                     assignmentDetails += "Grade: Not Graded\n"
                 }
+                assignmentDetails += "Course ID: \(assignment.courseID)\n"
                 assignmentDetails += "---------\n"
             }
             return assignmentDetails
