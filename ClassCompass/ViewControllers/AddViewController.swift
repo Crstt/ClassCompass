@@ -44,7 +44,7 @@ class AddViewController: UIViewController {
         AssignmentPicker.reloadAllComponents()
         if let firstAssignment = selectedCourse?.assignments.first{
             if let dueDate = firstAssignment.dueDate {
-                DueDatePicker.date = dueDate
+                setDatePickers(dueDate)
             }
         }
     }
@@ -153,13 +153,27 @@ class AddViewController: UIViewController {
         setupSelectedAssignmentForRow(row)
     }
     
+    func setDatePickers(_ dueDate: Date) {
+        DueDatePicker.date = dueDate
+        DueOnDatePicker.minimumDate = Date()
+        if overdueSwitch.isOn{
+            DueOnDatePicker.maximumDate = nil
+        }else{
+            DueOnDatePicker.maximumDate = dueDate
+        }
+    }
+    
     func setupSelectedAssignmentForRow(_ row: Int) {
         if let selectedCourse = selectedCourse {
             if selectedCourse.assignments.count > 0{
-                selectedAssignment = selectedCourse.assignments[row]
+                if row < selectedCourse.assignments.count{
+                    selectedAssignment = selectedCourse.assignments[row]
+                }else{
+                    selectedAssignment = selectedCourse.assignments[0]
+                }
                 // Update DueDatePicker with the due date of the selected assignment
                 if let dueDate = selectedAssignment?.dueDate {
-                    DueDatePicker.date = dueDate
+                    setDatePickers(dueDate)
                 }
             }
         }
@@ -180,14 +194,14 @@ extension AddViewController: UIPickerViewDelegate{
                 
                 // Update DueDatePicker with the due date of the selected assignment
                 if let dueDate = selectedAssignment?.dueDate {
-                    DueDatePicker.date = dueDate
+                    setDatePickers(dueDate)
                 }
             }
         } else if pickerView == AssignmentPicker {
             selectedAssignment = selectedCourse?.assignments[row]
             // Update DueDatePicker with the due date of the selected assignment
             if let dueDate = selectedAssignment?.dueDate {
-                DueDatePicker.date = dueDate
+                setDatePickers(dueDate)
             }
         }
     }

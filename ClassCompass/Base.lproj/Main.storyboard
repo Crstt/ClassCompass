@@ -267,7 +267,7 @@
                                                     <constraint firstAttribute="trailing" secondItem="NfO-wx-08f" secondAttribute="trailing" id="IK5-ue-bkf"/>
                                                 </constraints>
                                             </stackView>
-                                            <datePicker contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="zMa-Xf-R7P">
+                                            <datePicker contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="zMa-Xf-R7P">
                                                 <rect key="frame" x="0.0" y="38" width="373" height="50"/>
                                             </datePicker>
                                         </subviews>
@@ -286,7 +286,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <datePicker contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="ZJP-Y0-p6J">
+                                            <datePicker contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="ZJP-Y0-p6J">
                                                 <rect key="frame" x="0.0" y="28.333333333333258" width="373" height="50"/>
                                             </datePicker>
                                         </subviews>
