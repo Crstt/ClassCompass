@@ -22,7 +22,7 @@ class Assignment {
     let courseID: Int // added courseID to store the ID (of course lol)
     var status: AssignmentStatus
 
-    init(id: Int, name: String, dueDate: Date?, dueOnDate: Date? = nil, description: String, grade: Double?, courseID: Int, status: AssignmentStatus = "ToDo") {
+    init(id: Int, name: String, dueDate: Date?, dueOnDate: Date? = nil, description: String, grade: Double?, courseID: Int, status: AssignmentStatus = .toDo) {
         self.id = id
         self.name = name
         self.dueDate = dueDate

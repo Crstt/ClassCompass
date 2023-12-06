@@ -180,11 +180,11 @@ class CanvasAPIClient {
                     continue
                 }
 
-                let dueDateString = assignmentRaw["dueDate"] as? String
+                let dueDateString = assignmentRaw["due_at"] as? String
                 let dueDate = dueDateString.flatMap { self.stringtoDate($0) }
 
-                let dueOnDateString = assignmentRaw["dueOnDate"] as? String
-                let dueOnDate = dueOnDateString.flatMap { self.stringtoDate($0) }
+                //let dueOnDateString = assignmentRaw["dueOnDate"] as? String
+                //let dueOnDate = dueOnDateString.flatMap { self.stringtoDate($0) }
 
                 let rawDescription = assignmentRaw["description"] as? String ?? "No description"
                 let description = stripHTML(rawDescription)
@@ -199,11 +199,9 @@ class CanvasAPIClient {
                 let assignment = Assignment(id: id,
                                             name: name,
                                             dueDate: dueDate,
-                                            dueOnDate: dueOnDate,
                                             description: description,
                                             grade: grade,
-                                            courseID: courseID,
-                                            status: status)
+                                            courseID: courseID)
 
                 assignments.append(assignment)
             }

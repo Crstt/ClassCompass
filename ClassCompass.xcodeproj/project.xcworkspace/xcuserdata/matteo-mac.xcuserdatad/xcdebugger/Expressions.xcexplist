@@ -23,6 +23,14 @@
          contextName = "static Course.dump(_:):Course.swift">
       </ContextState>
       <ContextState
+         contextName = "CanvasAPIClient.decodeAssignments(_:):CanvasAPIClient.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "assignmentRaw[&quot;due_at&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "static SettingsViewController.decrypt(encryptedPassword:keyString:ivString:):SettingsViewController.swift">
          <PersistentStrings>
             <PersistentString
