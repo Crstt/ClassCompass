@@ -30,7 +30,7 @@ class CanvasAPIClient {
         
         // Added this step to init the db and open the db file
         self.database = Database()
-        _ = self.database.openDatabase()
+        // self.database = self.database.openDatabase()
     }
     
 
@@ -151,44 +151,17 @@ class CanvasAPIClient {
     }
     
     func fetchAssignmentsById(courseId: Int, page: Int = 1, pageSize: Int = 999, completion: @escaping ([Assignment]) -> Void) {
-        
         let parameters: [String: Any] = [
             "page": page,
             "per_page": pageSize
         ]
-        
+
         performRequest(url: self.canvasAPIURL + "/courses/\(courseId)/assignments", parameters: parameters, headers: self.defaultHeaders) { result in
             switch result {
             case .success(let assignmentRaw):
-                var assignments: [Assignment] = []
-                for assignmentDict in assignmentRaw {
-                    guard let id = assignmentDict["id"] as? Int else {
-                        print("Error: 'id' is not an Int or is missing in assignment: \(assignmentDict)")
-                        continue
-                    }
-                    guard let name = assignmentDict["name"] as? String else {
-                        print("Error: 'name' is not a String or is missing in assignment: \(assignmentDict)")
-                        continue
-                    }
-                    guard let description = assignmentDict["description"] as? String else {
-                        print("Error: 'description' is not a String or is missing in assignment: \(assignmentDict)")
-                        continue
-                    }
-
-                    let dueAtString = assignmentDict["due_at"] as? String
-                    let dueAtDate = dueAtString != nil ? self.stringtoDate(dueAtString!) : nil
-                    let grade = assignmentDict["grade"] as? Double
-
-                    // Now all required values are non-nil
-                    if dueAtDate != nil {
-                        let assignment = Assignment(id: id,
-                                                    name: name,
-                                                    dueDate: dueAtDate,
-                                                    description: description,
-                                                    grade: grade)
-                        self.database.saveAssignment(assignment, Int32(courseId))
-                        assignments.append(assignment)
-                    } 
+                let assignments = self.decodeAssignments(assignmentRaw)
+                for assignment in assignments {
+                    self.database.saveAssignment(assignment, Int32(courseId))
                 }
                 completion(assignments)
             case .failure(let error):
@@ -198,6 +171,97 @@ class CanvasAPIClient {
         }
     }
 
+    func decodeAssignments(_ assignmentsRaw: [NSDictionary]) -> [Assignment] {
+        var assignments: [Assignment] = []
+
+        for assignmentRaw in assignmentsRaw {
+            guard let id = assignmentRaw["id"] as? Int,
+                  let name = assignmentRaw["name"] as? String else {
+                continue
+            }
+
+            let dueAtString = assignmentRaw["due_at"] as? String
+            let dueAtDate = dueAtString.flatMap { self.stringtoDate($0) }
+            let rawDescription = assignmentRaw["description"] as? String ?? "No description"
+            let description = stripHTML(rawDescription)
+            let grade = assignmentRaw["grade"] as? Double
+            let courseID = assignmentRaw["course_id"] as? Int ?? 0
+
+            let assignment = Assignment(id: id,
+                                        name: name,
+                                        dueDate: dueAtDate,
+                                        description: description,
+                                        grade: grade,
+                                        courseID: courseID)
+
+            assignments.append(assignment)
+        }
+        return assignments
+    }
+
+    func stripHTML(_ input: String) -> String {
+        var output = input.replacingOccurrences(of: "&nbsp;", with: " ")
+        let htmlPattern = "<[^>]+>"
+        let regex = try! NSRegularExpression(pattern: htmlPattern, options: [])
+        let range = NSRange(location: 0, length: output.utf16.count)
+        output = regex.stringByReplacingMatches(in: output, options: [], range: range, withTemplate: "")
+
+        return output
+    }
+
+    
+    /*
+     func fetchAssignmentsById(courseId: Int, page: Int = 1, pageSize: Int = 999, completion: @escaping ([Assignment]) -> Void) {
+         
+         let parameters: [String: Any] = [
+             "page": page,
+             "per_page": pageSize
+         ]
+         
+         performRequest(url: self.canvasAPIURL + "/courses/\(courseId)/assignments", parameters: parameters, headers: self.defaultHeaders) { result in
+             switch result {
+             case .success(let assignmentRaw):
+                 var assignments: [Assignment] = []
+                 for assignmentDict in assignmentRaw {
+                     guard let id = assignmentDict["id"] as? Int else {
+                         print("Error: 'id' is not an Int or is missing in assignment: \(assignmentDict)")
+                         continue
+                     }
+                     guard let name = assignmentDict["name"] as? String else {
+                         print("Error: 'name' is not a String or is missing in assignment: \(assignmentDict)")
+                         continue
+                     }
+                     guard let description = assignmentDict["description"] as? String else {
+                         print("Error: 'description' is not a String or is missing in assignment: \(assignmentDict)")
+                         continue
+                     }
+
+                     let dueAtString = assignmentDict["due_at"] as? String
+                     let dueAtDate = dueAtString != nil ? self.stringtoDate(dueAtString!) : nil
+                     let grade = assignmentDict["grade"] as? Double
+                     
+                     // Now all required values are non-nil
+                     if dueAtDate != nil {
+                         let assignment = Assignment(id: id,
+                                                     name: name,
+                                                     dueDate: dueAtDate,
+                                                     description: description,
+                                                     grade: grade,
+                                                     courseID: courseId)
+                         self.database.saveAssignment(assignment, Int32(courseId))
+                         assignments.append(assignment)
+                     }
+                 }
+                 completion(assignments)
+             case .failure(let error):
+                 print("Error: \(error)")
+                 completion([])
+             }
+         }
+     }
+     */
+    
+    
     /////
     /*func fetchUsers(completion: @escaping ([Users]) -> Void) {
         performRequest(url: self.canvasAPIURL + "/users", headers: self.defaultHeaders) { result in

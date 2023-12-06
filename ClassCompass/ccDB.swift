@@ -67,9 +67,17 @@ class Database {
             return db
         }
     }
+
+    // Close the SQLite database
+    private func closeDatabase() {
+        if db != nil {
+            sqlite3_close(db)
+            print("Database closed.")
+        }
+    }
     
     /* ########################################################################
-     Create Tables
+                                    Create Tables
      ######################################################################## */
     private func createStudentTable() {
         /*
@@ -140,7 +148,6 @@ class Database {
             due_date TEXT,
             description TEXT,
             grade REAL,
-            grading_type TEXT,
             course_id INTEGER NOT NULL,
             FOREIGN KEY (course_id) REFERENCES TCourses(id)
         );
@@ -307,8 +314,7 @@ class Database {
             name            AS AssignmentName,
             due_date        AS DueDate,
             description     AS AssignmentDescription,
-            grade           AS Grade,
-            grading_type    AS GradeType
+            grade           AS Grade
         FROM TAssignments;
         """
         
@@ -499,14 +505,13 @@ class Database {
          Function Purpose: Function is to save the assignment that is pulled from the Canvas API call
          */
         let insertStatementString = """
-        INSERT INTO TAssignments (id, name, due_date, description, grade, grading_type, course_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO TAssignments (id, name, due_date, description, grade, course_id)
+        VALUES (?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
         name = excluded.name,
         due_date = excluded.due_date,
         description = excluded.description,
         grade = excluded.grade,
-        grading_type = excluded.grading_type,
         course_id = excluded.course_id;
         """
         
@@ -535,7 +540,7 @@ class Database {
             }
             
             
-            sqlite3_bind_int(insertStatement, 7, courseId)
+            sqlite3_bind_int(insertStatement, 6, courseId)
             
             
             if sqlite3_step(insertStatement) == SQLITE_DONE {
@@ -946,3 +951,87 @@ class Database {
         sqlite3_finalize(deleteStatement)
     }
 }
+
+    /* ########################################################################
+                                Create Query Executable
+     ######################################################################## */
+    func fetchCourses(using db: OpaquePointer) -> [Course] {
+        let query = "SELECT * FROM TCourses;"
+        var queryStatement: OpaquePointer? = nil
+
+        var courses: [Course] = []
+
+        if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let courseID = Int(sqlite3_column_int(queryStatement, 0))
+                let courseName = String(cString: sqlite3_column_text(queryStatement, 1))
+                let courseCode = String(cString: sqlite3_column_text(queryStatement, 2))
+                
+                // Convert date strings to Date objects using a DateFormatter
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                
+                let startDateString = String(cString: sqlite3_column_text(queryStatement, 3))
+                let endDateString = String(cString: sqlite3_column_text(queryStatement, 4))
+                
+                if let startDate = dateFormatter.date(from: startDateString),
+                   let endDate = dateFormatter.date(from: endDateString) {
+                    
+                    let course = Course(id: courseID,
+                                        name: courseName,
+                                        code: courseCode,
+                                        startDate: startDate,
+                                        endDate: endDate,
+                                        assignments: fetchAssignments(using: db, courseID: courseID))
+                    
+                    courses.append(course)
+                } else {
+                    print("Error converting date strings to Date objects.")
+                }
+            }
+        } else {
+            print("SELECT statement for TCourses could not be prepared.")
+        }
+        sqlite3_finalize(queryStatement)
+
+        return courses
+    }
+
+    func fetchAssignments(using db: OpaquePointer, courseID: Int) -> [Assignment] {
+        let query = "SELECT * FROM TAssignments WHERE course_id = \(courseID);"
+        var queryStatement: OpaquePointer? = nil
+
+        var assignments: [Assignment] = []
+
+        if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let assignmentID = Int(sqlite3_column_int(queryStatement, 0))
+                let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
+                
+                // Convert date strings to Date objects using a DateFormatter
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                
+                let dueDateString = String(cString: sqlite3_column_text(queryStatement, 2))
+                let dueDate = dateFormatter.date(from: dueDateString) ?? Date()
+                let assignmentDescription = String(cString: sqlite3_column_text(queryStatement, 3))
+                let grade = Double(sqlite3_column_double(queryStatement, 4))
+                _ = String(cString: sqlite3_column_text(queryStatement, 5))
+                let courseID = Int(sqlite3_column_int(queryStatement, 6))
+
+                let assignment = Assignment(id: assignmentID,
+                                            name: assignmentName,
+                                            dueDate: dueDate,
+                                            description: assignmentDescription,
+                                            grade: grade,
+                                            courseID: courseID)
+
+                assignments.append(assignment)
+            }
+        } else {
+            print("SELECT statement for TAssignments could not be prepared.")
+        }
+        sqlite3_finalize(queryStatement)
+
+        return assignments
+    }

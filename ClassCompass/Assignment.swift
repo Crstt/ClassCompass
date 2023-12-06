@@ -14,13 +14,15 @@ class Assignment {
     let description: String
     //points_possible
     var grade: Double?
+    let courseID: Int
 
-    init(id: Int, name: String, dueDate: Date?, description: String, grade: Double?) {
+    init(id: Int, name: String, dueDate: Date?, description: String, grade: Double?, courseID: Int) {
         self.id = id
         self.name = name
         self.dueDate = dueDate
         self.description = description
         self.grade = grade
+        self.courseID = courseID
     }
     
     static func dump(_ assignments: [Assignment]) -> String {
@@ -36,6 +38,7 @@ class Assignment {
                 } else {
                     assignmentDetails += "Grade: Not Graded\n"
                 }
+                assignmentDetails += "Course ID: \(assignment.courseID)\n"
                 assignmentDetails += "---------\n"
             }
             return assignmentDetails
