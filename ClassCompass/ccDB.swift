@@ -791,13 +791,13 @@ class Database {
     /* ########################################################################
      Create Query Executable
      ######################################################################## */
-    func fetchAllCoursesWithAssignments(using db: OpaquePointer) -> [Course] {
+    func fetchAllCoursesWithAssignments() -> [Course] {
         /*
          Function Name: fetchAllCoursesWithAssignments
          Function Purpose: Function process the opening of db by fetching courses and
          assignments. Returns an array of objects
          */
-        let courses = fetchCourses(using: db)
+        let courses = fetchCourses(using: self.db!)
         return courses
     }
     
@@ -819,7 +819,7 @@ class Database {
                 
                 // Convert date strings to Date objects using a DateFormatter
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
                 
                 let startDateString = String(cString: sqlite3_column_text(queryStatement, 3))
                 let endDateString = String(cString: sqlite3_column_text(queryStatement, 4))
@@ -853,7 +853,7 @@ class Database {
          Function Purpose: Function is to fetch the assignments for the course ID that is
          passed in as param. Returns an array of objects
          */
-        let query = "SELECT * FROM TAssignments WHERE courseID = \(courseID);"
+        let query = "SELECT * FROM TAssignments WHERE course_id = \(courseID);"
         var queryStatement: OpaquePointer? = nil
 
         var assignments: [Assignment] = []
@@ -865,7 +865,7 @@ class Database {
 
                 // Convert date strings to Date objects using a DateFormatter
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
 
                 let dueDateString = String(cString: sqlite3_column_text(queryStatement, 2))
                 let dueDate = dateFormatter.date(from: dueDateString)
@@ -905,7 +905,7 @@ class Database {
          */
         let query = """
         SELECT * FROM TAssignments
-        WHERE courseID = \(courseID) AND status = '\(statusFilter)';
+        WHERE course_id = \(courseID) AND status = '\(statusFilter)';
         """
         var queryStatement: OpaquePointer? = nil
 
@@ -917,7 +917,7 @@ class Database {
                 let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
 
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
 
                 let dueDateString = String(cString: sqlite3_column_text(queryStatement, 2))
                 let dueDate = dateFormatter.date(from: dueDateString)
