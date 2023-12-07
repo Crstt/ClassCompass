@@ -27,6 +27,9 @@ class AgendaViewController: UIViewController {
         
         db = Database()
         
+        courses = db.fetchAllCoursesWithAssignments()
+        //print(courses.count)
+        
         // Call the function to load settings from the plist file
         if let loadedSettings = SettingsViewController.loadSettingsFromPlist() {
             // Assign the loaded settings to the settingsValues dictionary
@@ -77,12 +80,12 @@ class AgendaViewController: UIViewController {
             settingsValues["API Token"] = APIToken.text!
         }
         
-        if settingsValues["API Token"] as! String == "" {
+        if settingsValues["API Token"]! == "" {
             print("Error: APIToken empty.")
             return
         }
         
-        canvasClient = CanvasAPIClient(authToken: settingsValues["API Token"]! as! String, database: db)
+        canvasClient = CanvasAPIClient(authToken: settingsValues["API Token"]! , database: db)
     }
     
     @IBAction func APITestBtn(_ sender: Any) {

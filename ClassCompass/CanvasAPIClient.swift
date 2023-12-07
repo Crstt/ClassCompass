@@ -161,7 +161,7 @@ class CanvasAPIClient {
             case .success(let assignmentRaw):
                 let assignments = self.decodeAssignments(assignmentRaw)
                 for assignment in assignments {
-                    self.database.saveAssignment(assignment, Int32(courseId))
+                    self.database.saveAssignment(assignment)
                 }
                 completion(assignments)
             case .failure(let error):
@@ -174,30 +174,39 @@ class CanvasAPIClient {
     func decodeAssignments(_ assignmentsRaw: [NSDictionary]) -> [Assignment] {
         var assignments: [Assignment] = []
 
-        for assignmentRaw in assignmentsRaw {
-            guard let id = assignmentRaw["id"] as? Int,
-                  let name = assignmentRaw["name"] as? String else {
-                continue
+            for assignmentRaw in assignmentsRaw {
+                guard let id = assignmentRaw["id"] as? Int,
+                      let name = assignmentRaw["name"] as? String else {
+                    continue
+                }
+
+                let dueDateString = assignmentRaw["due_at"] as? String
+                let dueDate = dueDateString.flatMap { self.stringtoDate($0) }
+
+                //let dueOnDateString = assignmentRaw["dueOnDate"] as? String
+                //let dueOnDate = dueOnDateString.flatMap { self.stringtoDate($0) }
+
+                let rawDescription = assignmentRaw["description"] as? String ?? "No description"
+                let description = stripHTML(rawDescription)
+
+                let grade = assignmentRaw["grade"] as? Double
+
+                let courseID = assignmentRaw["course_id"] as? Int ?? 0
+
+                let statusString = assignmentRaw["status"] as? String ?? "ToDo"
+                let status = AssignmentStatus(rawValue: statusString) ?? .toDo
+
+                let assignment = Assignment(id: id,
+                                            name: name,
+                                            dueDate: dueDate,
+                                            description: description,
+                                            grade: grade,
+                                            courseID: courseID)
+
+                assignments.append(assignment)
             }
-
-            let dueAtString = assignmentRaw["due_at"] as? String
-            let dueAtDate = dueAtString.flatMap { self.stringtoDate($0) }
-            let rawDescription = assignmentRaw["description"] as? String ?? "No description"
-            let description = stripHTML(rawDescription)
-            let grade = assignmentRaw["grade"] as? Double
-            let courseID = assignmentRaw["course_id"] as? Int ?? 0
-
-            let assignment = Assignment(id: id,
-                                        name: name,
-                                        dueDate: dueAtDate,
-                                        description: description,
-                                        grade: grade,
-                                        courseID: courseID)
-
-            assignments.append(assignment)
+            return assignments
         }
-        return assignments
-    }
 
     func stripHTML(_ input: String) -> String {
         var output = input.replacingOccurrences(of: "&nbsp;", with: " ")
@@ -208,7 +217,6 @@ class CanvasAPIClient {
 
         return output
     }
-
     
     /*
      func fetchAssignmentsById(courseId: Int, page: Int = 1, pageSize: Int = 999, completion: @escaping ([Assignment]) -> Void) {
