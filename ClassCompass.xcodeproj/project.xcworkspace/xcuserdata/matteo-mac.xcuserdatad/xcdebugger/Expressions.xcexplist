@@ -3,7 +3,73 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "AddViewController.filterCoursesWithAssignments(_:):AddViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AgendaViewController.APITestBtn(_:):AgendaViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AddViewController.pickerView(_:titleForRow:forComponent:):AddViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "selectedCourse">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "CanvasAPIClient.decodeCourses(_:):CanvasAPIClient.swift">
+      </ContextState>
+      <ContextState
          contextName = "static Course.dump(_:):Course.swift">
+      </ContextState>
+      <ContextState
+         contextName = "CanvasAPIClient.decodeAssignments(_:):CanvasAPIClient.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "assignmentRaw[&quot;due_at&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "static SettingsViewController.decrypt(encryptedPassword:keyString:ivString:):SettingsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "String(data: decryptedData, encoding: .utf8)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Database.saveAssignment(_:_:):ccDB.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AddViewController.setupInitialSelections():AddViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AddViewController.filterAssignmentsForSwitchState():AddViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AddViewController.pickerView(_:numberOfRowsInComponent:):AddViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "coursesFiltered.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "SettingsViewController.tableView(_:didSelectRowAt:):SettingsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "cell.textField.text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "SettingsViewController.viewDidLoad():SettingsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "settingsValues[&quot;Password&quot;]">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "AddViewController.pickerView(_:didSelectRow:inComponent:):AddViewController.swift">
@@ -12,17 +78,12 @@
                value = "self.selectedCourse">
             </PersistentString>
             <PersistentString
-               value = "courses[row]">
+               value = "coursesFiltered[row]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "AddViewController.pickerView(_:titleForRow:forComponent:):AddViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "courses[row].code">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "AddViewController.viewDidLoad():AddViewController.swift">
       </ContextState>
       <ContextState
          contextName = "closure #1 in ViewController.APITestBtn(_:):ViewController.swift">
@@ -36,10 +97,22 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "SettingsViewController.tableView(_:didSelectRowAt:):SettingsViewController.swift">
+         contextName = "AddViewController.overdueSwitched(_:):AddViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AddViewController.setupSelectedAssignmentForRow(_:):AddViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "SettingsViewController.tableView(_:cellForRowAt:):SettingsViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in AddViewController.filterAssignmentsForSwitchState():AddViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in closure #1 in static SettingsViewController.decrypt(encryptedPassword:keyString:ivString:):SettingsViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "cell.textField.text">
+               value = "ivBytes.baseAddress">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
