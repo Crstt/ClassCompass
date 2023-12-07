@@ -76,10 +76,15 @@ class AddViewController: UIViewController {
         coursesFiltered = coursesFiltered.map { course in
             var filteredCourse = course
             filteredCourse.assignments = course.assignments.filter { assignment in
+                if assignment.id == 18920352{
+                    print(assignment.dueOnDate)
+                }
                 if assignment.dueOnDate == nil {
                     // Keep assignments where dueOnDate is not yet set
                     return true
                 }
+                
+                print(assignment.id)
                 return false
             }
             return filteredCourse
@@ -116,7 +121,7 @@ class AddViewController: UIViewController {
         
         if let assignmentId = selectedAssignment?.id {
             let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+            df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
             let dueOnDate = df.string(from: DueOnDatePicker.date)
             db.updateAssignmentDueOnDate(assignmentId: assignmentId, dueOnDate: dueOnDate)
             for course in courses {
@@ -124,6 +129,7 @@ class AddViewController: UIViewController {
                     for assignment in course.assignments {
                         if assignment.id == assignmentId{
                             assignment.dueOnDate = DueOnDatePicker.date
+                            print(assignment.dueOnDate)
             
                         }
                     }

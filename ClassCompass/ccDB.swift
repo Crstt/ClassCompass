@@ -882,7 +882,7 @@ class Database {
 
                 if let cString = sqlite3_column_text(queryStatement, 3) {
                     dueOnDateString = String(cString: cString)
-                    dueOnDate = ((dueOnDateString?.isEmpty) != nil) ? nil : dateFormatter.date(from: dueOnDateString ?? "")
+                    dueOnDate = dueOnDateString!.isEmpty ? nil : dateFormatter.date(from: dueOnDateString!)
                 }
 
                 //print(dueOnDateString, dueOnDate)
