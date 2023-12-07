@@ -37,6 +37,7 @@ class Database {
             createStudentsView()
             createCoursesView()
             createAssignmentsView()
+            createAssignmentsNoDescription()
             createAssignmentsToDoView()
             createAssignmentsInProgressView()
             createAssignmentsCompletedView()
@@ -62,6 +63,11 @@ class Database {
             print("Successfully opened database connection at \(fileURL.path)")
             return db
         }
+    }
+
+    // Method to get the database connection pointer
+    func getDatabasePointer() -> OpaquePointer? {
+        return db
     }
     
     // Close the SQLite database
@@ -113,7 +119,7 @@ class Database {
         CREATE TABLE IF NOT EXISTS TCourses (
             id INTEGER PRIMARY KEY NOT NULL,
             name TEXT NOT NULL,
-            course_code TEXT,
+            course_code TEXT UNIQUE,
             start_date TEXT,
             end_date TEXT
         );
@@ -234,6 +240,36 @@ class Database {
             dueDate         AS DueDate,
             dueOnDate       AS DueOnDate,
             description     AS AssignmentDescription,
+            grade           AS Grade,
+            courseID        AS CourseID,
+            status          AS AssignmentStatus
+        FROM TAssignments;
+        """
+        
+        var createViewStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, createViewString, -1, &createViewStatement, nil) == SQLITE_OK {
+            if sqlite3_step(createViewStatement) == SQLITE_DONE {
+                print("vTAssignments view created.")
+            } else {
+                print("vTAssignments view could not be created.")
+            }
+        } else {
+            print("CREATE VIEW statement for vTAssignments could not be prepared.")
+        }
+        sqlite3_finalize(createViewStatement)
+    }
+
+    private func createAssignmentsNoDescription() {
+        /*
+         Function Name: createAssignmentsNoDescription
+         Function Purpose: Function is to create a view for the TAssignments table
+         */
+        let createViewString = """
+        CREATE VIEW IF NOT EXISTS vTAssignmentsNoDesc AS
+        SELECT
+            name            AS AssignmentName,
+            dueDate         AS DueDate,
+            dueOnDate       AS DueOnDate,
             grade           AS Grade,
             courseID        AS CourseID,
             status          AS AssignmentStatus
@@ -440,23 +476,23 @@ class Database {
         INSERT INTO TAssignments (id, name, dueDate, dueOnDate, description, grade, courseID, status)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
-            name = excluded.name,
-            dueDate = excluded.dueDate,
-            dueOnDate = excluded.dueOnDate,
-            description = excluded.description,
-            grade = excluded.grade,
-            courseID = excluded.courseID,
-            status = excluded.status;
+        name = excluded.name,
+        dueDate = excluded.dueDate,
+        dueOnDate = excluded.dueOnDate,
+        description = excluded.description,
+        grade = excluded.grade,
+        courseID = excluded.courseID,
+        status = excluded.status;
         """
-        
+
         var insertStatement: OpaquePointer? = nil
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        
+
         if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
             sqlite3_bind_int(insertStatement, 1, Int32(assignment.id))
             sqlite3_bind_text(insertStatement, 2, (assignment.name as NSString).utf8String, -1, nil)
-            
+
             if let dueDate = assignment.dueDate {
                 let dueDateString = dateFormatter.string(from: dueDate)
                 sqlite3_bind_text(insertStatement, 3, (dueDateString as NSString).utf8String, -1, nil)
@@ -470,26 +506,29 @@ class Database {
             } else {
                 sqlite3_bind_null(insertStatement, 4)
             }
-            
+
             sqlite3_bind_text(insertStatement, 5, (assignment.description as NSString).utf8String, -1, nil)
-            
+
             if let grade = assignment.grade {
                 sqlite3_bind_double(insertStatement, 6, grade)
             } else {
                 sqlite3_bind_null(insertStatement, 6)
             }
-
+            
             sqlite3_bind_int(insertStatement, 7, Int32(assignment.courseID))
             sqlite3_bind_text(insertStatement, 8, (assignment.status.rawValue as NSString).utf8String, -1, nil)
 
             if sqlite3_step(insertStatement) == SQLITE_DONE {
                 print("Successfully inserted assignment.")
             } else {
-                print("Could not insert assignment.")
+                let errmsg = String(cString: sqlite3_errmsg(db))
+                print("Failure inserting assignment: \(errmsg)")
             }
         } else {
-            print("INSERT statement could not be prepared.")
+            let errmsg = String(cString: sqlite3_errmsg(db))
+            print("INSERT statement could not be prepared: \(errmsg)")
         }
+
         sqlite3_finalize(insertStatement)
     }
 
@@ -819,7 +858,7 @@ class Database {
                 
                 // Convert date strings to Date objects using a DateFormatter
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
                 
                 let startDateString = String(cString: sqlite3_column_text(queryStatement, 3))
                 let endDateString = String(cString: sqlite3_column_text(queryStatement, 4))
@@ -861,21 +900,20 @@ class Database {
         if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
             while sqlite3_step(queryStatement) == SQLITE_ROW {
                 let assignmentID = Int(sqlite3_column_int(queryStatement, 0))
-                let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
+                let assignmentName = sqlite3_column_text(queryStatement, 1).flatMap { String(cString: $0) } ?? ""
 
-                // Convert date strings to Date objects using a DateFormatter
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
 
-                let dueDateString = String(cString: sqlite3_column_text(queryStatement, 2))
+                let dueDateString = sqlite3_column_text(queryStatement, 2).flatMap { String(cString: $0) } ?? ""
                 let dueDate = dateFormatter.date(from: dueDateString)
 
-                let dueOnDateString = String(cString: sqlite3_column_text(queryStatement, 3))
-                let dueOnDate: Date? = dueOnDateString.isEmpty ? nil : dateFormatter.date(from: dueOnDateString)
+                let dueOnDateString = sqlite3_column_text(queryStatement, 3).flatMap { String(cString: $0) } ?? ""
+                let dueOnDate = dueOnDateString.isEmpty ? nil : dateFormatter.date(from: dueOnDateString)
 
-                let assignmentDescription = String(cString: sqlite3_column_text(queryStatement, 4))
+                let assignmentDescription = sqlite3_column_text(queryStatement, 4).flatMap { String(cString: $0) } ?? ""
                 let grade = Double(sqlite3_column_double(queryStatement, 5))
-                let statusString = String(cString: sqlite3_column_text(queryStatement, 7))
+                let statusString = sqlite3_column_text(queryStatement, 7).flatMap { String(cString: $0) } ?? ""
                 let status = AssignmentStatus(rawValue: statusString) ?? .toDo
 
                 let assignment = Assignment(id: assignmentID,
@@ -917,7 +955,7 @@ class Database {
                 let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
 
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
 
                 let dueDateString = String(cString: sqlite3_column_text(queryStatement, 2))
                 let dueDate = dateFormatter.date(from: dueDateString)

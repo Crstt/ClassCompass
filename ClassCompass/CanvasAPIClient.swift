@@ -29,8 +29,8 @@ class CanvasAPIClient {
         ]
         
         // Added this step to init the db and open the db file
+        // Author: David Teixeira
         self.database = Database()
-        // self.database = self.database.openDatabase()
     }
     
 
@@ -151,6 +151,11 @@ class CanvasAPIClient {
     }
     
     func fetchAssignmentsById(courseId: Int, page: Int = 1, pageSize: Int = 999, completion: @escaping ([Assignment]) -> Void) {
+        /*
+         Function Name: fetchAssignmentsById
+         Function Purpose: This function calls to canvas API and gets the assignments for each course ID.
+         Author: David Teixeira
+         */
         let parameters: [String: Any] = [
             "page": page,
             "per_page": pageSize
@@ -172,6 +177,14 @@ class CanvasAPIClient {
     }
 
     func decodeAssignments(_ assignmentsRaw: [NSDictionary]) -> [Assignment] {
+        /*
+         Function Name: decodeAssignments
+         Function Purpose: This function decodes each assignment from the raw data and assigns each
+            data value to a specific const/var. Dates are trasnformed from string to date, and the
+            description of the assignment is stripped down from the HTML syntax. Returns an array of
+            values.
+         Author: David Teixeira
+         */
         var assignments: [Assignment] = []
 
             for assignmentRaw in assignmentsRaw {
@@ -180,7 +193,7 @@ class CanvasAPIClient {
                     continue
                 }
 
-                let dueDateString = assignmentRaw["dueDate"] as? String
+                let dueDateString = assignmentRaw["due_at"] as? String
                 let dueDate = dueDateString.flatMap { self.stringtoDate($0) }
 
                 let dueOnDateString = assignmentRaw["dueOnDate"] as? String
@@ -191,7 +204,7 @@ class CanvasAPIClient {
 
                 let grade = assignmentRaw["grade"] as? Double
 
-                let courseID = assignmentRaw["courseID"] as? Int ?? 0
+                let courseID = assignmentRaw["course_id"] as? Int ?? 0
 
                 let statusString = assignmentRaw["status"] as? String ?? "ToDo"
                 let status = AssignmentStatus(rawValue: statusString) ?? .toDo

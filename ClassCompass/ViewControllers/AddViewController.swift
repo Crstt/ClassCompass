@@ -74,6 +74,13 @@ class AddViewController: UIViewController {
     }
     
     @IBAction func Set(_ sender: Any) {
+        if let dbPointer = db.getDatabasePointer() {
+            self.courses = db.fetchAllCoursesWithAssignments(using: dbPointer)
+        } else {
+            print("Database connection failed.")
+            self.courses = []
+        }
+        print(self.courses)
         print(selectedCourse)
         print(selectedAssignment)
         print(DueDatePicker.date)
