@@ -28,7 +28,7 @@ class AgendaViewController: UIViewController {
         db = Database()
         
         courses = db.fetchAllCoursesWithAssignments()
-        print(courses.count)
+        //print(courses.count)
         
         // Call the function to load settings from the plist file
         if let loadedSettings = SettingsViewController.loadSettingsFromPlist() {

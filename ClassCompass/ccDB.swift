@@ -609,7 +609,7 @@ class Database {
          */
         let updateStatementString = """
         UPDATE TAssignments
-        SET dueOnDate = ?
+        SET dueOnDate = ?, status = 'InProgress'
         WHERE id = ?;
         """
         
@@ -853,7 +853,7 @@ class Database {
          Function Purpose: Function is to fetch the assignments for the course ID that is
          passed in as param. Returns an array of objects
          */
-        let query = "SELECT * FROM TAssignments WHERE course_id = \(courseID);"
+        let query = "SELECT * FROM TAssignments WHERE courseID = \(courseID);"
         var queryStatement: OpaquePointer? = nil
 
         var assignments: [Assignment] = []
@@ -862,21 +862,37 @@ class Database {
             while sqlite3_step(queryStatement) == SQLITE_ROW {
                 let assignmentID = Int(sqlite3_column_int(queryStatement, 0))
                 let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
+                //print(assignmentID, assignmentName)
 
                 // Convert date strings to Date objects using a DateFormatter
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                
+                var dueDateString: String?
+                var dueDate: Date?
 
-                let dueDateString = String(cString: sqlite3_column_text(queryStatement, 2))
-                let dueDate = dateFormatter.date(from: dueDateString)
+                if let cString = sqlite3_column_text(queryStatement, 2) {
+                    dueDateString = String(cString: cString)
+                    dueDate = dueDateString!.isEmpty ? nil : dateFormatter.date(from: dueDateString!)
+                }
+                //print(dueDateString, dueDate)
 
-                let dueOnDateString = String(cString: sqlite3_column_text(queryStatement, 3))
-                let dueOnDate: Date? = dueOnDateString.isEmpty ? nil : dateFormatter.date(from: dueOnDateString)
+                var dueOnDateString: String?
+                var dueOnDate: Date?
+
+                if let cString = sqlite3_column_text(queryStatement, 3) {
+                    dueOnDateString = String(cString: cString)
+                    dueOnDate = ((dueOnDateString?.isEmpty) != nil) ? nil : dateFormatter.date(from: dueOnDateString ?? "")
+                }
+
+                //print(dueOnDateString, dueOnDate)
 
                 let assignmentDescription = String(cString: sqlite3_column_text(queryStatement, 4))
                 let grade = Double(sqlite3_column_double(queryStatement, 5))
                 let statusString = String(cString: sqlite3_column_text(queryStatement, 7))
                 let status = AssignmentStatus(rawValue: statusString) ?? .toDo
+                
+                //print(statusString, status)
 
                 let assignment = Assignment(id: assignmentID,
                                             name: assignmentName,

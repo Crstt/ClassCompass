@@ -191,7 +191,7 @@ class CanvasAPIClient {
 
                 let grade = assignmentRaw["grade"] as? Double
 
-                let courseID = assignmentRaw["courseID"] as? Int ?? 0
+                let courseID = assignmentRaw["course_id"] as? Int ?? 0
 
                 let statusString = assignmentRaw["status"] as? String ?? "ToDo"
                 let status = AssignmentStatus(rawValue: statusString) ?? .toDo
