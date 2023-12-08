@@ -17,6 +17,8 @@ class AddViewController: UIViewController {
     var selectedAssignment: Assignment?
     //var filteredAssignments: [Assignment] = []
     
+    var onClose: (() -> Void)?
+    
     override func viewDidLoad() {//#1
         super.viewDidLoad()
         
@@ -76,15 +78,12 @@ class AddViewController: UIViewController {
         coursesFiltered = coursesFiltered.map { course in
             var filteredCourse = course
             filteredCourse.assignments = course.assignments.filter { assignment in
-                if assignment.id == 18920352{
-                    print(assignment.dueOnDate)
-                }
+                
                 if assignment.dueOnDate == nil {
                     // Keep assignments where dueOnDate is not yet set
                     return true
                 }
                 
-                print(assignment.id)
                 return false
             }
             return filteredCourse
@@ -114,10 +113,10 @@ class AddViewController: UIViewController {
     }
     
     @IBAction func Set(_ sender: Any) {
-        print(selectedCourse?.code as Any)
+        /*print(selectedCourse?.code as Any)
         print(selectedAssignment?.name as Any)
         print(DueDatePicker.date)
-        print(DueOnDatePicker.date)
+        print(DueOnDatePicker.date)*/
         
         if let assignmentId = selectedAssignment?.id {
             let df = DateFormatter()
@@ -129,7 +128,7 @@ class AddViewController: UIViewController {
                     for assignment in course.assignments {
                         if assignment.id == assignmentId{
                             assignment.dueOnDate = DueOnDatePicker.date
-                            print(assignment.dueOnDate)
+                            //print(assignment.dueOnDate)
             
                         }
                     }
@@ -152,6 +151,10 @@ class AddViewController: UIViewController {
         filterAssignmentsForSwitchState()
         AssignmentPicker.reloadAllComponents()
         
+        if rowAssignmetn >= (selectedCourse?.assignments.count)! {
+            rowAssignmetn = 1
+        }
+        
         // Select the first assignment for the selected course here
         if let assignment = selectedCourse?.assignments[rowAssignmetn] {
             
@@ -166,12 +169,16 @@ class AddViewController: UIViewController {
         
         //Close modal when there are no more assignments to set
         if coursesFiltered.count == 0{
-            self.dismiss(animated: true, completion: nil)
+            dismiss(animated: true){
+                self.onClose?() // Call the closure when dismissing the modal
+            }
         }
     }
     
     @IBAction func CloseModal(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true){
+            self.onClose?() // Call the closure when dismissing the modal
+        }
     }
     
     // MARK: - UIPickerViewDataSource methods

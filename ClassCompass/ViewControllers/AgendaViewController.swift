@@ -13,10 +13,21 @@ class AgendaViewController: UIViewController {
     var canvasClient: CanvasAPIClient!
     var db: Database!
     var settingsValues = [String: String]()
+    var dueOnDate : Date!
+    var agendaAssignments : [(Course, Assignment)]!
+    
+    @IBOutlet weak var agendaTableView: UITableView!
+    
+    @IBOutlet weak var ResponseView: UITextView!
+    @IBOutlet weak var APIToken: UITextField!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Agenda"
+        
         let swipeLeftGR = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeft(_:)))
         swipeLeftGR.direction = .left
         view.addGestureRecognizer(swipeLeftGR)
@@ -37,7 +48,16 @@ class AgendaViewController: UIViewController {
         }else{
             print("Error loading settings")
         }
-
+        
+        dueOnDate = Date()
+        agendaAssignments = Course.assignmentsDueOnDate(courses, dueOnDate: dueOnDate)
+        
+        let nib = UINib(nibName: "agendaTableViewCell", bundle: nil)
+        agendaTableView.register(nib, forCellReuseIdentifier: "agendaTableViewCell")
+        
+        agendaTableView.delegate = self
+        agendaTableView.dataSource = self
+        
     }
     
     @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
@@ -48,8 +68,12 @@ class AgendaViewController: UIViewController {
     
     @IBAction func swipeUp(_ sender: UISwipeGestureRecognizer) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let AddViewController = storyboard.instantiateViewController(withIdentifier: "AddViewController") as! AddViewController
-        present(AddViewController, animated: true)
+        let addVC = storyboard.instantiateViewController(withIdentifier: "AddViewController") as! AddViewController
+        // Pass data to AddViewController here
+        addVC.courses = courses
+        addVC.canvasClient = canvasClient
+        addVC.db = db
+        present(addVC, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -59,6 +83,11 @@ class AgendaViewController: UIViewController {
                 destinationVC.courses = courses
                 destinationVC.canvasClient = canvasClient
                 destinationVC.db = db
+                
+                destinationVC.onClose = { [weak self] in
+                    print("hello")
+                    self?.agendaTableView.reloadData()
+                }
             }
         }else if segue.identifier == "settingsSegue"{
             if let destinationVC = segue.destination as? SettingsViewController {
@@ -70,9 +99,6 @@ class AgendaViewController: UIViewController {
             }
         }
     }
-    
-    @IBOutlet weak var ResponseView: UITextView!
-    @IBOutlet weak var APIToken: UITextField!
     
     func initCanvasClient() {
         if !settingsValues.contains(where: { $0.key == "API Token" }) {
@@ -110,5 +136,32 @@ class AgendaViewController: UIViewController {
                 self.ResponseView.text += Assignment.dump(fetchedAssignments)
             }
         }
+    }
+}
+
+extension AgendaViewController: UITableViewDelegate{
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? agendaTableViewCell {
+            
+            print(cell.courseLabel.text ?? "")
+            print(cell.assignmentLabel.text ?? "")
+        }
+    }
+}
+
+extension AgendaViewController: UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return agendaAssignments.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "agendaTableViewCell", for: indexPath) as! agendaTableViewCell
+        
+        let assignment = agendaAssignments[indexPath.row]
+        cell.courseLabel?.text = assignment.0.code
+        cell.assignmentLabel?.text = assignment.1.name
+        
+        
+        return cell
     }
 }
