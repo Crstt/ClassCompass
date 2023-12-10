@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B26F0282B26231500A4B435 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B26F0272B26231500A4B435 /* ProgressBar.swift */; };
 		3BE513FF2B20E99A00FEA76D /* AssignmentsInProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE513FE2B20E99A00FEA76D /* AssignmentsInProgress.swift */; };
 		72338CB52B140A540040D4D5 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72338CB42B140A540040D4D5 /* ProgressViewController.swift */; };
 		727466752B042DD300A4E64C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727466742B042DD300A4E64C /* AppDelegate.swift */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3B26F0272B26231500A4B435 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		3BE513FE2B20E99A00FEA76D /* AssignmentsInProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentsInProgress.swift; sourceTree = "<group>"; };
 		72338CB42B140A540040D4D5 /* ProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
 		727466712B042DD300A4E64C /* ClassCompass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClassCompass.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,6 +127,7 @@
 			children = (
 				72DB68D92B19929500640691 /* ViewControllers */,
 				7274676A2B0D668700A4E64C /* Assignment.swift */,
+				3B26F0272B26231500A4B435 /* ProgressBar.swift */,
 				727467682B0D664E00A4E64C /* Course.swift */,
 				727466742B042DD300A4E64C /* AppDelegate.swift */,
 				727466762B042DD300A4E64C /* SceneDelegate.swift */,
@@ -327,6 +330,7 @@
 				72DB68DD2B1992FF00640691 /* settingsTableViewCell.swift in Sources */,
 				72338CB52B140A540040D4D5 /* ProgressViewController.swift in Sources */,
 				7274676D2B0D66D400A4E64C /* CanvasAPIClient.swift in Sources */,
+				3B26F0282B26231500A4B435 /* ProgressBar.swift in Sources */,
 				7274676B2B0D668700A4E64C /* Assignment.swift in Sources */,
 				727466772B042DD300A4E64C /* SceneDelegate.swift in Sources */,
 			);
