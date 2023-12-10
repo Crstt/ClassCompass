@@ -22,13 +22,16 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="yXv-cS-iPU">
                                         <rect key="frame" x="10" y="0.0" width="373" height="45"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3cg-uN-bUp">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3cg-uN-bUp" userLabel="dueOnDateBackward">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="45"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="54L-h0-7gR"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" image="arrow.left.square" catalog="system"/>
+                                                <connections>
+                                                    <action selector="dueOnDateBackward:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LgM-9v-jWE"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wednesday February 1, 2023" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="59o-qY-hgu">
                                                 <rect key="frame" x="60" y="0.0" width="253" height="45"/>
@@ -39,13 +42,16 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PvO-ss-1qb">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PvO-ss-1qb" userLabel="dueOnDateForward">
                                                 <rect key="frame" x="323" y="0.0" width="50" height="45"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="uFF-L4-rg0"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" image="arrow.right.square" catalog="system"/>
+                                                <connections>
+                                                    <action selector="dueOnDateForward:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cAs-Y0-t6l"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -154,6 +160,7 @@
                         <outlet property="APIToken" destination="VxH-SU-ocG" id="RN4-ip-w1P"/>
                         <outlet property="ResponseView" destination="FNz-eW-a8d" id="NnZ-gZ-RcF"/>
                         <outlet property="agendaTableView" destination="aC3-dY-ffb" id="JLd-oV-Vkg"/>
+                        <outlet property="dueOnDateLabel" destination="59o-qY-hgu" id="U0j-oa-x8N"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

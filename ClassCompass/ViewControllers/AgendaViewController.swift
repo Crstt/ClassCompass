@@ -17,6 +17,7 @@ class AgendaViewController: UIViewController {
     var agendaAssignments : [(Course, Assignment)]!
     
     @IBOutlet weak var agendaTableView: UITableView!
+    @IBOutlet weak var dueOnDateLabel: UILabel!
     
     @IBOutlet weak var ResponseView: UITextView!
     @IBOutlet weak var APIToken: UITextField!
@@ -50,6 +51,7 @@ class AgendaViewController: UIViewController {
         }
         
         dueOnDate = Date()
+        updateDueOnDateLabel(dueOnDate)
         agendaAssignments = Course.assignmentsDueOnDate(courses, dueOnDate: dueOnDate)
         
         let nib = UINib(nibName: "agendaTableViewCell", bundle: nil)
@@ -58,6 +60,32 @@ class AgendaViewController: UIViewController {
         agendaTableView.delegate = self
         agendaTableView.dataSource = self
         
+    }
+    
+    fileprivate func updateDueOnDateLabel(_ dueOnDate : Date) {
+        let df = DateFormatter()
+        df.dateFormat = "EEEE,\nMMMM d, yyyy"
+        df.locale = Locale(identifier: "en_US") // Set the locale for English formatting
+
+        dueOnDateLabel.text = df.string(from: dueOnDate)
+    }
+    
+    @IBAction func dueOnDateForward(_ sender: Any) {
+        if let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: dueOnDate) {
+            dueOnDate = tomorrow
+            updateDueOnDateLabel(dueOnDate)
+            agendaAssignments = Course.assignmentsDueOnDate(courses, dueOnDate: dueOnDate)
+            agendaTableView.reloadData()
+        }
+    }
+    
+    @IBAction func dueOnDateBackward(_ sender: Any) {
+        if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: dueOnDate) {
+            dueOnDate = yesterday
+            updateDueOnDateLabel(dueOnDate)
+            agendaAssignments = Course.assignmentsDueOnDate(courses, dueOnDate: dueOnDate)
+            agendaTableView.reloadData()
+        }
     }
     
     @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
@@ -85,7 +113,8 @@ class AgendaViewController: UIViewController {
                 destinationVC.db = db
                 
                 destinationVC.onClose = { [weak self] in
-                    print("hello")
+                    // Update assignments when add page closes
+                    self?.agendaAssignments = Course.assignmentsDueOnDate(destinationVC.courses, dueOnDate: self!.dueOnDate)
                     self?.agendaTableView.reloadData()
                 }
             }

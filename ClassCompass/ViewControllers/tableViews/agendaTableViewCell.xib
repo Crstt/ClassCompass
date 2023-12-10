@@ -29,15 +29,15 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S56-FM-AlC" userLabel="Assignment">
-                                <rect key="frame" x="137.66666666666666" y="0.0" width="37.333333333333343" height="46"/>
+                                <rect key="frame" x="136.33333333333334" y="0.0" width="37.333333333333343" height="46"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nzd-qE-MIS">
-                                <rect key="frame" x="262.33333333333331" y="0.0" width="47.666666666666686" height="46"/>
+                                <rect key="frame" x="260" y="0.0" width="50" height="46"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="50" id="NW9-T4-5oN"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="NW9-T4-5oN"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" image="checkmark" catalog="system"/>
