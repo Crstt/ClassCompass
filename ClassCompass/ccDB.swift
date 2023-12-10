@@ -978,11 +978,19 @@ class Database {
             return course.startDate <= today && today <= course.endDate
         }
         
-        // Calculate the progress: ratio of ongoing courses to total courses
-        let progress = ongoingCourses.isEmpty ? 0.0 : Float(ongoingCourses.count) / Float(courses.count)
+        // Calculate the progress for each ongoing course
+        let totalProgress = ongoingCourses.reduce(0.0) { (total, course) in
+            let courseDuration = course.endDate.timeIntervalSince(course.startDate)
+            let timeElapsed = today.timeIntervalSince(course.startDate)
+            let courseProgress = timeElapsed / courseDuration
+            return total + courseProgress
+        }
+
+        // Average progress across all ongoing courses
+        let averageProgress = ongoingCourses.isEmpty ? 0.0 : totalProgress / Double(Float(ongoingCourses.count))
         
-        // Round the progress to two decimal places and return
-        return round(progress * 100) / 100
+        // Round the average progress to two decimal places and return
+        return Float(round(averageProgress * 100) / 100)
     }
     
     func calculateAllCoursesAssignmentsProgress(using db: OpaquePointer, courses: [Course]) -> [Int: Float] {
