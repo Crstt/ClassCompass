@@ -123,13 +123,13 @@ class AddViewController: UIViewController {
             df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
             let dueOnDate = df.string(from: DueOnDatePicker.date)
             db.updateAssignmentDueOnDate(assignmentId: assignmentId, dueOnDate: dueOnDate)
+            
             for course in courses {
                 if course.id == selectedCourse?.id{
                     for assignment in course.assignments {
                         if assignment.id == assignmentId{
                             assignment.dueOnDate = DueOnDatePicker.date
-                            //print(assignment.dueOnDate)
-            
+                            assignment.status = .inProgress
                         }
                     }
                 }

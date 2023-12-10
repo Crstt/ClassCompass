@@ -8,6 +8,8 @@
 import UIKit
 
 class agendaTableViewCell: UITableViewCell {
+    
+    var checkButton: (() -> Void)?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -17,6 +19,7 @@ class agendaTableViewCell: UITableViewCell {
     @IBOutlet weak var assignmentLabel: UILabel!
     
     @IBAction func checkButton(_ sender: Any) {
+        checkButton?()
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

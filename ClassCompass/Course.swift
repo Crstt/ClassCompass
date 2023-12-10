@@ -44,7 +44,8 @@ class Course {
         for course in courses {
             let dueAssignments = course.assignments.filter { assignment in
                 if let dueDate = assignment.dueOnDate,
-                   Calendar.current.isDate(dueDate, inSameDayAs: dueOnDate) {
+                   Calendar.current.isDate(dueDate, inSameDayAs: dueOnDate),
+                   assignment.status != .completed {
                     return true
                 }
                 return false

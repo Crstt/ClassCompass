@@ -23,12 +23,39 @@ class AgendaViewController: UIViewController {
     @IBOutlet weak var APIToken: UITextField!
     
     override func viewWillAppear(_ animated: Bool) {
+        // Init Database
+        db = Database()
         
+        // Load settings from the plist file
+        if let loadedSettings = SettingsViewController.loadSettingsFromPlist() {
+            // Assign the loaded settings to the settingsValues dictionary
+            settingsValues = loadedSettings
+        }else{
+            print("Error loading settings")
+        }
+        
+        // Init and run Canvas API
+        initCanvasClient()
+        
+        canvasClient.fetchCourses(){ fetchedCourses in
+            self.courses = fetchedCourses
+            
+            for index in 0..<self.courses.count {
+                let course = self.courses[index]
+                self.canvasClient.fetchAssignmentsById(courseId: course.id) { fetchedAssignments in
+                    self.courses[index].assignments = fetchedAssignments
+                }
+            }
+        }
+        
+        // Get courses and assignments from database
+        courses = db.fetchAllCoursesWithAssignments()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Define Gestures
         let swipeLeftGR = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeft(_:)))
         swipeLeftGR.direction = .left
         view.addGestureRecognizer(swipeLeftGR)
@@ -37,23 +64,12 @@ class AgendaViewController: UIViewController {
         swipeUpGR.direction = .up
         view.addGestureRecognizer(swipeUpGR)
         
-        db = Database()
-        
-        courses = db.fetchAllCoursesWithAssignments()
-        //print(courses.count)
-        
-        // Call the function to load settings from the plist file
-        if let loadedSettings = SettingsViewController.loadSettingsFromPlist() {
-            // Assign the loaded settings to the settingsValues dictionary
-            settingsValues = loadedSettings
-        }else{
-            print("Error loading settings")
-        }
-        
+        // Set the Agenda date and courses
         dueOnDate = Date()
         updateDueOnDateLabel(dueOnDate)
         agendaAssignments = Course.assignmentsDueOnDate(courses, dueOnDate: dueOnDate)
         
+        // Set up Agenda table
         let nib = UINib(nibName: "agendaTableViewCell", bundle: nil)
         agendaTableView.register(nib, forCellReuseIdentifier: "agendaTableViewCell")
         
@@ -186,10 +202,17 @@ extension AgendaViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "agendaTableViewCell", for: indexPath) as! agendaTableViewCell
         
-        let assignment = agendaAssignments[indexPath.row]
-        cell.courseLabel?.text = assignment.0.code
-        cell.assignmentLabel?.text = assignment.1.name
+        let agendaItem = agendaAssignments[indexPath.row]
+        cell.courseLabel?.text = agendaItem.0.code
+        cell.assignmentLabel?.text = agendaItem.1.name
         
+        cell.checkButton = { [weak self] in
+            
+            agendaItem.1.status = .completed
+            self?.db.updateAssignmentCompleted(assignmentId : agendaItem.1.id)
+            self?.agendaAssignments = Course.assignmentsDueOnDate(self!.courses, dueOnDate: self!.dueOnDate)
+            self?.agendaTableView.reloadData()
+        }
         
         return cell
     }
