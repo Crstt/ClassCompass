@@ -463,7 +463,7 @@ class Database {
             } else {
                 sqlite3_bind_null(insertStatement, 3)
             }
-
+            
             if let dueOnDate = assignment.dueOnDate {
                 let dueOnDateString = dateFormatter.string(from: dueOnDate)
                 sqlite3_bind_text(insertStatement, 4, (dueOnDateString as NSString).utf8String, -1, nil)
@@ -478,10 +478,10 @@ class Database {
             } else {
                 sqlite3_bind_null(insertStatement, 6)
             }
-
+            
             sqlite3_bind_int(insertStatement, 7, Int32(assignment.courseID))
             sqlite3_bind_text(insertStatement, 8, (assignment.status.rawValue as NSString).utf8String, -1, nil)
-
+            
             if sqlite3_step(insertStatement) == SQLITE_DONE {
                 print("Successfully inserted assignment.")
             } else {
@@ -492,7 +492,7 @@ class Database {
         }
         sqlite3_finalize(insertStatement)
     }
-
+    
     
     /* ########################################################################
      Update Content To Tables
@@ -601,7 +601,7 @@ class Database {
         }
         sqlite3_finalize(updateStatement)
     }
-
+    
     func updateAssignmentDueOnDate(assignmentId: Int, dueOnDate: String) {
         /*
          Function Name: updateAssignmentDueOnDate
@@ -855,45 +855,45 @@ class Database {
          */
         let query = "SELECT * FROM TAssignments WHERE courseID = \(courseID);"
         var queryStatement: OpaquePointer? = nil
-
+        
         var assignments: [Assignment] = []
-
+        
         if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
             while sqlite3_step(queryStatement) == SQLITE_ROW {
                 let assignmentID = Int(sqlite3_column_int(queryStatement, 0))
                 let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
                 //print(assignmentID, assignmentName)
-
+                
                 // Convert date strings to Date objects using a DateFormatter
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
                 
                 var dueDateString: String?
                 var dueDate: Date?
-
+                
                 if let cString = sqlite3_column_text(queryStatement, 2) {
                     dueDateString = String(cString: cString)
                     dueDate = dueDateString!.isEmpty ? nil : dateFormatter.date(from: dueDateString!)
                 }
                 //print(dueDateString, dueDate)
-
+                
                 var dueOnDateString: String?
                 var dueOnDate: Date?
-
+                
                 if let cString = sqlite3_column_text(queryStatement, 3) {
                     dueOnDateString = String(cString: cString)
                     dueOnDate = dueOnDateString!.isEmpty ? nil : dateFormatter.date(from: dueOnDateString!)
                 }
-
+                
                 //print(dueOnDateString, dueOnDate)
-
+                
                 let assignmentDescription = String(cString: sqlite3_column_text(queryStatement, 4))
                 let grade = Double(sqlite3_column_double(queryStatement, 5))
                 let statusString = String(cString: sqlite3_column_text(queryStatement, 7))
                 let status = AssignmentStatus(rawValue: statusString) ?? .toDo
                 
                 //print(statusString, status)
-
+                
                 let assignment = Assignment(id: assignmentID,
                                             name: assignmentName,
                                             dueDate: dueDate,
@@ -902,14 +902,14 @@ class Database {
                                             grade: grade,
                                             courseID: courseID,
                                             status: status)
-
+                
                 assignments.append(assignment)
             }
         } else {
             print("SELECT statement for TAssignments could not be prepared.")
         }
         sqlite3_finalize(queryStatement)
-
+        
         return assignments
     }
     
@@ -917,35 +917,35 @@ class Database {
         /*
          Function Name: fetchAssignmentsStatus
          Function Purpose: Function is to fetch the assignments with status passed as param.
-            Returns an array of objects
+         Returns an array of objects
          */
         let query = """
         SELECT * FROM TAssignments
         WHERE course_id = \(courseID) AND status = '\(statusFilter)';
         """
         var queryStatement: OpaquePointer? = nil
-
+        
         var assignments: [Assignment] = []
-
+        
         if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
             while sqlite3_step(queryStatement) == SQLITE_ROW {
                 let assignmentID = Int(sqlite3_column_int(queryStatement, 0))
                 let assignmentName = String(cString: sqlite3_column_text(queryStatement, 1))
-
+                
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-
+                
                 let dueDateString = String(cString: sqlite3_column_text(queryStatement, 2))
                 let dueDate = dateFormatter.date(from: dueDateString)
-
+                
                 let dueOnDateString = String(cString: sqlite3_column_text(queryStatement, 3))
                 let dueOnDate: Date? = dueOnDateString.isEmpty ? nil : dateFormatter.date(from: dueOnDateString)
-
+                
                 let assignmentDescription = String(cString: sqlite3_column_text(queryStatement, 4))
                 let grade = Double(sqlite3_column_double(queryStatement, 5))
                 let statusString = String(cString: sqlite3_column_text(queryStatement, 7))
                 let status = AssignmentStatus(rawValue: statusString) ?? .toDo
-
+                
                 let assignment = Assignment(id: assignmentID,
                                             name: assignmentName,
                                             dueDate: dueDate,
@@ -954,15 +954,96 @@ class Database {
                                             grade: grade,
                                             courseID: courseID,
                                             status: status)
-
+                
                 assignments.append(assignment)
             }
         } else {
             print("SELECT statement for TAssignments could not be prepared.")
         }
         sqlite3_finalize(queryStatement)
-
+        
         return assignments
     }
-}
+    
+    func calculateOngoingCoursesProgress(courses: [Course]) -> Float {
+        /*
+         Function Name: calculateOngoingCoursesProgress
+         Function Purpose: Function is calculate the progress of all ongoing courses
+         */
+        // Get today's date
+        let today = Date()
+        
+        // Filter out ongoing courses based on their start and end dates
+        let ongoingCourses = courses.filter { course in
+            return course.startDate <= today && today <= course.endDate
+        }
+        
+        // Calculate the progress: ratio of ongoing courses to total courses
+        let progress = ongoingCourses.isEmpty ? 0.0 : Float(ongoingCourses.count) / Float(courses.count)
+        
+        // Round the progress to two decimal places and return
+        return round(progress * 100) / 100
+    }
+    
+    func calculateAllCoursesAssignmentsProgress(using db: OpaquePointer, courses: [Course]) -> [Int: Float] {
+        /*
+         Function Name: calculateAllCoursesAssignmentsProgress
+         Function Purpose: Function is to fetch all the course assignments in the db and calculates
+         assignments in progress per course.
+         */
+        // Declare Local Variables
+        var coursesProgress: [Int: Float] = [:]
+        
+        // Iterate through each course
+        for course in courses {
+            let statusPercentages = calculateAssignmentsStatusPercentage(using: db, courseID: course.id)
+            // Calculate the progress of assignments for the course
+            let overallProgress = statusPercentages[.completed] ?? 0.0
+            coursesProgress[course.id] = overallProgress
+        }
+        
+        // Return a dictionary mapping course IDs to their respective progress
+        return coursesProgress
+    }
+    
+    func calculateAssignmentsStatusPercentage(using db: OpaquePointer, courseID: Int) -> [AssignmentStatus: Float] {
+        /*
+         Function Name: calculateAssignmentsProgress
+         Function Purpose: Function is to fetch all the assignments in the db and calculates
+         assignments in progress.
+         */
+        // Fetch assignments for the given course ID
+        let assignments = fetchAssignments(using: db, courseID: courseID)
 
+        // Calculate the total number of assignments
+        let totalAssignments = assignments.count
+
+        // Initialize a dictionary to hold counts for each status
+        var statusCounts: [AssignmentStatus: Int] = [
+            .toDo: 0,
+            .inProgress: 0,
+            .completed: 0
+        ]
+
+        // Initialize a dictionary to hold percentages for each status
+        var statusPercentages: [AssignmentStatus: Float] = [:]
+
+        // Count the assignments for each status
+        for assignment in assignments {
+            statusCounts[assignment.status, default: 0] += 1
+        }
+
+        // Calculate and store the percentages
+        for (status, count) in statusCounts {
+            // Skip 'ToDo' status
+            if status == .toDo {
+                continue
+            }
+
+            let percentage = totalAssignments > 0 ? (Float(count) / Float(totalAssignments)) * 100 : 0
+            statusPercentages[status] = round(percentage * 100) / 100
+        }
+
+        return statusPercentages
+    }
+}

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AssignmentStatus: String {
+enum AssignmentStatus: String, CaseIterable {
     case toDo = "ToDo", inProgress = "InProgress", completed = "Completed"
 }
 

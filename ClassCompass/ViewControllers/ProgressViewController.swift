@@ -8,26 +8,41 @@
 import UIKit
 import SwiftUI
 
+class CourseData: ObservableObject {
+    @Published var courses: [Course] = []
+}
+
 class ProgressViewController: UIViewController {
+    var db: Database!
+    @ObservedObject var courseData = CourseData()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Progress"
-
-        // Set initial progress values
-        let assignmentsProgressValue: Float = 0.5 // Replace with actual progress data
-        let coursesProgressValue: Float = 0.7    // Replace with actual progress data
-
+        db = Database()
+        courseData.courses = db.fetchAllCoursesWithAssignments()
+        let courseProgress = db.calculateOngoingCoursesProgress(courses: courseData.courses)
+        
+        guard let dbPoint = db.openDatabase() else {
+            print("Database failed to open")
+            return
+        }
+        var assignmentProgress: [Int: [AssignmentStatus: Float]] = [:]
+        for course in courseData.courses {
+            assignmentProgress[course.id] = db.calculateAssignmentsStatusPercentage(using: dbPoint, courseID: course.id)
+        }
+        
         // Create a SwiftUI view for a scrollable progress bar container
-        let scrollableProgressContainer = ScrollableProgressContainerView(assignmentsProgress: assignmentsProgressValue, coursesProgress: coursesProgressValue)
+        let scrollableProgressContainer = ScrollableProgressContainerView(courseProg: courseProgress, assignProg: assignmentProgress, courseData: courseData)
         
         // Create a hosting controller with the SwiftUI view
         let hostingController = UIHostingController(rootView: scrollableProgressContainer)
-
+        
         // Add as a child of the current view controller
         addChild(hostingController)
         view.addSubview(hostingController.view)
         hostingController.didMove(toParent: self)
-
+        
         // Set up constraints
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -41,26 +56,43 @@ class ProgressViewController: UIViewController {
 
 // SwiftUI view that contains both progress bars within a scrollable view
 struct ScrollableProgressContainerView: View {
-    var assignmentsProgress: Float
-    var coursesProgress: Float
+    var courseProg: Float
+    var assignProg: [Int: [AssignmentStatus: Float]]
+    @ObservedObject var courseData: CourseData
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                Text("Assignments Progress")
-                    .font(.headline)
-                ProgressBar(progress: .constant(assignmentsProgress))
-                    .scaleEffect(0.5)
+            ScrollView {
+                VStack(spacing: 10) {
+                    Text("Total Course Completion Progress:")
+                        .font(.headline)
+                    ProgressBar(progress: .constant(courseProg))
+                        .scaleEffect(0.5)
 
-                Text("Courses Progress")
-                    .font(.headline)
-                ProgressBar(progress: .constant(coursesProgress))
-                    .scaleEffect(0.5)
+                    // Ensure this ForEach uses the 'courses' array correctly
+                    ForEach($courseData.courses, id: \.id) { $course in
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("\(course.name) Progress:")
+                                .font(.headline)
+                                .padding(.top)
+                            
+                            // This nested ForEach iterates over AssignmentStatus
+                            ForEach(AssignmentStatus.allCases, id: \.self) { status in
+                                if let statusProgress = assignProg[course.id]?[status] {
+                                    HStack {
+                                        Text(status.rawValue)
+                                            .font(.subheadline)
+                                        ProgressBar(progress: .constant(statusProgress))
+                                            .scaleEffect(0.5)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal)
             }
-            .padding()
         }
     }
-}
 
 
     

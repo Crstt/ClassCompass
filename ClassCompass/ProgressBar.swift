@@ -57,34 +57,9 @@ struct ScrollableProgressBarView: View {
         ScrollView {
             VStack {
                 ProgressBar(progress: $progress)
-                    .scaleEffect(1) // Adjust scale to make it larger
-                    .padding([.leading, .trailing], 1)
+                    .scaleEffect(0.5) // Adjust scale to make it larger
+                    .padding([.leading, .trailing], 0.5)
             }
         }
     }
 }
-
-/* struct ContentView: View {
-    // Example progress value
-    @State private var progress = 0.0
-
-    var body: some View {
-        VStack {
-            // Circular ProgressView
-            ProgressView(value: progress, total: 1.0)
-                .progressViewStyle(CircularProgressViewStyle())
-                .scaleEffect(2) // Increase the size of the progress view
-                .padding()
-
-            // Button to simulate progress
-            Button("Increment Progress") {
-                // Calculate your progress based on active courses
-                // For example, incrementing by 0.1 for demonstration
-                withAnimation {
-                    progress += 0.1
-                }
-            }
-        }
-    }
-} */
-
