@@ -993,23 +993,47 @@ class Database {
         return Float(round(averageProgress * 100) / 100)
     }
     
-    func calculateAllCoursesAssignmentsProgress(using db: OpaquePointer, courses: [Course]) -> [Int: Float] {
+    func calculateAllCoursesAssignmentsProgress(using db: OpaquePointer, courses: [Course]) -> [Int: (Float, [AssignmentStatus: Float])] {
         /*
          Function Name: calculateAllCoursesAssignmentsProgress
          Function Purpose: Function is to fetch all the course assignments in the db and calculates
          assignments in progress per course.
          */
         // Declare Local Variables
-        var coursesProgress: [Int: Float] = [:]
-        
+        var coursesProgress: [Int: (Float, [AssignmentStatus: Float])] = [:]
+        let today = Date()  // Get today's date
+
         // Iterate through each course
         for course in courses {
+            let assignments = fetchAssignments(using: db, courseID: course.id)
+            let totalAssignments = assignments.count
+            var completedCount = 0
+            var inProgressCount = 0
+
+            for assignment in assignments {
+                if let dueDate = assignment.dueDate {
+                    if dueDate < today {
+                        completedCount += 1  // Count as completed if due date has passed
+                    } else {
+                        inProgressCount += 1  // Count as in progress if due date is in the future
+                    }
+                }
+            }
+
+            // Calculate progress based on completed and in-progress assignments
+            let completedProgress = totalAssignments > 0 ? Float(completedCount) / Float(totalAssignments) : 0.0
+            let inProgressProgress = totalAssignments > 0 ? Float(inProgressCount) / Float(totalAssignments) : 0.0
+
+            // Determine overall progress
+            let overallProgress = max(completedProgress, inProgressProgress)
+
+            // Calculate status percentages for the course
             let statusPercentages = calculateAssignmentsStatusPercentage(using: db, courseID: course.id)
-            // Calculate the progress of assignments for the course
-            let overallProgress = statusPercentages[.completed] ?? 0.0
-            coursesProgress[course.id] = overallProgress
+            
+            // Combine overall progress and status percentages
+            coursesProgress[course.id] = (overallProgress, statusPercentages)
         }
-        
+
         // Return a dictionary mapping course IDs to their respective progress
         return coursesProgress
     }

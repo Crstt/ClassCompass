@@ -27,11 +27,14 @@ class ProgressViewController: UIViewController {
             print("Database failed to open")
             return
         }
-        var assignmentProgress: [Int: [AssignmentStatus: Float]] = [:]
+
+        var assignmentProgress: [Int: (Float, [AssignmentStatus: Float])] = [:]
         for course in courseData.courses {
-            assignmentProgress[course.id] = db.calculateAssignmentsStatusPercentage(using: dbPoint, courseID: course.id)
+            let courseProgressData = db.calculateAllCoursesAssignmentsProgress(using: dbPoint, courses: [course])
+            if let courseData = courseProgressData[course.id] {
+                assignmentProgress[course.id] = courseData
+            }
         }
-        
         // Create a SwiftUI view for a scrollable progress bar container
         let scrollableProgressContainer = ScrollableProgressContainerView(courseProg: courseProgress, assignProg: assignmentProgress, courseData: courseData)
         
@@ -57,53 +60,70 @@ class ProgressViewController: UIViewController {
 // SwiftUI view that contains both progress bars within a scrollable view
 struct ScrollableProgressContainerView: View {
     var courseProg: Float
-    var assignProg: [Int: [AssignmentStatus: Float]]
+    var assignProg: [Int: (Float, [AssignmentStatus: Float])]
     @ObservedObject var courseData: CourseData
-
+    
     var body: some View {
             ScrollView {
                 VStack(spacing: 10) {
                     Text("Total Course Completion Progress:")
                         .font(.headline)
+                    
+                    // Apply the same scale effect to the total course completion progress bar
                     ProgressBar(progress: .constant(courseProg))
                         .scaleEffect(0.5)
-
-                    // Ensure this ForEach uses the 'courses' array correctly
-                    ForEach($courseData.courses, id: \.id) { $course in
+                    
+                    // Iterate over each course. Only include courses that are currently ongoing
+                    ForEach(courseData.courses.filter { $0.endDate >= Date() }, id: \.id) { course in
                         VStack(alignment: .leading, spacing: 5) {
                             Text("\(course.name) Progress:")
                                 .font(.headline)
                                 .padding(.top)
-                            
-                            // This nested ForEach iterates over AssignmentStatus
-                            ForEach(AssignmentStatus.allCases, id: \.self) { status in
-                                if let statusProgress = assignProg[course.id]?[status] {
-                                    HStack {
-                                        Text(status.rawValue)
-                                            .font(.subheadline)
-                                        ProgressBar(progress: .constant(statusProgress))
-                                            .scaleEffect(0.5)
+
+                            // Label for course completion status
+                            Text("Course Completion Status:")
+                                .font(.subheadline)
+                                .padding(.bottom, 5)
+
+                            if let courseProgress = assignProg[course.id] {
+                                // Display progress bar for the course's overall completion
+                                ProgressBar(progress: .constant(courseProgress.0))
+                                    .scaleEffect(0.5)
+
+                                // Divider with label for assignments in progress
+                                Text("Assignments In Progress")
+                                    .font(.subheadline)
+                                    .padding(.vertical, 5)
+                                Divider()
+                                
+                                // Display progress bars for each assignment status
+                                ForEach(AssignmentStatus.allCases, id: \.self) { status in
+                                    if let statusProgress = courseProgress.1[status] {
+                                        HStack {
+                                            Text(status.rawValue)
+                                                .font(.subheadline)
+                                            ProgressBar(progress: .constant(statusProgress))
+                                                .scaleEffect(0.5)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
         }
     }
-
-
+    
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
 
