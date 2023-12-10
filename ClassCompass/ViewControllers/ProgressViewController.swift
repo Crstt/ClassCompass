@@ -89,21 +89,30 @@ struct ScrollableProgressContainerView: View {
                                 // Display progress bar for the course's overall completion
                                 ProgressBar(progress: .constant(courseProgress.0))
                                     .scaleEffect(0.5)
-
+                                
                                 // Divider with label for assignments in progress
                                 Text("Assignments In Progress")
                                     .font(.subheadline)
                                     .padding(.vertical, 5)
                                 Divider()
-                                
+
                                 // Display progress bars for each assignment status
                                 ForEach(AssignmentStatus.allCases, id: \.self) { status in
                                     if let statusProgress = courseProgress.1[status] {
                                         HStack {
                                             Text(status.rawValue)
                                                 .font(.subheadline)
-                                            ProgressBar(progress: .constant(statusProgress))
-                                                .scaleEffect(0.5)
+                                            
+                                            // Check if the current course's completion status is 100%
+                                            if let courseProgress = assignProg[course.id], courseProgress.0 == 1.0 {
+                                                // If the course is 100% complete, set assignment status to 100%
+                                                ProgressBar(progress: .constant(1.0))
+                                                    .scaleEffect(0.5)
+                                            } else {
+                                                // Otherwise, use the regular statusProgress
+                                                ProgressBar(progress: .constant(statusProgress))
+                                                    .scaleEffect(0.5)
+                                            }
                                         }
                                     }
                                 }

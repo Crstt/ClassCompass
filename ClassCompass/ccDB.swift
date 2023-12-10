@@ -1013,9 +1013,9 @@ class Database {
             for assignment in assignments {
                 if let dueDate = assignment.dueDate {
                     if dueDate < today {
-                        completedCount += 1  // Count as completed if due date has passed
+                        completedCount += 1
                     } else {
-                        inProgressCount += 1  // Count as in progress if due date is in the future
+                        inProgressCount += 1
                     }
                 }
             }

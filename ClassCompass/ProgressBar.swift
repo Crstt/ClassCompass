@@ -29,6 +29,10 @@ struct ProgressBar: View {
                 .foregroundColor(color)
                 .rotationEffect(Angle(degrees: 270.0)) // Rotates the circle to start at top N
                 .animation(.easeInOut(duration: 2.0), value: progress) // Apply the animation.
+
+            Text(String(format: "%.0f%%", self.progress * 100))
+                .font(.system(size:20, weight: .bold))
+                .bold()
         }
     }
 }
