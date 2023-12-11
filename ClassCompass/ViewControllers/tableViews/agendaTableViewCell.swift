@@ -18,6 +18,7 @@ class agendaTableViewCell: UITableViewCell {
     @IBOutlet weak var courseLabel: UILabel!
     @IBOutlet weak var assignmentLabel: UILabel!
     @IBOutlet weak var daysTillDue: UILabel!
+    @IBOutlet weak var dueDate: UILabel!
     
     @IBAction func checkButton(_ sender: Any) {
         checkButton?()

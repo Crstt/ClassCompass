@@ -227,12 +227,23 @@ extension AgendaViewController: UITableViewDataSource{
         cell.assignmentLabel?.text = agendaItem.1.name
         
         let calendar = Calendar.current
-        let startOfDayForDueOnDate = calendar.startOfDay(for: dueOnDate)
+        let startOfDayForDueOnDate = calendar.startOfDay(for: Date())
         let startOfDayForDueDate = calendar.startOfDay(for: agendaItem.1.dueDate!)
         
         let components = calendar.dateComponents([.day], from: startOfDayForDueOnDate, to: startOfDayForDueDate)
         
-        cell.daysTillDue?.text = "\(components.day ?? 0)"
+        if let days = components.day {
+            cell.daysTillDue?.text = days == 0 ? "Today" : "\(days)"
+        } else {
+            cell.daysTillDue?.text = "-" // Handle nil case as needed
+        }
+
+        
+        let df = DateFormatter()
+        df.dateFormat = "MM-dd"
+        df.locale = Locale(identifier: "en_US")
+        
+        cell.dueDate?.text = df.string(from: agendaItem.1.dueDate!)
         
         //tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: dueOnDate)
         
