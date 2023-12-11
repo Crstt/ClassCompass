@@ -16,9 +16,11 @@ class ProgressViewController: UIViewController {
     var db: Database!
     @ObservedObject var courseData = CourseData()
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Progress"
+        
         db = Database()
         courseData.courses = db.fetchAllCoursesWithAssignments()
         let courseProgress = db.calculateOngoingCoursesProgress(courses: courseData.courses)
@@ -49,7 +51,7 @@ class ProgressViewController: UIViewController {
         // Set up constraints
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            hostingController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
