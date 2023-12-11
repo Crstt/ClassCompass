@@ -40,20 +40,23 @@ class AgendaViewController: UIViewController {
         }
         
         // Init and run Canvas API
-        initCanvasClient()
-        
-        canvasClient.fetchCourses(){ fetchedCourses in
-            //self.courses = fetchedCourses
-            let existingIDs = Set(self.courses.map(\.id))
-            self.courses.append(contentsOf: fetchedCourses.filter { !existingIDs.contains($0.id) })
+        if initCanvasClient() {
             
-            for index in 0..<self.courses.count {
-                let course = self.courses[index]
-                self.canvasClient.fetchAssignmentsById(courseId: course.id) { fetchedAssignments in
-                    let existingIDs = Set(self.courses[index].assignments.map(\.id))
-                    self.courses[index].assignments.append(contentsOf: fetchedAssignments.filter { !existingIDs.contains($0.id) })
+            canvasClient.fetchCourses(){ fetchedCourses in
+                //self.courses = fetchedCourses
+                let existingIDs = Set(self.courses.map(\.id))
+                self.courses.append(contentsOf: fetchedCourses.filter { !existingIDs.contains($0.id) })
+                
+                for index in 0..<self.courses.count {
+                    let course = self.courses[index]
+                    self.canvasClient.fetchAssignmentsById(courseId: course.id) { fetchedAssignments in
+                        let existingIDs = Set(self.courses[index].assignments.map(\.id))
+                        self.courses[index].assignments.append(contentsOf: fetchedAssignments.filter { !existingIDs.contains($0.id) })
+                    }
                 }
             }
+        }else{
+            performSegue(withIdentifier: "settingsSegue", sender: self)
         }
         
         // Set the Agenda date and courses
@@ -92,7 +95,7 @@ class AgendaViewController: UIViewController {
         let df = DateFormatter()
         df.dateFormat = "EEEE,\nMMMM d, yyyy"
         df.locale = Locale(identifier: "en_US") // Set the locale for English formatting
-
+        
         dueOnDateLabel.text = df.string(from: dueOnDate)
     }
     
@@ -155,29 +158,32 @@ class AgendaViewController: UIViewController {
         }
     }
     
-    func initCanvasClient() {
+    func initCanvasClient() -> Bool{
         if !settingsValues.contains(where: { $0.key == "API Token" }) {
             print("API Token not in settings. Using APIToken text field")
             settingsValues["API Token"] = APIToken.text!
+            return false
         }
         
         if settingsValues["API Token"]! == "" {
             print("Error: APIToken empty.")
-            return
+            return false
         }
         
         canvasClient = CanvasAPIClient(authToken: settingsValues["API Token"]! , database: db)
+        return true
     }
     
     @IBAction func APITestBtn(_ sender: Any) {
         
-        initCanvasClient()
-        
-        canvasClient.fetchCourses(){ fetchedCourses in
-            self.courses = fetchedCourses
-            let courseDump = Course.dump(fetchedCourses)
-            //print(courseDump)
-            self.ResponseView.text = courseDump
+        if initCanvasClient(){
+            
+            canvasClient.fetchCourses(){ fetchedCourses in
+                self.courses = fetchedCourses
+                let courseDump = Course.dump(fetchedCourses)
+                //print(courseDump)
+                self.ResponseView.text = courseDump
+            }
         }
     }
     @IBAction func fetchAssignments(_ sender: Any) {
@@ -202,6 +208,10 @@ extension AgendaViewController: UITableViewDelegate{
             print(cell.assignmentLabel.text ?? "")
         }
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
 }
 
 extension AgendaViewController: UITableViewDataSource{
@@ -215,6 +225,16 @@ extension AgendaViewController: UITableViewDataSource{
         let agendaItem = agendaAssignments[indexPath.row]
         cell.courseLabel?.text = agendaItem.0.code
         cell.assignmentLabel?.text = agendaItem.1.name
+        
+        let calendar = Calendar.current
+        let startOfDayForDueOnDate = calendar.startOfDay(for: dueOnDate)
+        let startOfDayForDueDate = calendar.startOfDay(for: agendaItem.1.dueDate!)
+        
+        let components = calendar.dateComponents([.day], from: startOfDayForDueOnDate, to: startOfDayForDueDate)
+        
+        cell.daysTillDue?.text = "\(components.day ?? 0)"
+        
+        //tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: dueOnDate)
         
         cell.checkButton = { [weak self] in
             
