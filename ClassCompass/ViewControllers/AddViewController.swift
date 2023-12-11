@@ -159,7 +159,7 @@ class AddViewController: UIViewController {
         AssignmentPicker.reloadAllComponents()
         
         if rowAssignmetn >= (selectedCourse?.assignments.count)! {
-            rowAssignmetn = 1
+            rowAssignmetn = 0
         }
         
         // Select the first assignment for the selected course here
