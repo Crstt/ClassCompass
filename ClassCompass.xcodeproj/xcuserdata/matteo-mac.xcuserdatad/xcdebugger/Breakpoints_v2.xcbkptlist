@@ -115,5 +115,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3E519C44-B91D-4233-9D2D-165E28EEF4E6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ClassCompass/ViewControllers/AgendaViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "viewWillAppear(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3E519C44-B91D-4233-9D2D-165E28EEF4E6 - b651c4d7b1e684df"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Array&lt;ClassCompass.Assignment&gt;) -&gt; () in closure #1 (Swift.Array&lt;ClassCompass.Course&gt;) -&gt; () in ClassCompass.AgendaViewController.viewWillAppear(Swift.Bool) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/AgendaViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "668">
+               </Location>
+               <Location
+                  uuid = "3E519C44-B91D-4233-9D2D-165E28EEF4E6 - b651c4d7b1e68519"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Array&lt;ClassCompass.Assignment&gt;) -&gt; () in closure #1 (Swift.Array&lt;ClassCompass.Course&gt;) -&gt; () in ClassCompass.AgendaViewController.viewWillAppear(Swift.Bool) -&gt; ()"
+                  moduleName = "ClassCompass"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/matteo-mac/Documents/UNI/SDEV260/GroupProject/ClassCompass/ClassCompass/ViewControllers/AgendaViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51"
+                  offsetFromSymbolStart = "92">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

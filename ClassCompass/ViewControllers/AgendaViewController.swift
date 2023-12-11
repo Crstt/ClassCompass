@@ -28,6 +28,9 @@ class AgendaViewController: UIViewController {
         // Init Database
         db = Database()
         
+        // Get courses and assignments from database
+        courses = db.fetchAllCoursesWithAssignments()
+        
         // Load settings from the plist file
         if let loadedSettings = SettingsViewController.loadSettingsFromPlist() {
             // Assign the loaded settings to the settingsValues dictionary
@@ -40,21 +43,18 @@ class AgendaViewController: UIViewController {
         initCanvasClient()
         
         canvasClient.fetchCourses(){ fetchedCourses in
-            self.courses = fetchedCourses
+            //self.courses = fetchedCourses
+            let existingIDs = Set(self.courses.map(\.id))
+            self.courses.append(contentsOf: fetchedCourses.filter { !existingIDs.contains($0.id) })
             
             for index in 0..<self.courses.count {
                 let course = self.courses[index]
                 self.canvasClient.fetchAssignmentsById(courseId: course.id) { fetchedAssignments in
                     let existingIDs = Set(self.courses[index].assignments.map(\.id))
-                    
-                    //TODO Fix the replacement of assignments when canvasAPI is called
                     self.courses[index].assignments.append(contentsOf: fetchedAssignments.filter { !existingIDs.contains($0.id) })
                 }
             }
         }
-        
-        // Get courses and assignments from database
-        courses = db.fetchAllCoursesWithAssignments()
         
         // Set the Agenda date and courses
         dueOnDate = Date()

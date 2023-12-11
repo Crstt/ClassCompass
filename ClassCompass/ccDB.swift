@@ -441,8 +441,6 @@ class Database {
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """
         
-        
-        
         var insertStatement: OpaquePointer? = nil
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
