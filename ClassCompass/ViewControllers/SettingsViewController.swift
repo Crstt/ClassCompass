@@ -27,13 +27,12 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
-        
         for setting in settings {
             if !settingsValues.contains(where: { $0.key == setting }) {
                 settingsValues[setting] = ""
             }
         }
+        
         if settingsValues["Password"] != "" && settingsValues["API Token"] != ""{
             guard let decryptPassword = SettingsViewController.decrypt(
                 encryptedPassword: settingsValues["Password"]!,

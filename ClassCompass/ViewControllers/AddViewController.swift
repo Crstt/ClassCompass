@@ -17,6 +17,8 @@ class AddViewController: UIViewController {
     var selectedAssignment: Assignment?
     //var filteredAssignments: [Assignment] = []
     
+    var onClose: (() -> Void)?
+    
     override func viewDidLoad() {//#1
         super.viewDidLoad()
         
@@ -76,15 +78,12 @@ class AddViewController: UIViewController {
         coursesFiltered = coursesFiltered.map { course in
             var filteredCourse = course
             filteredCourse.assignments = course.assignments.filter { assignment in
-                if assignment.id == 18920352{
-                    print(assignment.dueOnDate)
-                }
+                
                 if assignment.dueOnDate == nil {
                     // Keep assignments where dueOnDate is not yet set
                     return true
                 }
                 
-                print(assignment.id)
                 return false
             }
             return filteredCourse
@@ -114,27 +113,34 @@ class AddViewController: UIViewController {
     }
     
     @IBAction func Set(_ sender: Any) {
-        print(selectedCourse?.code as Any)
+        /*print(selectedCourse?.code as Any)
         print(selectedAssignment?.name as Any)
         print(DueDatePicker.date)
-        print(DueOnDatePicker.date)
+        print(DueOnDatePicker.date)*/
         
         if let assignmentId = selectedAssignment?.id {
-            let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-            let dueOnDate = df.string(from: DueOnDatePicker.date)
-            db.updateAssignmentDueOnDate(assignmentId: assignmentId, dueOnDate: dueOnDate)
-            for course in courses {
-                if course.id == selectedCourse?.id{
-                    for assignment in course.assignments {
-                        if assignment.id == assignmentId{
-                            assignment.dueOnDate = DueOnDatePicker.date
-                            print(assignment.dueOnDate)
             
+            if let date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: DueOnDatePicker.date) {
+                let dueOnDate = date
+                
+                let df = DateFormatter()
+                df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                let dueOnDateString = df.string(from: dueOnDate)
+                db.updateAssignmentDueOnDate(assignmentId: assignmentId, dueOnDate: dueOnDateString)
+                
+                for course in courses {
+                    if course.id == selectedCourse?.id{
+                        for assignment in course.assignments {
+                            if assignment.id == assignmentId{
+                                
+                                assignment.dueOnDate = dueOnDate
+                                assignment.status = .inProgress
+                            }
                         }
                     }
                 }
             }
+            
         }
         filterAssignmentsForSwitchState()
         
@@ -152,6 +158,10 @@ class AddViewController: UIViewController {
         filterAssignmentsForSwitchState()
         AssignmentPicker.reloadAllComponents()
         
+        if rowAssignmetn >= (selectedCourse?.assignments.count)! {
+            rowAssignmetn = 1
+        }
+        
         // Select the first assignment for the selected course here
         if let assignment = selectedCourse?.assignments[rowAssignmetn] {
             
@@ -166,12 +176,16 @@ class AddViewController: UIViewController {
         
         //Close modal when there are no more assignments to set
         if coursesFiltered.count == 0{
-            self.dismiss(animated: true, completion: nil)
+            dismiss(animated: true){
+                self.onClose?() // Call the closure when dismissing the modal
+            }
         }
     }
     
     @IBAction func CloseModal(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true){
+            self.onClose?() // Call the closure when dismissing the modal
+        }
     }
     
     // MARK: - UIPickerViewDataSource methods

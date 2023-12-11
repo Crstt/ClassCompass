@@ -26,7 +26,7 @@ class Course {
     
     static func dump(_ courses: [Course]) -> String {
         var courseDetails = "Courses:\n"
-
+        
         for course in courses {
             courseDetails += "ID: \(course.id)\n"
             courseDetails += "Name: \(course.name)\n"
@@ -36,5 +36,25 @@ class Course {
             courseDetails += "---------\n"
         }
         return courseDetails
+    }
+    
+    static func assignmentsDueOnDate(_ courses: [Course], dueOnDate: Date) -> [(Course, Assignment)] {
+        var agendaAssignments: [(Course, Assignment)] = []
+        
+        for course in courses {
+            let dueAssignments = course.assignments.filter { assignment in
+                if let dueDate = assignment.dueOnDate,
+                   Calendar.current.isDate(dueDate, inSameDayAs: dueOnDate),
+                   assignment.status != .completed {
+                    return true
+                }
+                return false
+            }
+            
+            let courseWithDueAssignments = dueAssignments.map { (course, $0) }
+            agendaAssignments.append(contentsOf: courseWithDueAssignments)
+        }
+        
+        return agendaAssignments
     }
 }
