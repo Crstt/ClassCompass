@@ -119,21 +119,28 @@ class AddViewController: UIViewController {
         print(DueOnDatePicker.date)*/
         
         if let assignmentId = selectedAssignment?.id {
-            let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-            let dueOnDate = df.string(from: DueOnDatePicker.date)
-            db.updateAssignmentDueOnDate(assignmentId: assignmentId, dueOnDate: dueOnDate)
             
-            for course in courses {
-                if course.id == selectedCourse?.id{
-                    for assignment in course.assignments {
-                        if assignment.id == assignmentId{
-                            assignment.dueOnDate = DueOnDatePicker.date
-                            assignment.status = .inProgress
+            if let date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: DueOnDatePicker.date) {
+                let dueOnDate = date
+                
+                let df = DateFormatter()
+                df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                let dueOnDateString = df.string(from: dueOnDate)
+                db.updateAssignmentDueOnDate(assignmentId: assignmentId, dueOnDate: dueOnDateString)
+                
+                for course in courses {
+                    if course.id == selectedCourse?.id{
+                        for assignment in course.assignments {
+                            if assignment.id == assignmentId{
+                                
+                                assignment.dueOnDate = dueOnDate
+                                assignment.status = .inProgress
+                            }
                         }
                     }
                 }
             }
+            
         }
         filterAssignmentsForSwitchState()
         

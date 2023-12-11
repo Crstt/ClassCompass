@@ -421,7 +421,7 @@ class Database {
             sqlite3_bind_text(insertStatement, 5, (endDateString as NSString).utf8String, -1, nil)
             
             if sqlite3_step(insertStatement) == SQLITE_DONE {
-                print("Successfully inserted course.")
+                //print("Successfully inserted course.")
             } else {
                 print("Could not insert course.")
             }
@@ -437,17 +437,11 @@ class Database {
          Function Purpose: Function is to save the assignment that is pulled from the Canvas API call
          */
         let insertStatementString = """
-        INSERT INTO TAssignments (id, name, dueDate, dueOnDate, description, grade, courseID, status)
+        INSERT OR IGNORE INTO TAssignments (id, name, dueDate, dueOnDate, description, grade, courseID, status)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ON CONFLICT(id) DO UPDATE SET
-            name = excluded.name,
-            dueDate = excluded.dueDate,
-            dueOnDate = excluded.dueOnDate,
-            description = excluded.description,
-            grade = excluded.grade,
-            courseID = excluded.courseID,
-            status = excluded.status;
         """
+        
+        
         
         var insertStatement: OpaquePointer? = nil
         let dateFormatter = DateFormatter()
@@ -483,7 +477,7 @@ class Database {
             sqlite3_bind_text(insertStatement, 8, (assignment.status.rawValue as NSString).utf8String, -1, nil)
 
             if sqlite3_step(insertStatement) == SQLITE_DONE {
-                print("Successfully inserted assignment.")
+                //print("Successfully inserted assignment.")
             } else {
                 print("Could not insert assignment.")
             }

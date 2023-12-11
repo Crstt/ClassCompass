@@ -23,6 +23,8 @@ class AgendaViewController: UIViewController {
     @IBOutlet weak var APIToken: UITextField!
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         // Init Database
         db = Database()
         
@@ -43,13 +45,22 @@ class AgendaViewController: UIViewController {
             for index in 0..<self.courses.count {
                 let course = self.courses[index]
                 self.canvasClient.fetchAssignmentsById(courseId: course.id) { fetchedAssignments in
-                    self.courses[index].assignments = fetchedAssignments
+                    let existingIDs = Set(self.courses[index].assignments.map(\.id))
+                    
+                    //TODO Fix the replacement of assignments when canvasAPI is called
+                    self.courses[index].assignments.append(contentsOf: fetchedAssignments.filter { !existingIDs.contains($0.id) })
                 }
             }
         }
         
         // Get courses and assignments from database
         courses = db.fetchAllCoursesWithAssignments()
+        
+        // Set the Agenda date and courses
+        dueOnDate = Date()
+        updateDueOnDateLabel(dueOnDate)
+        agendaAssignments = Course.assignmentsDueOnDate(courses, dueOnDate: dueOnDate)
+        agendaTableView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -64,10 +75,10 @@ class AgendaViewController: UIViewController {
         swipeUpGR.direction = .up
         view.addGestureRecognizer(swipeUpGR)
         
-        // Set the Agenda date and courses
-        dueOnDate = Date()
-        updateDueOnDateLabel(dueOnDate)
-        agendaAssignments = Course.assignmentsDueOnDate(courses, dueOnDate: dueOnDate)
+        
+        
+        //updateDueOnDateLabel(dueOnDate)
+        //agendaAssignments = Course.assignmentsDueOnDate(courses, dueOnDate: dueOnDate)
         
         // Set up Agenda table
         let nib = UINib(nibName: "agendaTableViewCell", bundle: nil)
@@ -75,7 +86,6 @@ class AgendaViewController: UIViewController {
         
         agendaTableView.delegate = self
         agendaTableView.dataSource = self
-        
     }
     
     fileprivate func updateDueOnDateLabel(_ dueOnDate : Date) {
