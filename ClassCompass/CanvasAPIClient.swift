@@ -3,6 +3,7 @@
 //  ClassCompassDB
 //
 //  Created by Matteo Catalano on 11/26/23.
+//  Edited by David Teixeira
 //
 
 import Foundation
