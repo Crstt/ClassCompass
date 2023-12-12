@@ -9,6 +9,20 @@ import UIKit
 import Foundation
 import CommonCrypto
 
+/**
+ `SettingsViewController` is a UIViewController subclass that manages and displays user settings.
+
+ It has the following properties:
+ - `db`: A Database object that is used to interact with the database.
+ - `settings`: An array of strings that represent the names of the settings.
+ - `settingsValues`: A dictionary that maps setting names to their current values.
+ - `settingsDidChange`: A closure that is called when a setting's value changes.
+ - `tableView`: An IBOutlet for the UITableView that displays the settings.
+
+ In `viewDidLoad`, it initializes the `settingsValues` dictionary with empty strings for any settings that don't already have a value. If the "Password" and "API Token" settings have values, it decrypts the password and stores the decrypted password back in `settingsValues`.
+
+ It also registers a custom UITableViewCell for use with the table view, and sets itself as the table view's delegate.
+ */
 class SettingsViewController: UIViewController {
     
     var db: Database!
@@ -24,6 +38,10 @@ class SettingsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
+    /**
+     This method is called after the view controller's view is loaded into memory.
+     It initializes the settings values dictionary, decrypts the password if it is not empty, and sets up the table view.
+     */
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -53,6 +71,18 @@ class SettingsViewController: UIViewController {
         tableView.dataSource = self
     }
     
+    /**
+     Saves a setting to the Settings.plist file.
+
+     - Parameters:
+         - key: The key for the setting.
+         - value: The value to be saved for the setting.
+
+     This function checks if the Settings.plist file exists. If it does, it loads its contents into a mutable dictionary. It then updates the value for the specified key in the dictionary and writes the updated dictionary back to the plist file. If the file doesn't exist, it creates a new dictionary with the specified key-value pair and writes it to the plist file.
+
+     - Note: The Settings.plist file should be located in the document directory of the user's app.
+     - Important: The function assumes that the value parameter is of type Any, but it is recommended to use a specific type for the value parameter to ensure type safety.
+     */
     static func saveSettingToPlist(key: String, value: Any) {
         // Get the file URL for the Settings.plist file
         if let plistURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Settings.plist") {
@@ -84,6 +114,8 @@ class SettingsViewController: UIViewController {
         }
     }
     
+    /// Loads the settings from a plist file and returns them as a dictionary.
+    /// - Returns: A dictionary containing the settings loaded from the plist file, or `nil` if the file doesn't exist or couldn't be loaded.
     static func loadSettingsFromPlist() -> [String: String]? {
         // Get the file URL for the Settings.plist file
         if let plistURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Settings.plist") {
@@ -98,6 +130,9 @@ class SettingsViewController: UIViewController {
         return nil
     }
     
+    /// Loads a setting value from the settings dictionary based on the specified key.
+    /// - Parameter key: The key to search for in the settings dictionary.
+    /// - Returns: The value associated with the specified key, or `nil` if the key does not exist.
     static func loadSettingByKey(key: String) -> String? {
         
         if let settingsDict = SettingsViewController.loadSettingsFromPlist() {
@@ -106,13 +141,14 @@ class SettingsViewController: UIViewController {
             } else {
                 print("Key '\(key)' does not exist in the settings")
             }
-        }else{
+        } else {
             print("Error loading settings")
         }
         return nil
     }
 
-
+    /// Generates a random initialization vector (IV) for AES encryption.
+    /// - Returns: The randomly generated initialization vector as `Data`.
     static func generateRandomIV() -> Data {
         var randomIV = [UInt8](repeating: 0, count: kCCBlockSizeAES128)
         let result = SecRandomCopyBytes(kSecRandomDefault, randomIV.count, &randomIV)
@@ -120,6 +156,15 @@ class SettingsViewController: UIViewController {
         return Data(randomIV)
     }
     
+    /**
+     Encrypts a password using AES encryption algorithm.
+
+     - Parameters:
+         - password: The password to be encrypted.
+         - keyString: The key used for encryption.
+
+     - Returns: The encrypted password as a base64-encoded string, or `nil` if encryption fails.
+     */
     static func encrypt(password: String, keyString: String) -> String? {
         // Convert the password string to Data
         guard let passwordData = password.data(using: .utf8) else { return nil }
@@ -171,6 +216,16 @@ class SettingsViewController: UIViewController {
         return encryptedData.base64EncodedString()
     }
 
+    /**
+     Decrypts an encrypted password using AES algorithm with the provided key and initialization vector (IV).
+
+     - Parameters:
+         - encryptedPassword: The encrypted password string to be decrypted.
+         - keyString: The key string used for decryption.
+         - ivString: The initialization vector (IV) string used for decryption. If not provided, it will be loaded from the "ivKey" setting.
+
+     - Returns: The decrypted password string, or nil if decryption fails.
+     */
     static func decrypt(encryptedPassword: String, keyString: String, ivString: String = "") -> String? {
         // Convert the encrypted password string from base64
         guard let encryptedData = Data(base64Encoded: encryptedPassword) else { return nil }
@@ -231,11 +286,20 @@ class SettingsViewController: UIViewController {
         // Convert decrypted data to string
         return String(data: decryptedData, encoding: .utf8)
     }
-
-
 }
 
-extension SettingsViewController: UITableViewDelegate{
+/**
+    Extension of SettingsViewController conforming to UITableViewDelegate protocol.
+*/
+extension SettingsViewController: UITableViewDelegate {
+    
+    /**
+        Called when a row is deselected in the table view.
+     
+        - Parameters:
+            - tableView: The table view object.
+            - indexPath: The index path of the deselected row.
+    */
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? settingsTableViewCell {
             
@@ -245,11 +309,23 @@ extension SettingsViewController: UITableViewDelegate{
     }
 }
 
-extension SettingsViewController: UITableViewDataSource{
+/// Extension of SettingsViewController conforming to UITableViewDataSource protocol.
+extension SettingsViewController: UITableViewDataSource {
+    
+    /// Returns the number of rows in the table view section.
+    /// - Parameters:
+    ///   - tableView: The table view object requesting this information.
+    ///   - section: An index number identifying a section of the table view.
+    /// - Returns: The number of rows in the specified section.
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return settings.count
     }
     
+    /// Asks the data source for a cell to insert in a particular location of the table view.
+    /// - Parameters:
+    ///   - tableView: The table view object requesting the cell.
+    ///   - indexPath: An index path locating a row in tableView.
+    /// - Returns: An object inheriting from UITableViewCell that the table view can use for the specified row.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "settingsTableViewCell", for: indexPath) as! settingsTableViewCell
         
@@ -262,11 +338,19 @@ extension SettingsViewController: UITableViewDataSource{
     }
 }
 
+/// Extension of SettingsViewController conforming to SettingsTableViewCellDelegate protocol.
 extension SettingsViewController: SettingsTableViewCellDelegate {
+    
+    /**
+     Handles the event when the text field in a settingsTableViewCell ends editing.
+     
+     - Parameter cell: The settingsTableViewCell that triggered the event.
+     */
     func textFieldDidEndEditing(in cell: settingsTableViewCell) {
         if let indexPath = tableView.indexPath(for: cell) {
             tableView.deselectRow(at: indexPath, animated: true)
             if let cell = tableView.cellForRow(at: indexPath) as? settingsTableViewCell {
+                // Print the label text and the text entered in the cell's text field
                 print(cell.label.text ?? "")
                 print(cell.getText())
                 
@@ -276,19 +360,21 @@ extension SettingsViewController: SettingsTableViewCellDelegate {
                 let text = cell.getText()
                 switch key {
                     case "First Name", "Last Name", "Email", "API Token":
+                        // Update the settings value and save it to the plist file
                         settingsValues[key] = text
                         set.saveSettingToPlist(key: key, value: text)
                     case "Password":
-                        if let encryptedPassword = set.encrypt(password: text, keyString: settingsValues["API Token"]!
-                        ){
+                        // Encrypt the password and save it to the plist file
+                        if let encryptedPassword = set.encrypt(password: text, keyString: settingsValues["API Token"]!) {
                             settingsValues["Password"] = text
                             set.saveSettingToPlist(key: "Password", value: encryptedPassword)
-                        }else{
+                        } else {
                             print("Could not save password (API Token needs to be populated first)")
                         }
                     default:
                         break
                 }
+                // Call the settingsDidChange closure to notify that the settings values have been updated
                 settingsDidChange?(settingsValues)
             }
         }
