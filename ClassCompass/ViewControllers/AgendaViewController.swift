@@ -153,6 +153,25 @@ class AgendaViewController: UIViewController {
                 destinationVC.settingsValues = settingsValues
                 destinationVC.settingsDidChange = { updatedSettings in
                     self.settingsValues = updatedSettings
+                    // Init and run Canvas API
+                    if self.initCanvasClient() {
+                        
+                        self.canvasClient.fetchCourses(){ fetchedCourses in
+                            //self.courses = fetchedCourses
+                            let existingIDs = Set(self.courses.map(\.id))
+                            self.courses.append(contentsOf: fetchedCourses.filter { !existingIDs.contains($0.id) })
+                            
+                            for index in 0..<self.courses.count {
+                                let course = self.courses[index]
+                                self.canvasClient.fetchAssignmentsById(courseId: course.id) { fetchedAssignments in
+                                    let existingIDs = Set(self.courses[index].assignments.map(\.id))
+                                    self.courses[index].assignments.append(contentsOf: fetchedAssignments.filter { !existingIDs.contains($0.id) })
+                                }
+                            }
+                        }
+                    }else{
+                        self.performSegue(withIdentifier: "settingsSegue", sender: self)
+                    }
                 }
             }
         }
@@ -237,7 +256,7 @@ extension AgendaViewController: UITableViewDataSource{
         } else {
             cell.daysTillDue?.text = "-" // Handle nil case as needed
         }
-
+        
         
         let df = DateFormatter()
         df.dateFormat = "MM-dd"
